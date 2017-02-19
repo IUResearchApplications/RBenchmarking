@@ -1,28 +1,28 @@
-microbenchmark_sparse_matrix_kernel <- function(runParameters, numberOfThreads, csvResultsFile, allocatorFunction, benchmarkFunction) {
-   cat(sprintf("Running microbenchmark: %s\n", runParameters$benchmarkName))
-   allocator <- match.fun(allocatorFunction)
-   benchmark <- match.fun(benchmarkFunction)
+microbenchmark_sparse_matrix_kernel <- function(benchmarkParameters, numberOfThreads, resultsDirectory, runIdentifier) {
+   cat(sprintf("Running microbenchmark: %s\n", benchmarkParameters$benchmarkName))
+   allocator <- match.fun(benchmarkParameters$allocatorFunction)
+   benchmark <- match.fun(benchmarkParameters$benchmarkFunction)
 
-   numberOfRows <- runParameters$numberOfRows
-   numberOfColumns <- runParameters$numberOfColumns
-   numberOfTrials <- runParameters$numberOfTrials
-   numberOfWarmupTrials <- runParameters$numberOfWarmupTrials
-   benchmarkName <- runParameters$benchmarkName
+   numberOfRows <- benchmarkParameters$numberOfRows
+   numberOfColumns <- benchmarkParameters$numberOfColumns
+   numberOfTrials <- benchmarkParameters$numberOfTrials
+   numberOfWarmupTrials <- benchmarkParameters$numberOfWarmupTrials
+   benchmarkName <- benchmarkParameters$benchmarkName
 
    if (length(numberOfRows) != length(numberOfTrials)) {
-      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- lengths of numberOfTrials and numberOfRows arrays must be equal", runParameters$benchmarkName)
+      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- lengths of numberOfTrials and numberOfRows arrays must be equal", benchmarkParameters$benchmarkName)
       write(errorStr, stderr())
       return(1)
    }
 
    if (length(numberOfColumns) != length(numberOfTrials)) {
-      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- lengths of numberOfTrials and numberOfColumns arrays must be equal", runParameters$benchmarkName)
+      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- lengths of numberOfTrials and numberOfColumns arrays must be equal", benchmarkParameters$benchmarkName)
       write(errorStr, stderr())
       return(1)
    }
 
    if (length(numberOfTrials) != length(numberOfWarmupTrials)) {
-      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s' -- lengths of numberOfTrials and numberOfWarmupTrials arrays must be equal", runParameters$benchmarkName)
+      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s' -- lengths of numberOfTrials and numberOfWarmupTrials arrays must be equal", benchmarkParameters$benchmarkName)
       write(errorStr, stderr())
       return(1)
    }
@@ -42,7 +42,7 @@ microbenchmark_sparse_matrix_kernel <- function(runParameters, numberOfThreads, 
 
          tryCatchResult <- tryCatch({
             allocationSuccessful <- TRUE
-            kernelParameters <- allocator(runParameters, j)
+            kernelParameters <- allocator(benchmarkParameters, j)
          }, warning = function(war) {
             msg <- sprintf("WARN: allocator threw a warning -- %s", war)
             write(msg, stderr())
@@ -58,7 +58,7 @@ microbenchmark_sparse_matrix_kernel <- function(runParameters, numberOfThreads, 
 
          tryCatchResult <- tryCatch({
             benchmarkSuccessful <- TRUE
-            timings <- benchmark(runParameters, kernelParameters)
+            timings <- benchmark(benchmarkParameters, kernelParameters)
          }, warning = function(war) {
             msg <- sprintf("WARN: benchmark threw a warning -- %s", war)
             write(msg, stderr())
@@ -88,9 +88,10 @@ microbenchmark_sparse_matrix_kernel <- function(runParameters, numberOfThreads, 
          cat(sprintf("done: %f(sec)\n", wallClockTime))
       }
 
+      csvResultsFileName <- file.path(resultsDirectory, paste(benchmarkParameters$csvResultsBaseFileName, "_", runIdentifier, ".csv", sep=""))
       averageWallClockTimes[j] <- compute_average_time(numberOfSuccessfulTrials[j], trialTimes[,j]) 
       standardDeviations[j] <- compute_standard_deviation(numberOfSuccessfulTrials[j], trialTimes[,j])
-      print_sparse_matrix_results_csv(numberOfThreads, numberOfRows[j], numberOfColumns[j], averageWallClockTimes[j], standardDeviations[j], csvResultsFile)
+      print_sparse_matrix_results_csv(numberOfThreads, numberOfRows[j], numberOfColumns[j], averageWallClockTimes[j], standardDeviations[j], csvResultsFileName)
    }
 
    print_sparse_matrix_results(benchmarkName, numberOfThreads, numberOfRows, numberOfColumns, numberOfSuccessfulTrials, trialTimes, averageWallClockTimes, standardDeviations)

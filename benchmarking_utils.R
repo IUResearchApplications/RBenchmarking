@@ -70,7 +70,7 @@ read_parameters <- function() {
 }
   
 
-print_results <- function(benchmarkName, numberOfThreads, dimensions, numberOfSuccessfulTrials, trialTimes, averageWallClockTimes, standardDeviations) {
+print_matrix_kernel_results <- function(benchmarkName, numberOfThreads, dimensions, numberOfSuccessfulTrials, trialTimes, averageWallClockTimes, standardDeviations) {
    numberOfDimensions <- length(dimensions)
 
    cat(  "---------------------------------------------------------------------------------\n")
@@ -115,7 +115,7 @@ print_sparse_matrix_results <- function(benchmarkName, numberOfThreads, numberOf
 }
 
 
-print_results_csv <- function(numberOfThreads, dimension, averageWallClockTime, standardDeviation, csvResultsFile) {
+print_matrix_kernel_results_csv <- function(numberOfThreads, dimension, averageWallClockTime, standardDeviation, csvResultsFile) {
    if (csvResultsFile != "" && !file.exists(csvResultsFile)) {
       cat("Dimension", "Avg. Wall Clock Time", "Std. Dev", "Number of Threads\n", file=csvResultsFile, sep=",", append=FALSE)
    }
