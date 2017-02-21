@@ -1,4 +1,4 @@
-matrix_kernels_benchmark <- function(runIdentifier, resultsDirectory, microbenchmarks = matrix_kernels_default_tests()) {
+dense_matrix_benchmark <- function(runIdentifier, resultsDirectory, microbenchmarks = matrix_kernels_default_tests()) {
 
    numberOfThreads <- strtoi(get_configurable_env_parameter("R_BENCH_NUM_THREADS_VARIABLE"))
 
@@ -20,7 +20,7 @@ matrix_kernels_default_tests <- function() {
    # Define matrix kernel tests here
 
    # Cholesky factorization
-   microbenchmarks[["cholesky"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["cholesky"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "Cholesky factorization",
       csvResultsBaseFileName = "cholesky",
@@ -32,7 +32,7 @@ matrix_kernels_default_tests <- function() {
    )
 
    # matrix cross product
-   microbenchmarks[["crossprod"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["crossprod"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "matrix cross product",
       csvResultsBaseFileName = "crossprod",
@@ -44,7 +44,7 @@ matrix_kernels_default_tests <- function() {
    )
 
    # matrix determinant
-   microbenchmarks[["determinant"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["determinant"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "matrix determinant",
       csvResultsBaseFileName = "determinant",
@@ -56,7 +56,7 @@ matrix_kernels_default_tests <- function() {
    )
 
    # eigendecomposition
-   microbenchmarks[["eigen"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["eigen"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "eigendecomposition",
       csvResultsBaseFileName = "eigendecomposition",
@@ -68,7 +68,7 @@ matrix_kernels_default_tests <- function() {
    )
 
    # Linear solve with multiple right hand sides
-   microbenchmarks[["solve"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["solve"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "linear solve with multiple r.h.s.",
       csvResultsBaseFileName = "solve",
@@ -80,7 +80,7 @@ matrix_kernels_default_tests <- function() {
    )
    
    # Least squares fit with multiple right hand sides
-   microbenchmarks[["lsfit"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["lsfit"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "least squares fit",
       csvResultsBaseFileName = "lsfit",
@@ -92,7 +92,7 @@ matrix_kernels_default_tests <- function() {
    )
 
    # Matrix deformation and transpose
-   microbenchmarks[["deformtrans"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["deformtrans"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "matrix deformation and transpose",
       csvResultsBaseFileName = "deformtrans",
@@ -104,7 +104,7 @@ matrix_kernels_default_tests <- function() {
    )
 
    # Matrix-matrix multiplication
-   microbenchmarks[["matmat"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["matmat"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "matrix-matrix multiplication",
       csvResultsBaseFileName = "matmat",
@@ -116,7 +116,7 @@ matrix_kernels_default_tests <- function() {
    )
 
    # Matrix-vector multiplication
-   microbenchmarks[["matvec"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["matvec"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "matrix-vector multiplication",
       csvResultsBaseFileName = "matvec",
@@ -128,7 +128,7 @@ matrix_kernels_default_tests <- function() {
    )
 
    # QR decomposition
-   microbenchmarks[["qr"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["qr"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "QR decomposition",
       csvResultsBaseFileName = "qr",
@@ -140,7 +140,7 @@ matrix_kernels_default_tests <- function() {
    )
 
    # Singular value decomposition
-   microbenchmarks[["svd"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["svd"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "Singular value decomposition",
       csvResultsBaseFileName = "svd",
@@ -152,7 +152,7 @@ matrix_kernels_default_tests <- function() {
    )
 
    # Matrix transpose
-   microbenchmarks[["transpose"]] <- MatrixKernelBenchmark$new(
+   microbenchmarks[["transpose"]] <- DenseMatrixBenchmark$new(
       active = TRUE,
       benchmarkName = "matrix transpose",
       csvResultsBaseFileName = "transpose",

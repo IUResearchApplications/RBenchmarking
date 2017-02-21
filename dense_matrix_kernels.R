@@ -2,7 +2,7 @@ cholesky_allocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
    s <- benchmarkParameters$dimensions[trialIndex]
-   X <- matrix(rnorm(s*s), nrow=s, ncol=s)
+   X <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
    kernelParameters$A <- crossprod(X)
    return (kernelParameters)
 }
@@ -17,7 +17,7 @@ crossprod_allocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A")   
    s <- benchmarkParameters$dimensions[trialIndex]
-   kernelParameters$A <- matrix(rnorm(s*s), nrow=s, ncol=s)
+   kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
    return(kernelParameters)
 }
 
@@ -35,7 +35,7 @@ deformtrans_allocator <- function(benchmarkParameters, trialIndex) {
       stop("deformtrans kernel matrix dimension must be a multiple of 2")
    }
       
-   kernelParameters$A <- matrix(rnorm(s*s), nrow=s, ncol=s)
+   kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
    return (kernelParameters)
 }
 
@@ -57,7 +57,7 @@ determinant_allocator <- function(benchmarkParameters, trialIndex) {
   # Create list of kernel parameters
   kernelParameters <- list("A")
   s <- benchmarkParameters$dimensions[trialIndex]
-  kernelParameters$A <- matrix(rnorm(s*s), nrow=s, ncol=s)
+  kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
   return (kernelParameters)
 }  
 
@@ -71,7 +71,7 @@ eigen_allocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
    s <- benchmarkParameters$dimensions[trialIndex]
-   kernelParameters$A <- matrix(rnorm(s*s), nrow=s, ncol=s)
+   kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
    return (kernelParameters)
 }
 
@@ -92,8 +92,8 @@ lsfit_allocator <- function(benchmarkParameters, trialIndex) {
       stop("least squares fit kernel matrix dimension must be a multiple of 2")
    }
 
-   kernelParameters$A <- matrix(rnorm(s*s), nrow=2*s, ncol=s/2)
-   kernelParameters$b <- matrix(rnorm(2*s), nrow=2*s, ncol=1)
+   kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=2*s, ncol=s/2)
+   kernelParameters$b <- matrix(RBenchmarkOptions$rnorm(2*s), nrow=2*s, ncol=1)
    return (kernelParameters)
 }
 
@@ -110,8 +110,8 @@ matmat_allocator <- function(benchmarkParameters, trialIndex) {
   # Create list of kernel parameters
   kernelParameters <- list("A", "B")
   s <- benchmarkParameters$dimensions[trialIndex]
-  kernelParameters$A <- matrix(rnorm(s*s), nrow=s, ncol=s)
-  kernelParameters$B <- matrix(rnorm(s*s), nrow=s, ncol=s)
+  kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
+  kernelParameters$B <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
   return(kernelParameters)
 }
 
@@ -127,8 +127,8 @@ matvec_allocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A", "b")
    s <- benchmarkParameters$dimensions[trialIndex]
-   kernelParameters$A <- matrix(rnorm(s*s), nrow=s, ncol=s)
-   kernelParameters$b <- matrix(rnorm(s), nrow=s, ncol=1)
+   kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
+   kernelParameters$b <- matrix(RBenchmarkOptions$rnorm(s), nrow=s, ncol=1)
    return (kernelParameters)      
 }
 
@@ -145,7 +145,7 @@ qr_allocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
    s <- benchmarkParameters$dimensions[trialIndex]
-   kernelParameters$A <- matrix(rnorm(s*s), nrow=s, ncol=s)
+   kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
    return (kernelParameters)
 }
 
@@ -162,8 +162,8 @@ solve_allocator <- function(benchmarkParameters, trialIndex) {
    kernelParameters <- list("A", "B")
 
    s <- benchmarkParameters$dimensions[trialIndex]
-   kernelParameters$A <- matrix(rnorm(s*s), nrow=s, ncol=s)
-   X <- matrix(rnorm(s*s), nrow=s, ncol=s)
+   kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
+   X <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
    kernelParameters$B <- kernelParameters$A %*% X
    return(kernelParameters)
 }
@@ -178,7 +178,7 @@ svd_allocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
    s <- benchmarkParameters$dimensions[trialIndex]
-   kernelParameters$A <- matrix(rnorm(s*s), nrow=s, ncol=s)
+   kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
    return (kernelParameters)
 }
 
@@ -195,7 +195,7 @@ transpose_allocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
    s <- benchmarkParameters$dimensions[trialIndex]
-   kernelParameters$A <- matrix(rnorm(s*s), nrow=s, ncol=s)
+   kernelParameters$A <- matrix(RBenchmarkOptions$rnorm(s*s), nrow=s, ncol=s)
    return (kernelParameters)
 }
 

@@ -3,8 +3,8 @@ require(methods)
 
 source("benchmarking_utils.R")
 source("microbenchmark_matrix_kernel.R")
-source("matrix_kernels_benchmark.R")
-source("matrix_kernel.R")
+source("dense_matrix_kernels.R")
+source("dense_matrix_benchmark.R")
 
 args <- commandArgs(trailingOnly=TRUE)
 
@@ -13,11 +13,14 @@ if (length(args) != 2) {
    quit(status=1)
 }
 
+RBenchmarkOptions <- list()
+RBenchmarkOptions$rnorm <- rnorm
+
 runIdentifier <- args[1]
 resultsDirectory <- args[2]
 
-MatrixKernelBenchmark = setRefClass(
-   "MatrixKernelBenchmark",
+DenseMatrixBenchmark = setRefClass(
+   "DenseMatrixBenchmark",
    fields = list(
       active = "logical",
       benchmarkName = "character",
@@ -30,4 +33,4 @@ MatrixKernelBenchmark = setRefClass(
    )
 )
 
-matrix_kernels_benchmark(runIdentifier, resultsDirectory)
+dense_matrix_benchmark(runIdentifier, resultsDirectory)

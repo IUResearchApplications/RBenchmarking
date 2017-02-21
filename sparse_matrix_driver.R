@@ -2,8 +2,9 @@ require(Matrix)
 require(methods)
 
 source("benchmarking_utils.R")
-source("sparse_matrix_benchmark.R")
 source("microbenchmark_sparse_matrix_kernel.R")
+source("sparse_matrix_kernels.R")
+source("sparse_matrix_benchmark.R")
 
 args <- commandArgs(trailingOnly=TRUE)
 
@@ -11,6 +12,9 @@ if (length(args) != 3) {
    write("USAGE: sparse_matrix_driver runIdentifier matrixDirectory resultsDirectory", stderr())
    quit(status=1)
 }
+
+RBenchmarkOptions <- list()
+RBenchmarkOptions$rnorm <- rnorm
 
 runIdentifier <- args[1]
 matrixDirectory <- args[2]
