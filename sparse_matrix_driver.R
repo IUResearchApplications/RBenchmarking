@@ -19,12 +19,15 @@ resultsDirectory <- args[3]
 SparseMatrixBenchmark = setRefClass(
    "SparseMatrixBenchmark",
    fields = list(
+      active = "logical",
       benchmarkName = "character",
+      description = "character",
       matrixFileName = "character",
       csvResultsBaseFileName = "character",
       matrixObjectName = "character",
       numberOfRows = "integer",
       numberOfColumns = "integer",
+      numberOfNonzeros = "integer",
       numberOfTrials = "integer",
       numberOfWarmupTrials = "integer",
       allocatorFunction = "function",

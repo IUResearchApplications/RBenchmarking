@@ -19,6 +19,7 @@ resultsDirectory <- args[2]
 MatrixKernelBenchmark = setRefClass(
    "MatrixKernelBenchmark",
    fields = list(
+      active = "logical",
       benchmarkName = "character",
       csvResultsBaseFileName = "character",
       dimensions = "integer",
