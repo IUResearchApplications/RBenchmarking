@@ -34,7 +34,7 @@ RBenchmarkOptions$rnorm <- rnorm
 runIdentifier <- args[1]
 resultsDirectory <- args[2]
 
-DenseMatrixBenchmark = methods::setRefClass(
+DenseMatrixMicrobenchmark = methods::setRefClass(
    "DenseMatrixBenchmark",
    fields = list(
       active = "logical",
@@ -48,4 +48,4 @@ DenseMatrixBenchmark = methods::setRefClass(
    )
 )
 
-dense_matrix_benchmark(runIdentifier, resultsDirectory)
+DenseMatrixBenchmark(runIdentifier, resultsDirectory)

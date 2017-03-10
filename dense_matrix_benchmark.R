@@ -14,7 +14,8 @@
 # limitations under the License.
 ################################################################################
 
-dense_matrix_benchmark <- function(runIdentifier, resultsDirectory, microbenchmarks = matrix_kernels_default_tests()) {
+DenseMatrixBenchmark <- function(runIdentifier, resultsDirectory,
+	microbenchmarks = MatrixKernelsDefaultMicrobenchmarks()) {
 
    numberOfThreads <- strtoi(get_configurable_env_parameter("R_BENCH_NUM_THREADS_VARIABLE"))
 
@@ -22,7 +23,7 @@ dense_matrix_benchmark <- function(runIdentifier, resultsDirectory, microbenchma
 
    for (i in 1:length(microbenchmarks)) {
       if (microbenchmarks[[i]]$active) {
-         microbenchmarkValue <- microbenchmark_matrix_kernel(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+         microbenchmarkValue <- MicrobenchmarkMatrixKernel(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
          invisible(gc())
       }
    }
@@ -30,153 +31,153 @@ dense_matrix_benchmark <- function(runIdentifier, resultsDirectory, microbenchma
 }
 
 
-matrix_kernels_default_tests <- function() {
+MatrixKernelsDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
 
    # Define matrix kernel tests here
 
    # Cholesky factorization
-   microbenchmarks[["cholesky"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["cholesky"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "Cholesky factorization",
       csvResultsBaseFileName = "cholesky",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = cholesky_allocator,
-      benchmarkFunction = cholesky_benchmark
+      allocatorFunction = CholeskyAllocator,
+      benchmarkFunction = CholeskyBenchmark
    )
 
    # matrix cross product
-   microbenchmarks[["crossprod"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["crossprod"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "matrix cross product",
       csvResultsBaseFileName = "crossprod",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = crossprod_allocator,
-      benchmarkFunction = crossprod_benchmark
+      allocatorFunction = CrossprodAllocator,
+      benchmarkFunction = CrossprodBenchmark
    )
 
    # matrix determinant
-   microbenchmarks[["determinant"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["determinant"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "matrix determinant",
       csvResultsBaseFileName = "determinant",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = determinant_allocator,
-      benchmarkFunction = determinant_benchmark
+      allocatorFunction = DeterminantAllocator,
+      benchmarkFunction = DeterminantBenchmark
    )
 
    # eigendecomposition
-   microbenchmarks[["eigen"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["eigen"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "eigendecomposition",
       csvResultsBaseFileName = "eigendecomposition",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = eigen_allocator,
-      benchmarkFunction = eigen_benchmark
+      allocatorFunction = EigenAllocator,
+      benchmarkFunction = EigenBenchmark
    )
 
    # Linear solve with multiple right hand sides
-   microbenchmarks[["solve"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["solve"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "linear solve with multiple r.h.s.",
       csvResultsBaseFileName = "solve",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = solve_allocator,
-      benchmarkFunction = solve_benchmark
+      allocatorFunction = SolveAllocator,
+      benchmarkFunction = SolveBenchmark
    )
    
    # Least squares fit with multiple right hand sides
-   microbenchmarks[["lsfit"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["lsfit"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "least squares fit",
       csvResultsBaseFileName = "lsfit",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = lsfit_allocator,
-      benchmarkFunction = lsfit_benchmark
+      allocatorFunction = LsfitAllocator,
+      benchmarkFunction = LsfitBenchmark
    )
 
    # Matrix deformation and transpose
-   microbenchmarks[["deformtrans"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["deformtrans"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "matrix deformation and transpose",
       csvResultsBaseFileName = "deformtrans",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = deformtrans_allocator,
-      benchmarkFunction = deformtrans_benchmark
+      allocatorFunction = DeformtransAllocator,
+      benchmarkFunction = DeformtransBenchmark
    )
 
    # Matrix-matrix multiplication
-   microbenchmarks[["matmat"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["matmat"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "matrix-matrix multiplication",
       csvResultsBaseFileName = "matmat",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = matmat_allocator,
-      benchmarkFunction = matmat_benchmark
+      allocatorFunction = MatmatAllocator,
+      benchmarkFunction = MatmatBenchmark
    )
 
    # Matrix-vector multiplication
-   microbenchmarks[["matvec"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["matvec"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "matrix-vector multiplication",
       csvResultsBaseFileName = "matvec",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = matvec_allocator,
-      benchmarkFunction = matvec_benchmark
+      allocatorFunction = MatvecAllocator,
+      benchmarkFunction = MatvecBenchmark
    )
 
    # QR decomposition
-   microbenchmarks[["qr"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["qr"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "QR decomposition",
       csvResultsBaseFileName = "qr",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = qr_allocator,
-      benchmarkFunction = qr_benchmark
+      allocatorFunction = QrAllocator,
+      benchmarkFunction = QrBenchmark
    )
 
    # Singular value decomposition
-   microbenchmarks[["svd"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["svd"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "Singular value decomposition",
       csvResultsBaseFileName = "svd",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = svd_allocator,
-      benchmarkFunction = svd_benchmark
+      allocatorFunction = SvdAllocator,
+      benchmarkFunction = SvdBenchmark
    )
 
    # Matrix transpose
-   microbenchmarks[["transpose"]] <- DenseMatrixBenchmark$new(
+   microbenchmarks[["transpose"]] <- DenseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "matrix transpose",
       csvResultsBaseFileName = "transpose",
       dimensions = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
-      allocatorFunction = transpose_allocator,
-      benchmarkFunction = transpose_benchmark
+      allocatorFunction = TransposeAllocator,
+      benchmarkFunction = TransposeBenchmark
    )
 
    return (microbenchmarks)

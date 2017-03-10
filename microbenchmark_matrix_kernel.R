@@ -14,7 +14,7 @@
 # limitations under the License.
 ################################################################################
 
-microbenchmark_matrix_kernel <- function(benchmarkParameters, numberOfThreads, resultsDirectory, runIdentifier) {
+MicrobenchmarkMatrixKernel <- function(benchmarkParameters, numberOfThreads, resultsDirectory, runIdentifier) {
    cat(sprintf("Running microbenchmark: %s\n", benchmarkParameters$benchmarkName))
    allocator <- match.fun(benchmarkParameters$allocatorFunction)
    benchmark <- match.fun(benchmarkParameters$benchmarkFunction)

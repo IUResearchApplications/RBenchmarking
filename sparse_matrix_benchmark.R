@@ -14,55 +14,69 @@
 # limitations under the License.
 ################################################################################
 
-sparse_matrix_benchmark <- function(
-   runIdentifier, matrixDirectory, resultsDirectory,
-   matrix_vector_tests = sparse_matrix_vector_multiplication_default_tests(),
-   cholesky_factorization_tests = sparse_cholesky_factorization_default_tests(),
-   lu_factorization_tests = sparse_lu_factorization_default_tests(),
-   qr_factorization_tests = sparse_qr_factorization_default_tests()) {
+SparseMatrixBenchmark <- function(runIdentifier, matrixDirectory,
+   resultsDirectory,
+   matrixVectorMicrobenchmarks = SparseMatrixVectorDefaultMicrobenchmarks(),
+   choleskyMicrobenchmarks = SparseCholeskyDefaultMicrobenchmarks(),
+   luMicrobenchmarks = SparseLuDefaultMicrobenchmarks(),
+   qrMicrobenchmarks = SparseQrDefaultMicrobenchmarks()) {
 
    numberOfThreads <- strtoi(get_configurable_env_parameter("R_BENCH_NUM_THREADS_VARIABLE"))
 
-   # Loop over all sparse matrix-vector multiplication tests
+   # Loop over all sparse matrix-vector multiplication microbenchmarks
 
-   for (i in 1:length(matrix_vector_tests)) {
-      if (matrix_vector_tests[[i]]$active) {
+   for (i in 1:length(matrixVectorMicrobenchmarks)) {
+      if (matrixVectorMicrobenchmarks[[i]]$active) {
          # The matrices are read in to the global environment so that they only
          # have to be read from storage once.
-         matrixFileName <- file.path(matrixDirectory, matrix_vector_tests[[i]]$matrixFileName)
+         matrixFileName <- file.path(matrixDirectory, matrixVectorMicrobenchmarks[[i]]$matrixFileName)
          load(matrixFileName, envir = .GlobalEnv)
-         returnValue <- microbenchmark_sparse_matrix_kernel(matrix_vector_tests[[i]], numberOfThreads, resultsDirectory, runIdentifier)
-         remove(list=c(matrix_vector_tests[[i]]$matrixObjectName), envir = .GlobalEnv)
+         returnValue <- MicrobenchmarkSparseMatrixKernel(matrixVectorMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+         remove(list=c(matrixVectorMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
          invisible(gc())
       }
    }
 
 
-   # Loop over all sparse Cholesky factorization tests
+   # Loop over all sparse Cholesky factorization microbenchmarks
 
-   for (i in 1:length(cholesky_factorization_tests)) {
-      if (cholesky_factorization_tests[[i]]$active) {
+   for (i in 1:length(choleskyMicrobenchmarks)) {
+      if (choleskyMicrobenchmarks[[i]]$active) {
          # The matrices are read in to the global environment so that they only
          # have to be read from storage once.
-         matrixFileName <- file.path(matrixDirectory, cholesky_factorization_tests[[i]]$matrixFileName)
+         matrixFileName <- file.path(matrixDirectory, choleskyMicrobenchmarks[[i]]$matrixFileName)
          load(matrixFileName, envir = .GlobalEnv)
-         returnValue <- microbenchmark_sparse_matrix_kernel(cholesky_factorization_tests[[i]], numberOfThreads, resultsDirectory, runIdentifier)
-         remove(list=c(cholesky_factorization_tests[[i]]$matrixObjectName), envir = .GlobalEnv)
+         returnValue <- MicrobenchmarkSparseMatrixKernel(choleskyMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+         remove(list=c(choleskyMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
          invisible(gc())
       }
    }
 
 
-   # Loop over all sparse QR factorization tests
+   # Loop over all sparse LU factorization microbenchmarks
 
-   for (i in 1:length(qr_factorization_tests)) {
-      if (qr_factorization_tests[[i]]$active) {
+   for (i in 1:length(luMicrobenchmarks)) {
+      if (luMicrobenchmarks[[i]]$active) {
          # The matrices are read in to the global environment so that they only
          # have to be read from storage once.
-         matrixFileName <- file.path(matrixDirectory, qr_factorization_tests[[i]]$matrixFileName)
+         matrixFileName <- file.path(matrixDirectory, luMicrobenchmarks[[i]]$matrixFileName)
          load(matrixFileName, envir = .GlobalEnv)
-         returnValue <- microbenchmark_sparse_matrix_kernel(qr_factorization_tests[[i]], numberOfThreads, resultsDirectory, runIdentifier)
-         remove(list=c(qr_factorization_tests[[i]]$matrixObjectName), envir = .GlobalEnv)
+         returnValue <- MicrobenchmarkSparseMatrixKernel(luMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+         remove(list=c(luMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
+         invisible(gc())
+      }
+   }
+
+   # Loop over all sparse QR factorization microbenchmarks
+
+   for (i in 1:length(qrMicrobenchmarks)) {
+      if (qrMicrobenchmarks[[i]]$active) {
+         # The matrices are read in to the global environment so that they only
+         # have to be read from storage once.
+         matrixFileName <- file.path(matrixDirectory, qrMicrobenchmarks[[i]]$matrixFileName)
+         load(matrixFileName, envir = .GlobalEnv)
+         returnValue <- MicrobenchmarkSparseMatrixKernel(qrMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+         remove(list=c(qrMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
          invisible(gc())
       }
    }
@@ -70,9 +84,9 @@ sparse_matrix_benchmark <- function(
 }
 
 
-sparse_matrix_vector_multiplication_default_tests <- function() {
+SparseMatrixVectorDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["laplacian7pt_100"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["laplacian7pt_100"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse matrix-vector mult. with 100x100x100 7-point Laplacian operator",
       description = "Sparse matrix-vector multiplication with 100x100x100 7-point Laplacian operator",
@@ -84,11 +98,11 @@ sparse_matrix_vector_multiplication_default_tests <- function() {
       numberOfNonzeros = as.integer(6940000),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_matrix_vector_allocator,
-      benchmarkFunction = sparse_matrix_vector_benchmark
+      allocatorFunction = SparseMatrixVectorAllocator,
+      benchmarkFunction = SparseMatrixVectorBenchmark
    )
 
-   microbenchmarks[["laplacian7pt_200"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["laplacian7pt_200"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse matrix-vector mult. with 200x200x200 7-point Laplacian operator",
       description = "Sparse matrix-vector multiplication with 200x200x200 7-point Laplacian operator",
@@ -100,11 +114,11 @@ sparse_matrix_vector_multiplication_default_tests <- function() {
       numberOfNonzeros = as.integer(55760000),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_matrix_vector_allocator,
-      benchmarkFunction = sparse_matrix_vector_benchmark
+      allocatorFunction = SparseMatrixVectorAllocator,
+      benchmarkFunction = SparseMatrixVectorBenchmark
    )   
 
-   microbenchmarks[["ca2010"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["ca2010"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse matrix-vector mult. with DIMACS10/ca2010 undirected graph matrix",
       description = "Sparse matrix-vector mult. with undirected weighted graph matrix ca2010 from the University of Florida Sparse Matrix Collection DIMACS10 matrix group",
@@ -116,17 +130,17 @@ sparse_matrix_vector_multiplication_default_tests <- function() {
       numberOfNonzeros = as.integer(3489366),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_matrix_vector_allocator,
-      benchmarkFunction = sparse_matrix_vector_benchmark
+      allocatorFunction = SparseMatrixVectorAllocator,
+      benchmarkFunction = SparseMatrixVectorBenchmark
    )
 
    return (microbenchmarks)
 }
 
 
-sparse_cholesky_factorization_default_tests <- function() {
+SparseCholeskyDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["ct20stif"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["ct20stif"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse Cholesky factorization of Boeing/ct20stif structural problem matrix",
       description = "Cholesky factorization of ct20stif matrix from University of Florida Sparse Matrix Collection Boeing group; CT20 engine block -- stiffness matrix, Boeing",
@@ -138,11 +152,11 @@ sparse_cholesky_factorization_default_tests <- function() {
       numberOfNonzeros = as.integer(2600295),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_cholesky_allocator,
-      benchmarkFunction = sparse_cholesky_benchmark
+      allocatorFunction = SparseCholeskyAllocator,
+      benchmarkFunction = SparseCholeskyBenchmark
    )
 
-   microbenchmarks[["Andrews"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["Andrews"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse Cholesky factorization of Andrews/Andrews computer graphics vision problem matrix",
       description = "Cholesky factorization of Andrews matrix from University of Florida Sparse Matrix Collection Andrews group; Eigenvalue problem, Stuart Andrews, Brown Univ.",
@@ -154,11 +168,11 @@ sparse_cholesky_factorization_default_tests <- function() {
       numberOfNonzeros = as.integer(760154),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_cholesky_allocator,
-      benchmarkFunction = sparse_cholesky_benchmark
+      allocatorFunction = SparseCholeskyAllocator,
+      benchmarkFunction = SparseCholeskyBenchmark
    )
 
-   microbenchmarks[["G3_circuit"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["G3_circuit"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse Cholesky factorization of AMD/G3_circuit circuit simulation problem matrix",
       description = "Cholesky factorization of G3_circuit matrix from University of Florida Sparse Matrix Collection AMD group; circuit simulation problem, Ufuk Okuyucu, AMD, Inc.",
@@ -170,17 +184,17 @@ sparse_cholesky_factorization_default_tests <- function() {
       numberOfNonzeros = as.integer(7660826),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_cholesky_allocator,
-      benchmarkFunction = sparse_cholesky_benchmark
+      allocatorFunction = SparseCholeskyAllocator,
+      benchmarkFunction = SparseCholeskyBenchmark
    )
 
    return (microbenchmarks)
 }
 
 
-sparse_lu_factorization_default_tests <- function() {
+SparseLuDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["circuit5M_dc"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["circuit5M_dc"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse LU decomposition of Freescale/circuit5M_dc circuit simulation problem matrix",
       description = "LU decomposition of circuit5M_dc matrix from University of Florida Sparse Matrix Collection Freescale group; Large circuit (DC analysis) K. Gullapalli, Freescale Semiconductor",
@@ -192,11 +206,11 @@ sparse_lu_factorization_default_tests <- function() {
       numberOfNonzeros = as.integer(14865409),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_lu_allocator,
-      benchmarkFunction = sparse_lu_benchmark
+      allocatorFunction = SparseLuAllocator,
+      benchmarkFunction = SparseLuBenchmark
    )
 
-   microbenchmarks[["stomach"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["stomach"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse LU decomposition of Norris/stomach 2D/3D problem matrix",
       description = "LU decomposition of stomach matrix from University of Florida Sparse Matrix Collection Norris group; S.Norris, Univ. Auckland. 3D electro-physical model of a duodenum",
@@ -208,11 +222,11 @@ sparse_lu_factorization_default_tests <- function() {
       numberOfNonzeros = as.integer(3021648),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_lu_allocator,
-      benchmarkFunction = sparse_lu_benchmark
+      allocatorFunction = SparseLuAllocator,
+      benchmarkFunction = SparseLuBenchmark
    )
 
-   microbenchmarks[["torso3"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["torso3"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse LU decomposition of Norris/torso3 2D/3D problem matrix",
       description = "LU decomposition of torso3 matrix from University of Florida Sparse Matrix Collection Norris group; S.Norris, Univ Auckland. finite diff. electro-phys.  3D model of torso",
@@ -224,17 +238,17 @@ sparse_lu_factorization_default_tests <- function() {
       numberOfNonzeros = as.integer(4429042),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_lu_allocator,
-      benchmarkFunction = sparse_lu_benchmark
+      allocatorFunction = SparseLuAllocator,
+      benchmarkFunction = SparseLuBenchmark
    )
 
    return (microbenchmarks)
 }
 
 
-sparse_qr_factorization_default_tests <- function() {
+SparseQrDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["Maragal_6"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["Maragal_6"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse QR factorization of NYPA/Maragal_6 least squares problem matrix",
       description = "QR factorization of Maragal_6 matrix from University of Florida Sparse Matrix Collection NYPA group; rank deficient least squares problem, D. Maragal, NY Power Authority",
@@ -246,11 +260,11 @@ sparse_qr_factorization_default_tests <- function() {
       numberOfNonzeros = as.integer(537694),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_qr_allocator,
-      benchmarkFunction = sparse_qr_benchmark
+      allocatorFunction = SparseQrAllocator,
+      benchmarkFunction = SparseQrBenchmark
    )
 
-   microbenchmarks[["landmark"]] <- SparseMatrixBenchmark$new(
+   microbenchmarks[["landmark"]] <- SparseMatrixMicrobenchmark$new(
       active = TRUE,
       benchmarkName = "sparse QR factorization of Pereyra/landmark least squares problem matrix",
       description = "QR factorization of landmark matrix from University of Florida Sparse Matrix Collection Pereyra group; Matrix from Victor Pereyra, Stanford University",
@@ -262,8 +276,8 @@ sparse_qr_factorization_default_tests <- function() {
       numberOfNonzeros = as.integer(1146848),
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
-      allocatorFunction = sparse_qr_allocator,
-      benchmarkFunction = sparse_qr_benchmark
+      allocatorFunction = SparseQrAllocator,
+      benchmarkFunction = SparseQrBenchmark
    )
 
    return (microbenchmarks)

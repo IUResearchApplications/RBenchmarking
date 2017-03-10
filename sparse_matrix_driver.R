@@ -36,7 +36,7 @@ runIdentifier <- args[1]
 matrixDirectory <- args[2]
 resultsDirectory <- args[3]
 
-SparseMatrixBenchmark = methods::setRefClass(
+SparseMatrixMicrobenchmark = methods::setRefClass(
    "SparseMatrixBenchmark",
    fields = list(
       active = "logical",
@@ -55,5 +55,5 @@ SparseMatrixBenchmark = methods::setRefClass(
    )
 )
 
-sparse_matrix_benchmark(runIdentifier, matrixDirectory, resultsDirectory)
+SparseMatrixBenchmark(runIdentifier, matrixDirectory, resultsDirectory)
 

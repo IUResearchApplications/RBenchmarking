@@ -14,7 +14,7 @@
 # limitations under the License.
 ################################################################################
 
-sparse_matrix_vector_allocator <- function(benchmarkParameters, trialIndex) {
+SparseMatrixVectorAllocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A", "x")
    kernelParameters$A <- get(benchmarkParameters$matrixObjectName)
@@ -31,7 +31,7 @@ sparse_matrix_vector_allocator <- function(benchmarkParameters, trialIndex) {
    return (kernelParameters)
 }
 
-sparse_matrix_vector_benchmark <- function(benchmarkParameters, kernelParameters) {
+SparseMatrixVectorBenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- kernelParameters$A %*% kernelParameters$x})
    return (timings)
 }
@@ -39,7 +39,7 @@ sparse_matrix_vector_benchmark <- function(benchmarkParameters, kernelParameters
 
 # Sparse Cholesky factorization definitions
 
-sparse_cholesky_allocator <- function(benchmarkParameters, trialIndex) {
+SparseCholeskyAllocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
    kernelParameters$A <- get(benchmarkParameters$matrixObjectName)
@@ -54,7 +54,7 @@ sparse_cholesky_allocator <- function(benchmarkParameters, trialIndex) {
    return (kernelParameters)
 }
 
-sparse_cholesky_benchmark <- function(benchmarkParameters, kernelParameters) {
+SparseCholeskyBenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- Cholesky(kernelParameters$A)})
    return (timings)
 }
@@ -62,7 +62,7 @@ sparse_cholesky_benchmark <- function(benchmarkParameters, kernelParameters) {
 
 # Sparse LU factorization definitions
 
-sparse_lu_allocator <- function(benchmarkParameters, trialIndex) {
+SparseLuAllocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
    kernelParameters$A <- get(benchmarkParameters$matrixObjectName)
@@ -77,7 +77,7 @@ sparse_lu_allocator <- function(benchmarkParameters, trialIndex) {
    return (kernelParameters)
 }
 
-sparse_lu_benchmark <- function(benchmarkParameters, kernelParameters) {
+SparseLuBenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- lu(kernelParameters$A)})
    return (timings)
 }
@@ -85,7 +85,7 @@ sparse_lu_benchmark <- function(benchmarkParameters, kernelParameters) {
 
 # Sparse QR factorization definitions
 
-sparse_qr_allocator <- function(benchmarkParameters, trialIndex) {
+SparseQrAllocator <- function(benchmarkParameters, trialIndex) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
    kernelParameters$A <- get(benchmarkParameters$matrixObjectName)
@@ -100,7 +100,7 @@ sparse_qr_allocator <- function(benchmarkParameters, trialIndex) {
    return (kernelParameters)
 }
 
-sparse_qr_benchmark <- function(benchmarkParameters, kernelParameters) {
+SparseQrBenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- qr(kernelParameters$A)})
    return (timings)
 }
