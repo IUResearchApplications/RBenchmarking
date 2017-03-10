@@ -1,0 +1,15 @@
+Package: RHPCBenchmark
+Title: R benchmarking package for high-performance computing environments
+Version: 0.0.0.9000
+Authors@R: person("James", "McCombs", email = "jmccombs@iu.edu", role = c("aut", "cre"))
+Description: This package provides microbenchmarks for determining the run time
+  performance of aspects of the R programming environment and packages
+  commonly used for high-performance computation.  The benchmark currently
+  measures the performance of dense linear algebra kernels from the base
+  package and sparse linear algebra kernels from the matrix package.
+Depends: R (>= 3.3.1)
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: Matrix (>= 1.2.6),
+    methods (>= 3.3.1)
