@@ -105,12 +105,12 @@ MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters, numberOfThread
       }
 
       csvResultsFileName <- file.path(resultsDirectory, paste(benchmarkParameters$csvResultsBaseFileName, "_", runIdentifier, ".csv", sep=""))
-      averageWallClockTimes[j] <- compute_average_time(numberOfSuccessfulTrials[j], trialTimes[,j]) 
-      standardDeviations[j] <- compute_standard_deviation(numberOfSuccessfulTrials[j], trialTimes[,j])
-      print_sparse_matrix_results_csv(numberOfThreads, numberOfRows[j], numberOfColumns[j], averageWallClockTimes[j], standardDeviations[j], csvResultsFileName)
+      averageWallClockTimes[j] <- ComputeAverageTime(numberOfSuccessfulTrials[j], trialTimes[,j]) 
+      standardDeviations[j] <- ComputeStandardDeviation(numberOfSuccessfulTrials[j], trialTimes[,j])
+      WriteSparseMatrixPerformanceResultsCsv(numberOfThreads, numberOfRows[j], numberOfColumns[j], averageWallClockTimes[j], standardDeviations[j], csvResultsFileName)
    }
 
-   print_sparse_matrix_results(benchmarkName, numberOfThreads, numberOfRows, numberOfColumns, numberOfSuccessfulTrials, trialTimes, averageWallClockTimes, standardDeviations)
+   PrintSparseMatrixMicrobenchmarkResults(benchmarkName, numberOfThreads, numberOfRows, numberOfColumns, numberOfSuccessfulTrials, trialTimes, averageWallClockTimes, standardDeviations)
 
    return(0)
 }

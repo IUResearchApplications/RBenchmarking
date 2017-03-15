@@ -19,20 +19,20 @@ MicrobenchmarkMatrixKernel <- function(benchmarkParameters, numberOfThreads, res
    allocator <- match.fun(benchmarkParameters$allocatorFunction)
    benchmark <- match.fun(benchmarkParameters$benchmarkFunction)
 
-   dimensions <- benchmarkParameters$dimensions
-   numberOfDimensions <- length(dimensions)
+   dimensionParameters <- benchmarkParameters$dimensionParameters
+   numberOfDimensions <- length(dimensionParameters)
    numberOfTrials <- benchmarkParameters$numberOfTrials
    numberOfWarmupTrials <- benchmarkParameters$numberOfWarmupTrials
    benchmarkName <- benchmarkParameters$benchmarkName
 
    if (numberOfDimensions != length(numberOfTrials)) {
-      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- length of numberOfTrials and dimensions arrays must be equal", benchmarkParameters$benchmarkName)
+      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- length of numberOfTrials and dimensionParameters arrays must be equal", benchmarkParameters$benchmarkName)
       write(errorStr, stderr())
       return(1)
    }
 
    if (numberOfDimensions != length(numberOfWarmupTrials)) {
-      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s' -- length of numberOfWarmupTrials and dimensions arrays must be equal", benchmarkParameters$benchmarkName)
+      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s' -- length of numberOfWarmupTrials and dimensionParameters arrays must be equal", benchmarkParameters$benchmarkName)
       write(errorStr, stderr())
       return(1)
    }
@@ -45,7 +45,7 @@ MicrobenchmarkMatrixKernel <- function(benchmarkParameters, numberOfThreads, res
    numberOfSuccessfulTrials <- rep(0, numberOfDimensions)
 
    for (j in 1:numberOfDimensions) {
-      d <- dimensions[j]
+      d <- dimensionParameters[j]
 
       for (i in 1:(numberOfTrials[j]+numberOfWarmupTrials[j])) {
          cat(sprintf("Running iteration %d for dimension %d... ", i, d))
@@ -99,12 +99,12 @@ MicrobenchmarkMatrixKernel <- function(benchmarkParameters, numberOfThreads, res
       }
 
       csvResultsFileName <- file.path(resultsDirectory, paste(benchmarkParameters$csvResultsBaseFileName, "_", runIdentifier, ".csv", sep=""))
-      averageWallClockTimes[j] <- compute_average_time(numberOfSuccessfulTrials[j], trialTimes[,j]) 
-      standardDeviations[j] <- compute_standard_deviation(numberOfSuccessfulTrials[j], trialTimes[,j])
-      print_matrix_kernel_results_csv(numberOfThreads, dimensions[j], averageWallClockTimes[j], standardDeviations[j], csvResultsFileName)
+      averageWallClockTimes[j] <- ComputeAverageTime(numberOfSuccessfulTrials[j], trialTimes[,j]) 
+      standardDeviations[j] <- ComputeStandardDeviation(numberOfSuccessfulTrials[j], trialTimes[,j])
+      WriteDenseMatrixPerformanceResultsCsv(numberOfThreads, dimensionParameters[j], averageWallClockTimes[j], standardDeviations[j], csvResultsFileName)
    }
 
-   print_matrix_kernel_results(benchmarkName, numberOfThreads, dimensions, numberOfSuccessfulTrials, trialTimes, averageWallClockTimes, standardDeviations)
+   PrintDenseMatrixMicrobenchmarkResults(benchmarkName, numberOfThreads, dimensionParameters, numberOfSuccessfulTrials, trialTimes, averageWallClockTimes, standardDeviations)
 
    return(0)
 }

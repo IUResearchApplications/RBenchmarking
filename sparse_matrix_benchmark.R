@@ -21,7 +21,7 @@ SparseMatrixBenchmark <- function(runIdentifier, matrixDirectory,
    luMicrobenchmarks = SparseLuDefaultMicrobenchmarks(),
    qrMicrobenchmarks = SparseQrDefaultMicrobenchmarks()) {
 
-   numberOfThreads <- strtoi(get_configurable_env_parameter("R_BENCH_NUM_THREADS_VARIABLE"))
+   numberOfThreads <- strtoi(GetConfigurableEnvParameter("R_BENCH_NUM_THREADS_VARIABLE"))
 
    # Loop over all sparse matrix-vector multiplication microbenchmarks
 
