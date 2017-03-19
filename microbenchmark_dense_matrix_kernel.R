@@ -14,7 +14,30 @@
 # limitations under the License.
 ################################################################################
 
-MicrobenchmarkMatrixKernel <- function(benchmarkParameters, numberOfThreads, resultsDirectory, runIdentifier) {
+#' Performs microbenchmarking of a dense matrix linear algebra kernel
+#'
+#' \code{MicrobenchmarkDenseMatrixKernel} performs microbenchmarking of a
+#' dense matrix linear algebra kernel for several matrix dimensions
+#'
+#' This function performs microbenchmarking of a dense matrix linear algebra
+#' kernel for several matrix dimensions and a given number of threads.  The
+#' kernel to be performance tested, the matrix dimensions to be tested, and
+#' other parameters specifying how the kernel is to be benchmarked are given in
+#' the input object \code{benchmarkParameters} which is an instance of
+#' the class \code{\link{DenseMatrixMicrobenchmark}}.  For each matrix dimension
+#' to be tested, the run time performance of the kernel is averaged over
+#' multiple runs.  The kernel can be executed with multiple threads if the
+#' kernel supports multithreading.  See \code{\link{DenseMatrixMicrobenchmark}}
+#' for more details on the benchmarking parameters.
+#' 
+#' @param numberOfThreads the number of threads the microbenchmark is being
+#'   performed with.  The value is for informational purposes only and does not
+#'   effect the number threads the kernel is executed with.
+#' @param resultsDirectory a character string specifying the directory
+#'   where all of the CSV performance results files will be saved
+#' @param runIdentifier a character string specifying the suffix to be
+#'   appended to the base of the file name of the output CSV format files
+MicrobenchmarkDenseMatrixKernel <- function(benchmarkParameters, numberOfThreads, resultsDirectory, runIdentifier) {
    cat(sprintf("Running microbenchmark: %s\n", benchmarkParameters$benchmarkName))
    allocator <- match.fun(benchmarkParameters$allocatorFunction)
    benchmark <- match.fun(benchmarkParameters$benchmarkFunction)

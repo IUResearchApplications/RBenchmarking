@@ -17,7 +17,7 @@ require(Matrix)
 require(methods)
 
 source("benchmarking_utils.R")
-source("microbenchmark_matrix_kernel.R")
+source("microbenchmark_dense_matrix_kernel.R")
 source("dense_matrix_kernels.R")
 source("dense_matrix_benchmark.R")
 
