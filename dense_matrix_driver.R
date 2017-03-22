@@ -16,10 +16,10 @@
 require(Matrix)
 require(methods)
 
-source("benchmarking_utils.R")
-source("microbenchmark_dense_matrix_kernel.R")
-source("dense_matrix_kernels.R")
-source("dense_matrix_benchmark.R")
+source("./RHPCBenchmark/R/benchmarking_utils.R")
+source("./RHPCBenchmark/R/microbenchmark_dense_matrix_kernel.R")
+source("./RHPCBenchmark/R/dense_matrix_kernels.R")
+source("./RHPCBenchmark/R/dense_matrix_benchmark.R")
 
 args <- commandArgs(trailingOnly=TRUE)
 
