@@ -73,6 +73,7 @@
 #' qrMicrobenchmarks <- SparseQrDefaultMicrobenchmarks()
 #' qrMicrobenchmarks[["circuit5M_dc"]]$active <- FALSE
 #' SparseMatrixBenchmark("test1", "./DenseMatrixResults")
+#' @export
 SparseMatrixBenchmark <- function(runIdentifier, matrixDirectory,
    resultsDirectory,
    matrixVectorMicrobenchmarks = SparseMatrixVectorDefaultMicrobenchmarks(),
@@ -166,9 +167,11 @@ SparseMatrixBenchmark <- function(runIdentifier, matrixDirectory,
 #'   microbenchmarks to be executed.  The microbenchmarks appear in the order
 #'   listed in the function description and are assigned the names enumerate
 #'   in the description.
+#' @export
 SparseMatrixVectorDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["laplacian7pt_100"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["laplacian7pt_100"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse matrix-vector mult. with 100x100x100 7-point Laplacian operator",
       description = "Sparse matrix-vector multiplication with 100x100x100 7-point Laplacian operator",
@@ -184,7 +187,8 @@ SparseMatrixVectorDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseMatrixVectorBenchmark
    )
 
-   microbenchmarks[["laplacian7pt_200"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["laplacian7pt_200"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse matrix-vector mult. with 200x200x200 7-point Laplacian operator",
       description = "Sparse matrix-vector multiplication with 200x200x200 7-point Laplacian operator",
@@ -200,7 +204,8 @@ SparseMatrixVectorDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseMatrixVectorBenchmark
    )   
 
-   microbenchmarks[["ca2010"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["ca2010"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse matrix-vector mult. with DIMACS10/ca2010 undirected graph matrix",
       description = "Sparse matrix-vector mult. with undirected weighted graph matrix ca2010 from the University of Florida Sparse Matrix Collection DIMACS10 matrix group",
@@ -242,7 +247,8 @@ SparseMatrixVectorDefaultMicrobenchmarks <- function() {
 #'   in the description.
 SparseCholeskyDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["ct20stif"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["ct20stif"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse Cholesky factorization of Boeing/ct20stif structural problem matrix",
       description = "Cholesky factorization of ct20stif matrix from University of Florida Sparse Matrix Collection Boeing group; CT20 engine block -- stiffness matrix, Boeing",
@@ -258,7 +264,8 @@ SparseCholeskyDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseCholeskyBenchmark
    )
 
-   microbenchmarks[["Andrews"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["Andrews"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse Cholesky factorization of Andrews/Andrews computer graphics vision problem matrix",
       description = "Cholesky factorization of Andrews matrix from University of Florida Sparse Matrix Collection Andrews group; Eigenvalue problem, Stuart Andrews, Brown Univ.",
@@ -274,7 +281,8 @@ SparseCholeskyDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseCholeskyBenchmark
    )
 
-   microbenchmarks[["G3_circuit"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["G3_circuit"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse Cholesky factorization of AMD/G3_circuit circuit simulation problem matrix",
       description = "Cholesky factorization of G3_circuit matrix from University of Florida Sparse Matrix Collection AMD group; circuit simulation problem, Ufuk Okuyucu, AMD, Inc.",
@@ -315,7 +323,8 @@ SparseCholeskyDefaultMicrobenchmarks <- function() {
 #'   in the description.
 SparseLuDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["circuit5M_dc"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["circuit5M_dc"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse LU decomposition of Freescale/circuit5M_dc circuit simulation problem matrix",
       description = "LU decomposition of circuit5M_dc matrix from University of Florida Sparse Matrix Collection Freescale group; Large circuit (DC analysis) K. Gullapalli, Freescale Semiconductor",
@@ -331,7 +340,8 @@ SparseLuDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseLuBenchmark
    )
 
-   microbenchmarks[["stomach"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["stomach"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse LU decomposition of Norris/stomach 2D/3D problem matrix",
       description = "LU decomposition of stomach matrix from University of Florida Sparse Matrix Collection Norris group; S.Norris, Univ. Auckland. 3D electro-physical model of a duodenum",
@@ -347,7 +357,8 @@ SparseLuDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseLuBenchmark
    )
 
-   microbenchmarks[["torso3"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["torso3"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse LU decomposition of Norris/torso3 2D/3D problem matrix",
       description = "LU decomposition of torso3 matrix from University of Florida Sparse Matrix Collection Norris group; S.Norris, Univ Auckland. finite diff. electro-phys.  3D model of torso",
@@ -387,7 +398,8 @@ SparseLuDefaultMicrobenchmarks <- function() {
 #'   in the description.
 SparseQrDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["Maragal_6"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["Maragal_6"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse QR factorization of NYPA/Maragal_6 least squares problem matrix",
       description = "QR factorization of Maragal_6 matrix from University of Florida Sparse Matrix Collection NYPA group; rank deficient least squares problem, D. Maragal, NY Power Authority",
@@ -403,7 +415,8 @@ SparseQrDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseQrBenchmark
    )
 
-   microbenchmarks[["landmark"]] <- SparseMatrixMicrobenchmark$new(
+   microbenchmarks[["landmark"]] <- methods::new(
+      "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "sparse QR factorization of Pereyra/landmark least squares problem matrix",
       description = "QR factorization of landmark matrix from University of Florida Sparse Matrix Collection Pereyra group; Matrix from Victor Pereyra, Stanford University",

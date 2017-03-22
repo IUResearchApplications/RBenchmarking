@@ -1,0 +1,88 @@
+#.onLoad <- function(libname, pkgname) {
+
+#' This class specifies a dense matrix microbenchmark.
+#' 
+#' @name DenseMatrixMicrobenchmark
+#' @field active a logical indicating whether the microbenchmark is to be
+#'   executed (TRUE) or not (FALSE)
+#' @field benchmarkName a character string that is the name of the
+#'   microbenchmark
+#' @field csvResultsBaseFileName a character string that is the base of the file
+#'   name to contain the microbenchmark results
+#' @field dimensionParameters an integer vector specifying the dimension
+#'   parameters the microbenchmark uses to define the matrix dimensions to be
+#'   tested with
+#' @field numberOfTrials an integer vector specifying the number of trials
+#'   conducted for each matrix to be tested.  Must be the same length as
+#'   \code{dimensionParameters}.
+#' @field numberOfWarmupTrials an integer vector specifying the number of warmup
+#'   trials to be performed for each matrix to be tested
+#' @field allocatorFunction the function that allocates and initializes input to
+#'   the benchmark function
+#' @field benchmarkFunction the benchmark function which executes the
+#'   functionality to be timed
+methods::setRefClass(
+   "DenseMatrixMicrobenchmark",
+   fields = list(
+      active = "logical",
+      benchmarkName = "character",
+      csvResultsBaseFileName = "character",
+      dimensionParameters = "integer",
+      numberOfTrials = "integer",
+      numberOfWarmupTrials = "integer",
+      allocatorFunction = "function",
+      benchmarkFunction = "function"
+   )
+)
+
+
+#' This class specifies a sparse matrix microbenchmark.
+#'
+#' @name SparseMatrixMicrobenchmark
+#' @field active A logical indicating whether the microbenchmark is to be
+#'   executed (TRUE) or not (FALSE)
+#' @field benchmarkName A character string that is the name of the
+#'   microbenchmark
+#' @field description A character string describing the benchmark
+#' @field matrixFileName A character string specifying the R data file
+#'   containing the sparse matrix data
+#' @field csvResultsBaseFileName A character string that is the base of the file
+#'   name to contain the microbenchmark results
+#' @field matrixObjectName A character string specifying the name of the sparse
+#'   matrix object that is input to the benchmark; the object must be stored in
+#'   the R data file with name \code{matrixFileName}
+#' @field numberOfRows An integer specifying the expected number of rows in the
+#'   input sparse matrix
+#' @field numberOfColumns An integer specifying the expected number of columns
+#'   in the input sparse matrix
+#' @field numberOfNonzeros An integer specifying the expected number of nonzeros
+#'   in the input sparse matrix
+#' @field numberOfTrials An integer vector specifying the number of trials
+#'   conducted for each matrix to be tested. Must be the same length as
+#'   \code{diensions}.
+#' @field numberOfWarmupTrials An integer vector specifying the number of warmup
+#'   trials to be performed for each matrix to be tested
+#' @field allocatorFunction The function that allocates and initializes input
+#'   to the benchmark function
+#' @field benchmarkFunction The benchmark function which executes the
+#'   functionality to be timed
+methods::setRefClass(
+   "SparseMatrixMicrobenchmark",
+   fields = list(
+      active = "logical",
+      benchmarkName = "character",
+      description = "character",
+      matrixFileName = "character",
+      csvResultsBaseFileName = "character",
+      matrixObjectName = "character",
+      numberOfRows = "integer",
+      numberOfColumns = "integer",
+      numberOfNonzeros = "integer",
+      numberOfTrials = "integer",
+      numberOfWarmupTrials = "integer",
+      allocatorFunction = "function",
+      benchmarkFunction = "function"
+   )
+)
+
+#}

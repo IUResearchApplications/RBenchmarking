@@ -52,6 +52,7 @@
 #' microbenchmarks <- DenseMatrixDefaultMicrobenchmarks()
 #' microbenchmarks[["qr"]]$active <- FALSE
 #' DenseMatrixBenchmark("test1", "./DenseMatrixResults")
+#' @export
 DenseMatrixBenchmark <- function(runIdentifier, resultsDirectory,
 	microbenchmarks = DenseMatrixDefaultMicrobenchmarks()) {
 
@@ -86,13 +87,15 @@ DenseMatrixBenchmark <- function(runIdentifier, resultsDirectory,
 #'   listed in the function description and are assigned the following names:
 #'   cholesky, crossprod, determinant, eigen, solve, lsfit, deformtrans,
 #'   transpose, matmat, matvec, qr, and svd. 
+#' @export
 DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
 
    # Define matrix kernel tests here
 
    # Cholesky factorization
-   microbenchmarks[["cholesky"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["cholesky"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "Cholesky factorization",
       csvResultsBaseFileName = "cholesky",
@@ -104,7 +107,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
 
    # matrix cross product
-   microbenchmarks[["crossprod"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["crossprod"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "matrix cross product",
       csvResultsBaseFileName = "crossprod",
@@ -116,7 +120,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
 
    # matrix determinant
-   microbenchmarks[["determinant"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["determinant"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "matrix determinant",
       csvResultsBaseFileName = "determinant",
@@ -128,7 +133,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
 
    # eigendecomposition
-   microbenchmarks[["eigen"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["eigen"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "eigendecomposition",
       csvResultsBaseFileName = "eigendecomposition",
@@ -140,7 +146,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
 
    # Linear solve with multiple right hand sides
-   microbenchmarks[["solve"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["solve"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "linear solve with multiple r.h.s.",
       csvResultsBaseFileName = "solve",
@@ -152,7 +159,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
    
    # Least squares fit
-   microbenchmarks[["lsfit"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["lsfit"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "least squares fit",
       csvResultsBaseFileName = "lsfit",
@@ -164,7 +172,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
 
    # Matrix deformation and transpose
-   microbenchmarks[["deformtrans"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["deformtrans"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "matrix deformation and transpose",
       csvResultsBaseFileName = "deformtrans",
@@ -176,7 +185,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
 
    # Matrix transpose
-   microbenchmarks[["transpose"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["transpose"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "matrix transpose",
       csvResultsBaseFileName = "transpose",
@@ -188,7 +198,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
 
    # Matrix-matrix multiplication
-   microbenchmarks[["matmat"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["matmat"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "matrix-matrix multiplication",
       csvResultsBaseFileName = "matmat",
@@ -200,7 +211,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
 
    # Matrix-vector multiplication
-   microbenchmarks[["matvec"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["matvec"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "matrix-vector multiplication",
       csvResultsBaseFileName = "matvec",
@@ -212,7 +224,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
 
    # QR decomposition
-   microbenchmarks[["qr"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["qr"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "QR decomposition",
       csvResultsBaseFileName = "qr",
@@ -224,7 +237,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    )
 
    # Singular value decomposition
-   microbenchmarks[["svd"]] <- DenseMatrixMicrobenchmark$new(
+   microbenchmarks[["svd"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "Singular value decomposition",
       csvResultsBaseFileName = "svd",

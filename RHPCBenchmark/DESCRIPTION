@@ -7,9 +7,12 @@ Description: This package provides microbenchmarks for determining the run time
   commonly used for high-performance computation.  The benchmark currently
   measures the performance of dense linear algebra kernels from the base
   package and sparse linear algebra kernels from the matrix package.
-Depends: R (>= 3.3.1)
+Depends: R (>= 3.3.1),
+    Matrix,
+    methods 
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Imports: Matrix (>= 1.2.6),
     methods (>= 3.3.1)
+RoxygenNote: 6.0.1
