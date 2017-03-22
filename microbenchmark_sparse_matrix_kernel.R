@@ -30,6 +30,10 @@
 #' kernel supports multithreading.  See \code{\link{SparseMatrixMicrobenchmark}}
 #' for more details on the benchmarking parameters.
 #' 
+#' @param benchmarkParameters an object of type
+#'   \code{\link{SparseMatrixMicrobenchmark}} specifying the matrix
+#'   dimensions of matrices to be tested and the number of performance trials
+#'   to perform for each matrix dimension.
 #' @param numberOfThreads the number of threads the microbenchmark is being
 #'   performed with.  The value is for informational purposes only and does not
 #'   effect the number threads the kernel is executed with.

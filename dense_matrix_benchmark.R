@@ -100,7 +100,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = CholeskyAllocator,
-      benchmarkFunction = CholeskyBenchmark
+      benchmarkFunction = CholeskyMicrobenchmark
    )
 
    # matrix cross product
@@ -112,7 +112,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = CrossprodAllocator,
-      benchmarkFunction = CrossprodBenchmark
+      benchmarkFunction = CrossprodMicrobenchmark
    )
 
    # matrix determinant
@@ -124,7 +124,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = DeterminantAllocator,
-      benchmarkFunction = DeterminantBenchmark
+      benchmarkFunction = DeterminantMicrobenchmark
    )
 
    # eigendecomposition
@@ -136,7 +136,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = EigenAllocator,
-      benchmarkFunction = EigenBenchmark
+      benchmarkFunction = EigenMicrobenchmark
    )
 
    # Linear solve with multiple right hand sides
@@ -148,7 +148,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = SolveAllocator,
-      benchmarkFunction = SolveBenchmark
+      benchmarkFunction = SolveMicrobenchmark
    )
    
    # Least squares fit
@@ -160,7 +160,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = LsfitAllocator,
-      benchmarkFunction = LsfitBenchmark
+      benchmarkFunction = LsfitMicrobenchmark
    )
 
    # Matrix deformation and transpose
@@ -172,7 +172,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = DeformtransAllocator,
-      benchmarkFunction = DeformtransBenchmark
+      benchmarkFunction = DeformtransMicrobenchmark
    )
 
    # Matrix transpose
@@ -184,7 +184,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = TransposeAllocator,
-      benchmarkFunction = TransposeBenchmark
+      benchmarkFunction = TransposeMicrobenchmark
    )
 
    # Matrix-matrix multiplication
@@ -196,7 +196,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = MatmatAllocator,
-      benchmarkFunction = MatmatBenchmark
+      benchmarkFunction = MatmatMicrobenchmark
    )
 
    # Matrix-vector multiplication
@@ -208,7 +208,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = MatvecAllocator,
-      benchmarkFunction = MatvecBenchmark
+      benchmarkFunction = MatvecMicrobenchmark
    )
 
    # QR decomposition
@@ -220,7 +220,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = QrAllocator,
-      benchmarkFunction = QrBenchmark
+      benchmarkFunction = QrMicrobenchmark
    )
 
    # Singular value decomposition
@@ -232,7 +232,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3, 3)),
       numberOfWarmupTrials = as.integer(c(1, 1)),
       allocatorFunction = SvdAllocator,
-      benchmarkFunction = SvdBenchmark
+      benchmarkFunction = SvdMicrobenchmark
    )
 
    return (microbenchmarks)
