@@ -241,7 +241,7 @@ LsfitAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 LsfitMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({
-      x <- lsfit(kernelParameters$A, kernelParameters$b, intercept=FALSE)
+      x <- stats::lsfit(kernelParameters$A, kernelParameters$b, intercept=FALSE)
    })
 
    return (timings)

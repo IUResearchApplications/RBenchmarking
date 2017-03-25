@@ -45,13 +45,14 @@
 #' ## Run the default dense matrix benchmarks and place the results files
 #' ## in the directory ./DenseMatrixResults with the run identifier test1
 #' ## as a suffix to the base of the CSV file names
-#' DenseMatrixBenchmark("test1", "./DenseMatrixResults")
+#' #dir.create("./DenseMatrixResults")
+#' #DenseMatrixBenchmark("test1", "./DenseMatrixResults")
 #'
 #' ## Run the default dense matrix benchmark with the QR decomposition
 #' ## microbenchmark disabled
-#' microbenchmarks <- DenseMatrixDefaultMicrobenchmarks()
-#' microbenchmarks[["qr"]]$active <- FALSE
-#' DenseMatrixBenchmark("test1", "./DenseMatrixResults")
+#' #microbenchmarks <- DenseMatrixDefaultMicrobenchmarks()
+#' #microbenchmarks[["qr"]]$active <- FALSE
+#' #DenseMatrixBenchmark("test1", "./DenseMatrixResults")
 #' @export
 DenseMatrixBenchmark <- function(runIdentifier, resultsDirectory,
 	microbenchmarks = DenseMatrixDefaultMicrobenchmarks()) {

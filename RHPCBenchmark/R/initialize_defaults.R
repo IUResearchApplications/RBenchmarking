@@ -14,5 +14,7 @@
 # limitations under the License.
 ################################################################################
 
+#' @import methods
+#' @import Matrix
 RBenchmarkOptions <- list()
 RBenchmarkOptions$rnorm <- rnorm

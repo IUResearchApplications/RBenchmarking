@@ -66,13 +66,13 @@
 #' ## Run the default sparse matrix benchmarks and place the results files
 #' ## in the directory ./SparseMatrixResults with the run identifier test1
 #' ## as a suffix to the base of the CSV file names
-#' SparseMatrixBenchmark("test1", "./SparseMatrixResults")
+#' #SparseMatrixBenchmark("test1", "./SparseMatrixResults")
 #'
 #' ## Run the default sparse matrix benchmark with the circuit5M_dc QR
 #' ## decomposition microbenchmark disabled
-#' qrMicrobenchmarks <- SparseQrDefaultMicrobenchmarks()
-#' qrMicrobenchmarks[["circuit5M_dc"]]$active <- FALSE
-#' SparseMatrixBenchmark("test1", "./DenseMatrixResults")
+#' #qrMicrobenchmarks <- SparseQrDefaultMicrobenchmarks()
+#' #qrMicrobenchmarks[["circuit5M_dc"]]$active <- FALSE
+#' #SparseMatrixBenchmark("test1", "./DenseMatrixResults")
 #' @export
 SparseMatrixBenchmark <- function(runIdentifier,
    resultsDirectory,
@@ -106,7 +106,7 @@ SparseMatrixBenchmark <- function(runIdentifier,
 
 
    # Loop over all sparse Cholesky factorization microbenchmarks
-   if (length(choleksyMicrobenchmarks) > 0) {
+   if (length(choleskyMicrobenchmarks) > 0) {
       for (i in 1:length(choleskyMicrobenchmarks)) {
          if (choleskyMicrobenchmarks[[i]]$active) {
             # The matrices are read in to the global environment so that they

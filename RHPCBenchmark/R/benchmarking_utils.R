@@ -159,7 +159,7 @@ PrintDenseMatrixMicrobenchmarkResults <- function(benchmarkName,
 #' @param numberOfThreads the number of threads all of the performance trials
 #'   were conducted with
 #' @param numberOfRows the number of expected rows in the matrix
-#' @param numberOfColumns the number of expected rows in the matrix
+#' @param numberOfColumns the number of expected columns in the matrix
 #' @param numberOfSuccessfulTrials an integer vector specifying the number of
 #'   performance trials that were successfully performed for each matrix tested
 #' @param trialTimes a real matrix with each column containing the run times
@@ -248,9 +248,8 @@ WriteDenseMatrixPerformanceResultsCsv <- function(numberOfThreads,
 #'
 #' @param numberOfThreads the number of threads all of the performance trials
 #'   were conducted with
-#' @param dimensionParameter an integer vector specifying the dimension
-#'   parameter the microbenchmark uses to define the dimension of the test
-#'   matrix
+#' @param numberOfRows the number of rows in the matrix
+#' @param numberOfColumns the number of columns in the matrix
 #' @param averageWallClockTime average wall clock time computed for the matrix
 #'   tested during the performance trials
 #' @param standardDeviation standard deviation of the wall clock times obtained
@@ -274,8 +273,8 @@ WriteSparseMatrixPerformanceResultsCsv <- function(numberOfThreads, numberOfRows
 #'   trial times.  The average is computed only over the first
 #'   \code{numberOfSuccessfulTrials} elements of the \code{times} vector.
 #'
-#' @param numRuns the number of successful performance trials to be averaged
-#'   over 
+#' @param numberOfSuccessfulTrials the number of successful performance trials
+#'   to be averaged over 
 #' @param times a vector of wall clock times for the performance trials
 ComputeAverageTime<-function(numberOfSuccessfulTrials, times) {
    return(mean(times[1:numberOfSuccessfulTrials]))
@@ -289,9 +288,9 @@ ComputeAverageTime<-function(numberOfSuccessfulTrials, times) {
 #'   the first \code{numberOfSuccessfulTrials} elements of the \code{times}
 #'   vector.
 #'
-#' @param numRuns the number of successful performance trials over which the
-#'   standard deviation will be computed
+#' @param numberOfSuccessfulTrials the number of successful performance trials
+#'   over which the standard deviation will be computed
 #' @param times a vector of wall clock times for the performance trials
 ComputeStandardDeviation<-function(numberOfSuccessfulTrials, times) {
-   return(sqrt(var(times[1:numberOfSuccessfulTrials])))
+   return(sqrt(stats::var(times[1:numberOfSuccessfulTrials])))
 }
