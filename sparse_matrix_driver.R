@@ -28,4 +28,4 @@ runIdentifier <- args[1]
 matrixDirectory <- args[2]
 resultsDirectory <- args[3]
 
-SparseMatrixBenchmark(runIdentifier, matrixDirectory, resultsDirectory)
+SparseMatrixBenchmark(runIdentifier, resultsDirectory, matrixDirectory)

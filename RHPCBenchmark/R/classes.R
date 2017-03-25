@@ -22,12 +22,12 @@
 #' @field benchmarkName a character string that is the name of the
 #'   microbenchmark
 #' @field csvResultsBaseFileName a character string that is the base of the file
-#'   name to contain the microbenchmark results
+#'   name the microbenchmark results will be written to
 #' @field dimensionParameters an integer vector specifying the dimension
 #'   parameters the microbenchmark uses to define the matrix dimensions to be
 #'   tested with
-#' @field numberOfTrials an integer vector specifying the number of trials
-#'   conducted for each matrix to be tested.  Must be the same length as
+#' @field numberOfTrials an integer vector specifying the number of performance
+#'   trials conducted for each matrix to be tested.  Must be the same length as
 #'   \code{dimensionParameters}.
 #' @field numberOfWarmupTrials an integer vector specifying the number of warmup
 #'   trials to be performed for each matrix to be tested
@@ -61,7 +61,7 @@ methods::setRefClass(
 #' @field matrixFileName A character string specifying the R data file
 #'   containing the sparse matrix data
 #' @field csvResultsBaseFileName A character string that is the base of the file
-#'   name to contain the microbenchmark results
+#'   name the microbenchmark results will be written to
 #' @field matrixObjectName A character string specifying the name of the sparse
 #'   matrix object that is input to the benchmark; the object must be stored in
 #'   the R data file with name \code{matrixFileName}
@@ -71,8 +71,8 @@ methods::setRefClass(
 #'   in the input sparse matrix
 #' @field numberOfNonzeros An integer specifying the expected number of nonzeros
 #'   in the input sparse matrix
-#' @field numberOfTrials An integer vector specifying the number of trials
-#'   conducted for each matrix to be tested. Must be the same length as
+#' @field numberOfTrials An integer vector specifying the number of performance
+#'   trials conducted for each matrix to be tested. Must be the same length as
 #'   \code{diensions}.
 #' @field numberOfWarmupTrials An integer vector specifying the number of warmup
 #'   trials to be performed for each matrix to be tested

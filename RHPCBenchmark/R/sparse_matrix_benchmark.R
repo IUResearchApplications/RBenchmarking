@@ -40,10 +40,10 @@
 #'
 #' @param runIdentifier a character string specifying the suffix to be
 #'   appended to the base of the file name of the output CSV format files
-#' @param matrixDirectory a character string specifying the directory that
-#'   the sparse matrices will be read from
 #' @param resultsDirectory a character string specifying the directory
 #'   where all of the CSV performance results files will be saved
+#' @param matrixDirectory a character string specifying the directory that
+#'   the sparse matrices will be read from
 #' @param matrixVectorMicrobenchmarks a vector of
 #'   \code{SparseMatrixMicrobenchmark} objects defining the matrix-vector
 #'   multiplication microbenchmarks to execute as part of the sparse matrix
@@ -74,8 +74,9 @@
 #' qrMicrobenchmarks[["circuit5M_dc"]]$active <- FALSE
 #' SparseMatrixBenchmark("test1", "./DenseMatrixResults")
 #' @export
-SparseMatrixBenchmark <- function(runIdentifier, matrixDirectory,
+SparseMatrixBenchmark <- function(runIdentifier,
    resultsDirectory,
+   matrixDirectory = "./sparse_matrices",
    matrixVectorMicrobenchmarks = SparseMatrixVectorDefaultMicrobenchmarks(),
    choleskyMicrobenchmarks = SparseCholeskyDefaultMicrobenchmarks(),
    luMicrobenchmarks = SparseLuDefaultMicrobenchmarks(),
@@ -85,63 +86,69 @@ SparseMatrixBenchmark <- function(runIdentifier, matrixDirectory,
 
    # Loop over all sparse matrix-vector multiplication microbenchmarks
 
-   for (i in 1:length(matrixVectorMicrobenchmarks)) {
-      if (matrixVectorMicrobenchmarks[[i]]$active) {
-         # TODO: need to make the matrix directory a field in the microbenchmark
-         # classes, and to make the directory for the default matrices an
-         # environment parameter read during package initialization.
+   if (length(matrixVectorMicrobenchmarks) > 0) {
+      for (i in 1:length(matrixVectorMicrobenchmarks)) {
+         if (matrixVectorMicrobenchmarks[[i]]$active) {
+            # classes, and to make the directory for the default matrices an
+            # environment parameter read during package initialization.
 
-         # The matrices are read in to the global environment so that they only
-         # have to be read from storage once.
-         matrixFileName <- file.path(matrixDirectory, matrixVectorMicrobenchmarks[[i]]$matrixFileName)
-         load(matrixFileName, envir = .GlobalEnv)
-         returnValue <- MicrobenchmarkSparseMatrixKernel(matrixVectorMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
-         remove(list=c(matrixVectorMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
-         invisible(gc())
+            # The matrices are read in to the global environment so that they
+            # only have to be read from storage once.
+            matrixFileName <- file.path(matrixDirectory, matrixVectorMicrobenchmarks[[i]]$matrixFileName)
+            load(matrixFileName, envir = .GlobalEnv)
+            returnValue <- MicrobenchmarkSparseMatrixKernel(matrixVectorMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+            remove(list=c(matrixVectorMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
+            invisible(gc())
+         }
       }
    }
+ 
 
 
    # Loop over all sparse Cholesky factorization microbenchmarks
-
-   for (i in 1:length(choleskyMicrobenchmarks)) {
-      if (choleskyMicrobenchmarks[[i]]$active) {
-         # The matrices are read in to the global environment so that they only
-         # have to be read from storage once.
-         matrixFileName <- file.path(matrixDirectory, choleskyMicrobenchmarks[[i]]$matrixFileName)
-         load(matrixFileName, envir = .GlobalEnv)
-         returnValue <- MicrobenchmarkSparseMatrixKernel(choleskyMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
-         remove(list=c(choleskyMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
-         invisible(gc())
+   if (length(choleksyMicrobenchmarks) > 0) {
+      for (i in 1:length(choleskyMicrobenchmarks)) {
+         if (choleskyMicrobenchmarks[[i]]$active) {
+            # The matrices are read in to the global environment so that they
+            # only have to be read from storage once.
+            matrixFileName <- file.path(matrixDirectory, choleskyMicrobenchmarks[[i]]$matrixFileName)
+            load(matrixFileName, envir = .GlobalEnv)
+            returnValue <- MicrobenchmarkSparseMatrixKernel(choleskyMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+            remove(list=c(choleskyMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
+            invisible(gc())
+         }
       }
    }
 
 
    # Loop over all sparse LU factorization microbenchmarks
-
-   for (i in 1:length(luMicrobenchmarks)) {
-      if (luMicrobenchmarks[[i]]$active) {
-         # The matrices are read in to the global environment so that they only
-         # have to be read from storage once.
-         matrixFileName <- file.path(matrixDirectory, luMicrobenchmarks[[i]]$matrixFileName)
-         load(matrixFileName, envir = .GlobalEnv)
-         returnValue <- MicrobenchmarkSparseMatrixKernel(luMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
-         remove(list=c(luMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
-         invisible(gc())
+   if (length(luMicrobenchmarks) > 0) {
+      for (i in 1:length(luMicrobenchmarks)) {
+         if (luMicrobenchmarks[[i]]$active) {
+            # The matrices are read in to the global environment so that they
+            # only have to be read from storage once.
+            matrixFileName <- file.path(matrixDirectory, luMicrobenchmarks[[i]]$matrixFileName)
+            load(matrixFileName, envir = .GlobalEnv)
+            returnValue <- MicrobenchmarkSparseMatrixKernel(luMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+            remove(list=c(luMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
+            invisible(gc())
+         }
       }
    }
 
-   # Loop over all sparse QR factorization microbenchmarks
 
-   for (i in 1:length(qrMicrobenchmarks)) {
-      if (qrMicrobenchmarks[[i]]$active) {
-         # The matrices are read in to the global environment so that they only
-         # have to be read from storage once.
-         matrixFileName <- file.path(matrixDirectory, qrMicrobenchmarks[[i]]$matrixFileName)
-         load(matrixFileName, envir = .GlobalEnv)
-         returnValue <- MicrobenchmarkSparseMatrixKernel(qrMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
-         remove(list=c(qrMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
-         invisible(gc())
+   # Loop over all sparse QR factorization microbenchmarks
+   if (length(qrMicrobenchmarks)) {
+      for (i in 1:length(qrMicrobenchmarks)) {
+         if (qrMicrobenchmarks[[i]]$active) {
+            # The matrices are read in to the global environment so that they
+            # only have to be read from storage once.
+            matrixFileName <- file.path(matrixDirectory, qrMicrobenchmarks[[i]]$matrixFileName)
+            load(matrixFileName, envir = .GlobalEnv)
+            returnValue <- MicrobenchmarkSparseMatrixKernel(qrMicrobenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+            remove(list=c(qrMicrobenchmarks[[i]]$matrixObjectName), envir = .GlobalEnv)
+            invisible(gc())
+         }
       }
    }
 
@@ -175,7 +182,7 @@ SparseMatrixVectorDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "sparse matrix-vector mult. with 100x100x100 7-point Laplacian operator",
       description = "Sparse matrix-vector multiplication with 100x100x100 7-point Laplacian operator",
-      matrixFileName = "laplacian7pt_100_R",
+      matrixFileName = "laplacian7pt_100",
       csvResultsBaseFileName = "matvec_laplacian7pt_100",
       matrixObjectName = "laplacian7pt_100",
       numberOfRows = as.integer(1000000),
@@ -192,7 +199,7 @@ SparseMatrixVectorDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "sparse matrix-vector mult. with 200x200x200 7-point Laplacian operator",
       description = "Sparse matrix-vector multiplication with 200x200x200 7-point Laplacian operator",
-      matrixFileName = "laplacian7pt_200_R",
+      matrixFileName = "laplacian7pt_200",
       csvResultsBaseFileName = "matvec_laplacian7pt_200",
       matrixObjectName = "laplacian7pt_200",
       numberOfRows = as.integer(8000000),
@@ -209,7 +216,7 @@ SparseMatrixVectorDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "sparse matrix-vector mult. with DIMACS10/ca2010 undirected graph matrix",
       description = "Sparse matrix-vector mult. with undirected weighted graph matrix ca2010 from the University of Florida Sparse Matrix Collection DIMACS10 matrix group",
-      matrixFileName = "ca2010_R",
+      matrixFileName = "ca2010",
       csvResultsBaseFileName = "matvec_ca2010",
       matrixObjectName = "ca2010",
       numberOfRows = as.integer(710145),
@@ -252,7 +259,7 @@ SparseCholeskyDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "sparse Cholesky factorization of Boeing/ct20stif structural problem matrix",
       description = "Cholesky factorization of ct20stif matrix from University of Florida Sparse Matrix Collection Boeing group; CT20 engine block -- stiffness matrix, Boeing",
-      matrixFileName = "ct20stif_R",
+      matrixFileName = "ct20stif",
       csvResultsBaseFileName = "cholesky_ct20stif",
       matrixObjectName = "ct20stif",
       numberOfRows = as.integer(52329),
@@ -269,7 +276,7 @@ SparseCholeskyDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "sparse Cholesky factorization of Andrews/Andrews computer graphics vision problem matrix",
       description = "Cholesky factorization of Andrews matrix from University of Florida Sparse Matrix Collection Andrews group; Eigenvalue problem, Stuart Andrews, Brown Univ.",
-      matrixFileName = "Andrews_R",
+      matrixFileName = "Andrews",
       csvResultsBaseFileName = "cholesky_Andrews",
       matrixObjectName = "Andrews",
       numberOfRows = as.integer(60000),
@@ -286,7 +293,7 @@ SparseCholeskyDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "sparse Cholesky factorization of AMD/G3_circuit circuit simulation problem matrix",
       description = "Cholesky factorization of G3_circuit matrix from University of Florida Sparse Matrix Collection AMD group; circuit simulation problem, Ufuk Okuyucu, AMD, Inc.",
-      matrixFileName = "G3_circuit_R",
+      matrixFileName = "G3_circuit",
       csvResultsBaseFileName = "cholesky_G3_circuit",
       matrixObjectName = "G3_circuit",
       numberOfRows = as.integer(1585478),
@@ -328,7 +335,7 @@ SparseLuDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "sparse LU decomposition of Freescale/circuit5M_dc circuit simulation problem matrix",
       description = "LU decomposition of circuit5M_dc matrix from University of Florida Sparse Matrix Collection Freescale group; Large circuit (DC analysis) K. Gullapalli, Freescale Semiconductor",
-      matrixFileName = "circuit5M_dc_R",
+      matrixFileName = "circuit5M_dc",
       csvResultsBaseFileName = "lu_circuit5M_dc",
       matrixObjectName = "circuit5M_dc",
       numberOfRows = as.integer(3523317),
@@ -345,7 +352,7 @@ SparseLuDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "sparse LU decomposition of Norris/stomach 2D/3D problem matrix",
       description = "LU decomposition of stomach matrix from University of Florida Sparse Matrix Collection Norris group; S.Norris, Univ. Auckland. 3D electro-physical model of a duodenum",
-      matrixFileName = "stomach_R",
+      matrixFileName = "stomach",
       csvResultsBaseFileName = "lu_stomach",
       matrixObjectName = "stomach",
       numberOfRows = as.integer(213360),
@@ -362,7 +369,7 @@ SparseLuDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "sparse LU decomposition of Norris/torso3 2D/3D problem matrix",
       description = "LU decomposition of torso3 matrix from University of Florida Sparse Matrix Collection Norris group; S.Norris, Univ Auckland. finite diff. electro-phys.  3D model of torso",
-      matrixFileName = "torso3_R",
+      matrixFileName = "torso3",
       csvResultsBaseFileName = "lu_torso3",
       matrixObjectName = "torso3",
       numberOfRows = as.integer(259156),
@@ -420,7 +427,7 @@ SparseQrDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "sparse QR factorization of Pereyra/landmark least squares problem matrix",
       description = "QR factorization of landmark matrix from University of Florida Sparse Matrix Collection Pereyra group; Matrix from Victor Pereyra, Stanford University",
-      matrixFileName = "landmark_R",
+      matrixFileName = "landmark",
       csvResultsBaseFileName = "qr_landmark",
       matrixObjectName = "landmark",
       numberOfRows = as.integer(71952),
