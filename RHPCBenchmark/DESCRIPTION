@@ -8,7 +8,7 @@ Description: This package provides microbenchmarks for determining the run time
   performance of aspects of the R programming environment and packages
   commonly used for high-performance computation.  The benchmark currently
   measures the performance of dense linear algebra kernels from the base
-  package and sparse linear algebra kernels from the matrix package.
+  package and sparse linear algebra kernels from the Matrix package.
 Depends: R (>= 3.3.1),
   Matrix,
   methods,

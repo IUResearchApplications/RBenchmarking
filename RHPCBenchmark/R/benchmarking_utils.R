@@ -105,7 +105,7 @@ GetConfigurableEnvParameter <- function(configurableVariable) {
 #'   were conducted with
 #' @param dimensionParameters an integer vector specifying the dimension
 #'   parameters the microbenchmark uses to define the matrix dimensions to be
-#'   tested with
+#'   tested with; length is assumed to be greater than zero
 #' @param numberOfSuccessfulTrials an integer vector specifying the number of
 #'   performance trials that were successfully performed for each matrix tested
 #' @param trialTimes a real matrix with each column containing the run times
@@ -133,10 +133,13 @@ PrintDenseMatrixMicrobenchmarkResults <- function(benchmarkName,
    for (i in 1:numberOfDimensions) {
       if (numberOfSuccessfulTrials[i] > 0) {
          cat(sprintf("%-9d   %-9d   %-12.6e   %-12.6e   %-12.6e   %-12.6e\n", dimensionParameters[i], numberOfSuccessfulTrials[i], min(trialTimes[1:numberOfSuccessfulTrials[i], i]), max(trialTimes[1:numberOfSuccessfulTrials[i], i]), averageWallClockTimes[i], standardDeviations[i]))
+      } else {
+         cat("There were no successful performance trials for this microbenchmark.\n")
+         cat("Please look for warnings or errors prior to this report.\n")
       }
    }
 
-   cat(  "---------------------------------------------------------------------------------\n")
+   cat(  "---------------------------------------------------------------------------------\n\n")
 
 }
 
@@ -158,8 +161,10 @@ PrintDenseMatrixMicrobenchmarkResults <- function(benchmarkName,
 #'   microbenchmark
 #' @param numberOfThreads the number of threads all of the performance trials
 #'   were conducted with
-#' @param numberOfRows the number of expected rows in the matrix
-#' @param numberOfColumns the number of expected columns in the matrix
+#' @param numberOfRows the number of expected rows in the matrix; assumed to
+#'   be greater than zero
+#' @param numberOfColumns the number of expected columns in the matrix; assumed
+#'   to be greater than zero
 #' @param numberOfSuccessfulTrials an integer vector specifying the number of
 #'   performance trials that were successfully performed for each matrix tested
 #' @param trialTimes a real matrix with each column containing the run times
@@ -186,11 +191,13 @@ PrintSparseMatrixMicrobenchmarkResults <- function(benchmarkName,
    for (i in 1:length(numberOfRows)) {
       if (numberOfSuccessfulTrials[i] > 0) {
          cat(sprintf("%-9d   %-9d   %-12d   %-12.6e   %-12.6e   %-12.6e   %-12.6e\n", numberOfRows, numberOfColumns, numberOfSuccessfulTrials[i], min(trialTimes[1:numberOfSuccessfulTrials[i], i]), max(trialTimes[1:numberOfSuccessfulTrials[i], i]), averageWallClockTimes[i], standardDeviations[i]))
+      } else {
+         cat("There were no successful performance trials for this microbenchmark.\n")
+         cat("Please look for warnings or errors prior to this report.\n")
       }
    }
 
-   cat(  "------------------------------------------------------------------------------------------------\n")
-
+   cat(  "------------------------------------------------------------------------------------------------\n\n")
 }
 
 

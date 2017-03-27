@@ -52,25 +52,28 @@ MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters, numberOfThread
    numberOfWarmupTrials <- benchmarkParameters$numberOfWarmupTrials
    benchmarkName <- benchmarkParameters$benchmarkName
 
+   numberOfDimensions <- length(numberOfRows)
+
+   if (numberOfDimensions < 1) {
+      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- length of numberOfRows array must be greater than zero", benchmarkParameters$benchmarkName)
+      write(errorStr, stderr())
+   }
+
    if (length(numberOfRows) != length(numberOfTrials)) {
       errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- lengths of numberOfTrials and numberOfRows arrays must be equal", benchmarkParameters$benchmarkName)
       write(errorStr, stderr())
-      return(1)
    }
 
    if (length(numberOfColumns) != length(numberOfTrials)) {
       errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- lengths of numberOfTrials and numberOfColumns arrays must be equal", benchmarkParameters$benchmarkName)
       write(errorStr, stderr())
-      return(1)
    }
 
    if (length(numberOfTrials) != length(numberOfWarmupTrials)) {
       errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s' -- lengths of numberOfTrials and numberOfWarmupTrials arrays must be equal", benchmarkParameters$benchmarkName)
       write(errorStr, stderr())
-      return(1)
    }
    
-   numberOfDimensions <- length(numberOfRows)
    maximumNumberOfTrials <- max(numberOfTrials)
    trialTimes <- rep(0, maximumNumberOfTrials*maximumNumberOfTrials)
    dim(trialTimes) <- c(maximumNumberOfTrials, maximumNumberOfTrials)
@@ -78,37 +81,42 @@ MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters, numberOfThread
    standardDeviations <- rep(0, numberOfDimensions)
    numberOfSuccessfulTrials <- rep(0, numberOfDimensions)
 
+   # Run the microbenchmark for different size matrices whose dimensions are given in a
+   # vector of dimensions
    for (j in 1:numberOfDimensions) {
 
       for (i in 1:(numberOfTrials[j]+numberOfWarmupTrials[j])) {
          cat(sprintf("Running iteration %d for matrix dimensions %d x %d...", i, numberOfRows[j], numberOfColumns[j]))
 
-         tryCatchResult <- tryCatch({
-            allocationSuccessful <- TRUE
+         allocationSuccessful <- tryCatch({
             kernelParameters <- allocator(benchmarkParameters, j)
+            TRUE
          }, warning = function(war) {
-            msg <- sprintf("WARN: allocator threw a warning -- %s", war)
+            msg <- sprintf("ERROR: allocator threw a warning -- %s", war)
             write(msg, stderr())
+            return(FALSE)
          }, error = function(err) {
-            allocationSuccessful <- FALSE
             msg <- sprintf("ERROR: allocator threw an error -- %s", err)
             write(msg, stderr())
+            return(FALSE)
          })
 
          if (!allocationSuccessful) {
             break;
          }
 
-         tryCatchResult <- tryCatch({
-            benchmarkSuccessful <- TRUE
+         benchmarkSuccessful <- tryCatch({
             timings <- benchmark(benchmarkParameters, kernelParameters)
+            TRUE
          }, warning = function(war) {
             msg <- sprintf("WARN: benchmark threw a warning -- %s", war)
             write(msg, stderr())
+            return(FALSE)
          }, error = function(err) {
             benchmarkSuccessful <- FALSE
             msg <- sprintf("ERROR: benchmark threw an error -- %s", err)
             write(msg, stderr())
+            return(FALSE)
          })
             
          if (!benchmarkSuccessful) {
@@ -139,5 +147,4 @@ MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters, numberOfThread
 
    PrintSparseMatrixMicrobenchmarkResults(benchmarkName, numberOfThreads, numberOfRows, numberOfColumns, numberOfSuccessfulTrials, trialTimes, averageWallClockTimes, standardDeviations)
 
-   return(0)
 }

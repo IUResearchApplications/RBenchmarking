@@ -52,16 +52,19 @@ MicrobenchmarkDenseMatrixKernel <- function(benchmarkParameters, numberOfThreads
    numberOfWarmupTrials <- benchmarkParameters$numberOfWarmupTrials
    benchmarkName <- benchmarkParameters$benchmarkName
 
+   if (numberOfDimensions < 1) {
+      errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- length of dimensionParameters array must be greater than zero", benchmarkParameters$benchmarkName)
+      write(errorStr, stderr())
+   }
+
    if (numberOfDimensions != length(numberOfTrials)) {
       errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- length of numberOfTrials and dimensionParameters arrays must be equal", benchmarkParameters$benchmarkName)
       write(errorStr, stderr())
-      return(1)
    }
 
    if (numberOfDimensions != length(numberOfWarmupTrials)) {
       errorStr <- sprintf("ERROR: Input checking failed for microbenchmark '%s' -- length of numberOfWarmupTrials and dimensionParameters arrays must be equal", benchmarkParameters$benchmarkName)
       write(errorStr, stderr())
-      return(1)
    }
    
    maximumNumberOfTrials <- max(numberOfTrials)
@@ -71,38 +74,43 @@ MicrobenchmarkDenseMatrixKernel <- function(benchmarkParameters, numberOfThreads
    standardDeviations <- rep(0, numberOfDimensions)
    numberOfSuccessfulTrials <- rep(0, numberOfDimensions)
 
+   # Run the microbenchmark for different size matrices whose dimensions are
+   # given in a vector of dimensions
    for (j in 1:numberOfDimensions) {
       d <- dimensionParameters[j]
 
       for (i in 1:(numberOfTrials[j]+numberOfWarmupTrials[j])) {
          cat(sprintf("Running iteration %d for dimension %d... ", i, d))
 
-         tryCatchResult <- tryCatch({
-            allocationSuccessful <- TRUE
+         allocationSuccessful <- tryCatch({
             kernelParameters <- allocator(benchmarkParameters, j)
+            TRUE
          }, warning = function(war) {
-            msg <- sprintf("WARN: allocator threw a warning -- %s", war)
+            msg <- sprintf("ERROR: allocator threw a warning -- %s", war)
             write(msg, stderr())
+            return(FALSE)
          }, error = function(err) {
-            allocationSuccessful <- FALSE
             msg <- sprintf("ERROR: allocator threw an error -- %s", err)
             write(msg, stderr())
+            return(FALSE)
          })
 
          if (!allocationSuccessful) {
             break;
          }
 
-         tryCatchResult <- tryCatch({
-            benchmarkSuccessful <- TRUE
+         benchmarkSuccessful <- tryCatch({
             timings <- benchmark(benchmarkParameters, kernelParameters)
+            TRUE
          }, warning = function(war) {
             msg <- sprintf("WARN: benchmark threw a warning -- %s", war)
             write(msg, stderr())
+            return(FALSE)
          }, error = function(err) {
             benchmarkSuccessful <- FALSE
             msg <- sprintf("ERROR: benchmark threw an error -- %s", err)
             write(msg, stderr())
+            return(FALSE)
          })
             
          if (!benchmarkSuccessful) {
@@ -132,6 +140,4 @@ MicrobenchmarkDenseMatrixKernel <- function(benchmarkParameters, numberOfThreads
    }
 
    PrintDenseMatrixMicrobenchmarkResults(benchmarkName, numberOfThreads, dimensionParameters, numberOfSuccessfulTrials, trialTimes, averageWallClockTimes, standardDeviations)
-
-   return(0)
 }

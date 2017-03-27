@@ -19,13 +19,12 @@ load_all("RHPCBenchmark")
 
 args <- commandArgs(trailingOnly=TRUE)
 
-if (length(args) != 3) {
-   write("USAGE: sparse_matrix_driver runIdentifier matrixDirectory resultsDirectory", stderr())
+if (length(args) != 2) {
+   write("USAGE: sparse_matrix_driver runIdentifier resultsDirectory", stderr())
    quit(status=1)
 }
 
 runIdentifier <- args[1]
-matrixDirectory <- args[2]
-resultsDirectory <- args[3]
+resultsDirectory <- args[2]
 
-SparseMatrixBenchmark(runIdentifier, resultsDirectory, matrixDirectory)
+SparseMatrixBenchmark(runIdentifier, resultsDirectory)
