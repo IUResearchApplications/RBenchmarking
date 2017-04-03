@@ -122,7 +122,7 @@ PrintDenseMatrixMicrobenchmarkResults <- function(benchmarkName,
    numberOfDimensions <- length(dimensionParameters)
 
    cat(  "---------------------------------------------------------------------------------\n")
-   cat(sprintf("Timings summary for benchmark%s\n", benchmarkName))
+   cat(sprintf("Timings summary for microbenchmark %s\n", benchmarkName))
    cat(  "---------------------------------------------------------------------------------\n")
    cat(sprintf("numberOfThreads=%s\n", numberOfThreads))
    cat(  "---------------------------------------------------------------------------------\n")
@@ -180,7 +180,7 @@ PrintSparseMatrixMicrobenchmarkResults <- function(benchmarkName,
      trialTimes, averageWallClockTimes, standardDeviations) {
 
    cat(  "------------------------------------------------------------------------------------------------\n")
-   cat(sprintf("Timings summary for %s\n", benchmarkName))
+   cat(sprintf("Timings summary for microbenchmark %s\n", benchmarkName))
    cat(  "------------------------------------------------------------------------------------------------\n")
    cat(sprintf("numberOfThreads=%s\n", numberOfThreads))
    cat(  "------------------------------------------------------------------------------------------------\n")
@@ -263,7 +263,10 @@ WriteDenseMatrixPerformanceResultsCsv <- function(numberOfThreads,
 #'   for the performance trials
 #' @param csvResultsFile the CSV results file the performance result will be
 #'   appended to
-WriteSparseMatrixPerformanceResultsCsv <- function(numberOfThreads, numberOfRows, numberOfColumns, averageWallClockTime, standardDeviation, csvResultsFile) {
+WriteSparseMatrixPerformanceResultsCsv <- function(numberOfThreads,
+   numberOfRows, numberOfColumns, averageWallClockTime, standardDeviation,
+   csvResultsFile) {
+
    if (csvResultsFile != "" && !file.exists(csvResultsFile)) {
       cat("Num. Rows", "Num. Cols", "Avg. Wall Clock Time", "Std. Dev", "Number of Threads\n", file=csvResultsFile, sep=",", append=FALSE)
    }
@@ -283,7 +286,7 @@ WriteSparseMatrixPerformanceResultsCsv <- function(numberOfThreads, numberOfRows
 #' @param numberOfSuccessfulTrials the number of successful performance trials
 #'   to be averaged over 
 #' @param times a vector of wall clock times for the performance trials
-ComputeAverageTime<-function(numberOfSuccessfulTrials, times) {
+ComputeAverageTime <- function(numberOfSuccessfulTrials, times) {
    return(mean(times[1:numberOfSuccessfulTrials]))
 }
 
@@ -298,6 +301,6 @@ ComputeAverageTime<-function(numberOfSuccessfulTrials, times) {
 #' @param numberOfSuccessfulTrials the number of successful performance trials
 #'   over which the standard deviation will be computed
 #' @param times a vector of wall clock times for the performance trials
-ComputeStandardDeviation<-function(numberOfSuccessfulTrials, times) {
+ComputeStandardDeviation <- function(numberOfSuccessfulTrials, times) {
    return(sqrt(stats::var(times[1:numberOfSuccessfulTrials])))
 }

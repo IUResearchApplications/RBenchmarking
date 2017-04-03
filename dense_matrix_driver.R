@@ -28,4 +28,6 @@ if (length(args) != 2) {
 runIdentifier <- args[1]
 resultsDirectory <- args[2]
 
-DenseMatrixBenchmark(runIdentifier, resultsDirectory)
+denseMatrixResults <- DenseMatrixBenchmark(runIdentifier, resultsDirectory)
+save(denseMatrixResults, file="denseMatrixResults.RData")
+warnings()

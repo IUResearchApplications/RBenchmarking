@@ -33,7 +33,7 @@
 #'   conducted.
 SparseMatrixVectorAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
-   kernelParameters <- list("A", "x")
+   kernelParameters <- list()
    kernelParameters$A <- get(benchmarkParameters$matrixObjectName)
 
    # Make sure expected matrix dimensions agree
@@ -81,7 +81,7 @@ SparseMatrixVectorBenchmark <- function(benchmarkParameters, kernelParameters) {
 #' @inheritParams SparseMatrixVectorAllocator
 SparseCholeskyAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
-   kernelParameters <- list("A")
+   kernelParameters <- list()
    kernelParameters$A <- get(benchmarkParameters$matrixObjectName)
 
    # Make sure expected matrix dimensions agree
@@ -127,8 +127,15 @@ SparseCholeskyBenchmark <- function(benchmarkParameters, kernelParameters) {
 #' @inheritParams SparseMatrixVectorAllocator
 SparseLuAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
-   kernelParameters <- list("A")
+   kernelParameters <- list()
    kernelParameters$A <- get(benchmarkParameters$matrixObjectName)
+   # The sparse matrix objects can be altered by reference.
+   # When lu() is called on the sparse matrix, it will attach
+   # the L and U factors to the input matrix under the 'factors'
+   # field.  Thus, the factorization will only be perfored for the
+   # first performance trial unless the 'factors' field is set to
+   # the empty list.
+   kernelParameters$A@factors <- list()
 
    # Make sure expected matrix dimensions agree
    if (nrow(kernelParameters$A) != benchmarkParameters$numberOfRows[index]) {
@@ -167,7 +174,7 @@ SparseLuBenchmark <- function(benchmarkParameters, kernelParameters) {
 #' @inheritParams SparseMatrixVectorAllocator
 SparseQrAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
-   kernelParameters <- list("A")
+   kernelParameters <- list()
    kernelParameters$A <- get(benchmarkParameters$matrixObjectName)
 
    # Make sure expected matrix dimensions agree

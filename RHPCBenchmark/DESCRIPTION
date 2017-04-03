@@ -10,9 +10,10 @@ Description: This package provides microbenchmarks for determining the run time
   measures the performance of dense linear algebra kernels from the base
   package and sparse linear algebra kernels from the Matrix package.
 Depends: R (>= 3.3.1),
-  Matrix,
   methods,
-  stats
+  stats,
+  utils,
+  Matrix
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true

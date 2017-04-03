@@ -21,6 +21,7 @@
 #'   executed (TRUE) or not (FALSE)
 #' @field benchmarkName a character string that is the name of the
 #'   microbenchmark
+#' @field benchmarkDescription a character string describing the microbenchmark
 #' @field csvResultsBaseFileName a character string that is the base of the file
 #'   name the microbenchmark results will be written to
 #' @field dimensionParameters an integer vector specifying the dimension
@@ -40,6 +41,7 @@ methods::setRefClass(
    fields = list(
       active = "logical",
       benchmarkName = "character",
+      benchmarkDescription = "character",
       csvResultsBaseFileName = "character",
       dimensionParameters = "integer",
       numberOfTrials = "integer",
@@ -57,7 +59,7 @@ methods::setRefClass(
 #'   executed (TRUE) or not (FALSE)
 #' @field benchmarkName A character string that is the name of the
 #'   microbenchmark
-#' @field description A character string describing the benchmark
+#' @field benchmarkDescription A character string describing the microbenchmark
 #' @field matrixFileName A character string specifying the R data file
 #'   containing the sparse matrix data
 #' @field csvResultsBaseFileName A character string that is the base of the file
@@ -85,7 +87,7 @@ methods::setRefClass(
    fields = list(
       active = "logical",
       benchmarkName = "character",
-      description = "character",
+      benchmarkDescription = "character",
       matrixFileName = "character",
       csvResultsBaseFileName = "character",
       matrixObjectName = "character",

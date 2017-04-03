@@ -41,8 +41,28 @@
 #'   where all of the CSV performance results files will be saved
 #' @param runIdentifier a character string specifying the suffix to be
 #'   appended to the base of the file name of the output CSV format files
+#' @return a dataframe containing the performance trial times for each matrix
+#'   tested, that is the raw performance data before averaging.  The columns
+#'   of the data frame are the following:
+#'   \describe{
+#'     \item{BenchmarkName}{The name of the microbenchmark}
+#'     \item{NumberOfRows}{An integer specifying the expected number of rows in
+#'       the input sparse matrix}
+#'     \item{NumberOfColumns}{An integer specifying the expected number of
+#'       columns in the input sparse matrix}
+#'     \item{UserTime}{The amount of time spent in user-mode code within the
+#'       microbenchmarked code}
+#'     \item{SystemTime}{The amount of time spent in the kernel within the
+#'       process}
+#'     \item{WallClockTime}{The total time spent to complete the performance
+#'       trial}
+#'     \item{DateStarted}{The date and time the performance trial was commenced}
+#'     \item{DateFinished}{The date and time the performance trial ended}
+#'   }
+#'
 MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters, numberOfThreads, resultsDirectory, runIdentifier) {
    cat(sprintf("Running microbenchmark: %s\n", benchmarkParameters$benchmarkName))
+   cat(sprintf("Microbenchmark description: %s\n", benchmarkParameters$benchmarkDescription))
    allocator <- match.fun(benchmarkParameters$allocatorFunction)
    benchmark <- match.fun(benchmarkParameters$benchmarkFunction)
 
@@ -81,6 +101,10 @@ MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters, numberOfThread
    standardDeviations <- rep(0, numberOfDimensions)
    numberOfSuccessfulTrials <- rep(0, numberOfDimensions)
 
+   resultsFrame <- data.frame(BenchmarkName=character(), NumberOfRows=integer(), NumberOfColumns=integer(),
+      UserTime=numeric(), SystemTime=numeric(), WallClockTime=numeric(),
+      DateStarted=character(), DateFinished=character(), stringsAsFactors=FALSE)
+
    # Run the microbenchmark for different size matrices whose dimensions are given in a
    # vector of dimensions
    for (j in 1:numberOfDimensions) {
@@ -105,6 +129,9 @@ MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters, numberOfThread
             break;
          }
 
+         dateStarted <- date()
+         timings <- c(NA_real_, NA_real_, NA_real_)
+
          benchmarkSuccessful <- tryCatch({
             timings <- benchmark(benchmarkParameters, kernelParameters)
             TRUE
@@ -113,22 +140,28 @@ MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters, numberOfThread
             write(msg, stderr())
             return(FALSE)
          }, error = function(err) {
-            benchmarkSuccessful <- FALSE
             msg <- sprintf("ERROR: benchmark threw an error -- %s", err)
             write(msg, stderr())
             return(FALSE)
          })
-            
+
          if (!benchmarkSuccessful) {
             break;
          }
 
-         if (i > numberOfWarmupTrials[j]) {
-            numberOfSuccessfulTrials[j] <- numberOfSuccessfulTrials[j] + 1 
-         }
-       
+         dateFinished <- date()
+         userTime <- timings[1]
+         systemTime <- timings[2]
          wallClockTime <- timings[3]
 
+         if (i > numberOfWarmupTrials[j]) {
+            numberOfSuccessfulTrials[j] <- numberOfSuccessfulTrials[j] + 1 
+            resultsFrame[nrow(resultsFrame)+1, ] <- list(
+               benchmarkName, as.integer(numberOfRows[j]),
+               as.integer(numberOfColumns[j]), userTime, systemTime,
+               wallClockTime, dateStarted, dateFinished)
+         }
+       
          remove(kernelParameters)
          invisible(gc())
 
@@ -139,12 +172,19 @@ MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters, numberOfThread
          cat(sprintf("done: %f(sec)\n", wallClockTime))
       }
 
-      csvResultsFileName <- file.path(resultsDirectory, paste(benchmarkParameters$csvResultsBaseFileName, "_", runIdentifier, ".csv", sep=""))
+      csvResultsFileName <- file.path(resultsDirectory,
+         paste(benchmarkParameters$csvResultsBaseFileName, "_", runIdentifier,
+               ".csv", sep=""))
       averageWallClockTimes[j] <- ComputeAverageTime(numberOfSuccessfulTrials[j], trialTimes[,j]) 
       standardDeviations[j] <- ComputeStandardDeviation(numberOfSuccessfulTrials[j], trialTimes[,j])
-      WriteSparseMatrixPerformanceResultsCsv(numberOfThreads, numberOfRows[j], numberOfColumns[j], averageWallClockTimes[j], standardDeviations[j], csvResultsFileName)
+      WriteSparseMatrixPerformanceResultsCsv(numberOfThreads, numberOfRows[j],
+         numberOfColumns[j], averageWallClockTimes[j], standardDeviations[j],
+         csvResultsFileName)
    }
 
-   PrintSparseMatrixMicrobenchmarkResults(benchmarkName, numberOfThreads, numberOfRows, numberOfColumns, numberOfSuccessfulTrials, trialTimes, averageWallClockTimes, standardDeviations)
+   PrintSparseMatrixMicrobenchmarkResults(benchmarkName, numberOfThreads,
+      numberOfRows, numberOfColumns, numberOfSuccessfulTrials, trialTimes,
+      averageWallClockTimes, standardDeviations)
 
+   return (resultsFrame)
 }

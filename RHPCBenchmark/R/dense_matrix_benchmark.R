@@ -41,6 +41,9 @@
 #'   defining the microbenchmarks to execute as part of the dense matrix
 #'   benchmark.  Default values are provided by the function
 #'   \code{\link{DenseMatrixDefaultMicrobenchmarks}}.
+#' @return a list of data frames, one per microbenchmark, each containing the
+#'   user, system, and elapsed (wall clock) times of each performance trial
+#'   used to compute the average performance
 #' @examples 
 #' ## Run the default dense matrix benchmarks and place the results files
 #' ## in the directory ./DenseMatrixResults with the run identifier test1
@@ -59,14 +62,22 @@ DenseMatrixBenchmark <- function(runIdentifier, resultsDirectory,
 
    numberOfThreads <- strtoi(GetConfigurableEnvParameter("R_BENCH_NUM_THREADS_VARIABLE"))
 
+   microbenchmarkResults <- list()
+
    # Loop over all matrix kernel tests
 
    for (i in 1:length(microbenchmarks)) {
       if (microbenchmarks[[i]]$active) {
-         microbenchmarkValue <- MicrobenchmarkDenseMatrixKernel(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+         benchmarkName <- microbenchmarks[[i]]$benchmarkName
+
+         microbenchmarkResults[[benchmarkName]] <- MicrobenchmarkDenseMatrixKernel(
+            microbenchmarks[[i]], numberOfThreads, resultsDirectory,
+            runIdentifier)
          invisible(gc())
       }
    }
+
+   return (microbenchmarkResults)
 
 }
 
@@ -98,7 +109,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["cholesky"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "Cholesky factorization",
+      benchmarkName = "cholesky",
+      benchmarkDescription = "Dense matrix Cholesky factorization",
       csvResultsBaseFileName = "cholesky",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -111,7 +123,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["crossprod"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "matrix cross product",
+      benchmarkName = "crossprod",
+      benchmarkDescription = "Dense matrix cross product",
       csvResultsBaseFileName = "crossprod",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -124,7 +137,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["determinant"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "matrix determinant",
+      benchmarkName = "determinant",
+      benchmarkDescription = "Dense matrix determinant",
       csvResultsBaseFileName = "determinant",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -138,6 +152,7 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
       "DenseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "eigendecomposition",
+      benchmarkDescription = "Dense matrix eigendecomposition",
       csvResultsBaseFileName = "eigendecomposition",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -150,7 +165,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["solve"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "linear solve with multiple r.h.s.",
+      benchmarkName = "solve",
+      benchmarkDescription = "Dense linear solve with multiple r.h.s.",
       csvResultsBaseFileName = "solve",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -163,7 +179,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["lsfit"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "least squares fit",
+      benchmarkName = "lsfit",
+      benchmarkDescription = "Dense least squares fit",
       csvResultsBaseFileName = "lsfit",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -176,7 +193,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["deformtrans"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "matrix deformation and transpose",
+      benchmarkName = "deformtrans",
+      benchmarkDescription = "Dense matrix deformation and transpose",
       csvResultsBaseFileName = "deformtrans",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -189,7 +207,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["transpose"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "matrix transpose",
+      benchmarkName = "transpose",
+      benchmarkDescription = "Dense matrix transpose",
       csvResultsBaseFileName = "transpose",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -202,7 +221,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["matmat"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "matrix-matrix multiplication",
+      benchmarkName = "matmat",
+      benchmarkDescription = "Dense matrix-matrix multiplication",
       csvResultsBaseFileName = "matmat",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -215,7 +235,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["matvec"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "matrix-vector multiplication",
+      benchmarkName = "matvec",
+      benchmarkDescription = "Dense matrix-vector multiplication",
       csvResultsBaseFileName = "matvec",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -228,7 +249,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["qr"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "QR decomposition",
+      benchmarkName = "qr",
+      benchmarkDescription = "QR decomposition",
       csvResultsBaseFileName = "qr",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),
@@ -241,7 +263,8 @@ DenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks[["svd"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
       active = TRUE,
-      benchmarkName = "Singular value decomposition",
+      benchmarkName = "svd",
+      benchmarkDescription = "Singular value decomposition",
       csvResultsBaseFileName = "svd",
       dimensionParameters = as.integer(c(1000, 2000)),
       numberOfTrials = as.integer(c(3, 3)),

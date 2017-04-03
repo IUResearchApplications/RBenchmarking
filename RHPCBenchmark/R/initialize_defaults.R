@@ -15,6 +15,7 @@
 ################################################################################
 
 #' @import methods
+#' @import utils
 #' @import Matrix
 RBenchmarkOptions <- list()
 RBenchmarkOptions$rnorm <- rnorm
