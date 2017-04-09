@@ -15,7 +15,7 @@
 ################################################################################
 
 #' Allocates and initializes input to the Cholesky factorization dense matrix
-#' kernel
+#' kernel microbenchmarks
 #'
 #' \code{CholeskyAllocator} allocates and populates the input to the
 #' Cholesky factorization dense matrix kernel for the purposes of conducting a
@@ -25,10 +25,10 @@
 #'
 #' @param benchmarkParameters an object of type
 #'   \code{\link{DenseMatrixMicrobenchmark}} specifying various parameters
-#'   needed to generate input to the dense matrix kernel.
+#'   needed to generate input for the dense matrix kernel.
 #' @param index an integer index indicating the dimensions of the matrix or
-#'   vector data to be generated as input to the dense matrix kernel.
-#' @return a list containing the matrices or vectors to be input to the
+#'   vector data to be generated as input for the dense matrix kernel.
+#' @return a list containing the matrices or vectors to be input for the
 #'   dense matrix kernel for which a single performance trial is to be
 #'   conducted.
 CholeskyAllocator <- function(benchmarkParameters, index) {
@@ -62,6 +62,7 @@ CholeskyMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and populates input to the matrix cross product dense matrix kernel
+#' microbenchmarks
 #'
 #' \code{CrossprodAllocator} allocates and populates the input to the
 #' matrix cross product dense matrix kernel for the purposes of conducting a
@@ -93,7 +94,7 @@ CrossprodMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and populates input to the matrix deformation and transpose dense
-#' matrix kernel
+#' matrix kernel microbenchmarks
 #'
 #' \code{DeformtransAllocator} allocates and populates the input to the
 #' matrix deformation and transpose dense matrix kernel for the purposes of
@@ -141,6 +142,7 @@ DeformtransMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and populates input to the matrix determinant dense matrix kernel
+#' microbenchmarks
 #'
 #' \code{DeterminantAllocator} allocates and populates the input to the
 #' matrix determinant dense matrix kernel for the purposes of conducting a
@@ -173,6 +175,7 @@ DeterminantMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and populates input to the matrix eigendecomposition kernel
+#' microbenchmarks
 #'
 #' \code{EigenAllocator} allocates and populates the input to the
 #' matrix eigendecomposition dense matrix kernel for the purposes of conducting
@@ -207,7 +210,7 @@ EigenMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and populates input to the matrix least squares fit dense matrix
-#' kernel
+#' kernel microbenchmarks
 #'
 #' \code{LsfitAllocator} allocates and populates the input to the
 #' matrix least squares fit dense matrix kernel for the purposes of conducting
@@ -249,7 +252,7 @@ LsfitMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and populates input to the matrix-matrix multiplication dense
-#' matrix kernel
+#' matrix kernel microbenchmarks
 #'
 #' \code{MatmatAllocator} allocates and populates the input to the
 #' matrix-matrix multiplication dense matrix kernel for the purposes of
@@ -286,7 +289,7 @@ MatmatMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and populates input to the matrix-vector multiplication dense
-#' matrix kernel
+#' matrix kernel microbenchmarks
 #'
 #' \code{MatvecAllocator} allocates and populates the input to the
 #' matrix-vector multiplication dense matrix kernel for the purposes of
@@ -324,6 +327,7 @@ MatvecMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and populates input to the QR factorization dense matrix kernel
+#' microbenchmarks
 #'
 #' \code{QrAllocator} allocates and populates the input to the
 #' QR factorization dense matrix kernel for the purposes of
@@ -358,8 +362,9 @@ QrMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 }
 
 
-#' Allocates and populates input to the dense matrix kernel for computing the
-#' solution to a system of linear equations with multiple right-hand sides
+#' Allocates and populates input to the dense matrix kernel microbenchmark
+#' for computing the solution to a system of linear equations with multiple
+#' right-hand sides
 #'
 #' \code{SolveAllocator} allocates and populates the input to the
 #' solve kernel for the purposes of conducting a single performance trial with
@@ -396,7 +401,7 @@ SolveMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and populates input to the singular value decomposition (SVD) dense
-#' matrix kernel
+#' matrix kernel microbenchmarks
 #'
 #' \code{SvdAllocator} allocates and populates the input to the
 #' SVD dense matrix kernel for the purposes of conducting a single performance
@@ -432,6 +437,7 @@ SvdMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and populates input to the matrix transpose dense matrix kernel
+#' microbenchmarks
 #'
 #' \code{TransposeAllocator} allocates and populates the input to the
 #' transpose dense matrix kernel for the purposes of conducting a single

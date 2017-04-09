@@ -13,10 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+library(devtools)
+devtools::load_all("RHPCBenchmarkData")
 
-#' @import methods
-#' @import utils
-#' @import cluster
-#' @import Matrix
-RBenchmarkOptions <- list()
-RBenchmarkOptions$rnorm <- rnorm
+args <- commandArgs(trailingOnly=TRUE)
+
+if (length(args) != 4) {
+   write("USAGE: generate_cluster_test_data featureVectorDimension numDimensionsToCluster numVectorsPerCluster dataDirectory", stderr())
+   quit(status=1)
+}
+
+set.seed(910)
+
+featureVectorDimension <- as.integer(args[1])
+numDimensionsToCluster <- as.integer(args[2])
+numVectorsPerCluster <- as.integer(args[3])
+dataDirectory <- args[4]
+
+GenerateClusterData(featureVectorDimension, numDimensionsToCluster,
+   numVectorsPerCluster, dataDirectory)
+cat("Done\n")
+

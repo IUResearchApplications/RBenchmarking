@@ -13,7 +13,8 @@ Depends: R (>= 3.3.1),
   methods,
   stats,
   utils,
-  Matrix
+  Matrix,
+  cluster
 License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true

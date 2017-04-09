@@ -39,11 +39,11 @@
 #' \code{\link{SparseCholeskyDefaultMicrobenchmarks}},
 #' \code{\link{SparseLuDefaultMicrobenchmarks}}, and
 #' \code{\link{SparseQrDefaultMicrobenchmarks}}.  Each 
-#' \code{SparseMatrixMicrobenchmark} specifies an R data file which stores the
+#' \code{SparseMatrixMicrobenchmark} specifies an R data file which contains the
 #' sparse matrix object needed by the microbenchmark.  The needed R data files
 #' should either be given in an attached R package or given in the \code{data}
-#' subdirectory of the current directory, and they should have the extension
-#' \code{.RData}.
+#' subdirectory of the current working directory, and they should have the
+#' extension \code{.RData}.
 #'
 #' @param runIdentifier a character string specifying the suffix to be
 #'   appended to the base of the file name of the output CSV format files
@@ -83,7 +83,11 @@
 #' ## decomposition microbenchmark disabled
 #' #qrMicrobenchmarks <- SparseQrDefaultMicrobenchmarks()
 #' #qrMicrobenchmarks[["circuit5M_dc"]]$active <- FALSE
-#' #SparseMatrixBenchmark("test1", "./DenseMatrixResults")
+#' #SparseMatrixBenchmark("test1", "./SparseMatrixResults")
+#' @seealso \code{\link{SparseMatrixVectorDefaultMicrobenchmarks}}
+#'          \code{\link{SparseCholeskyDefaultMicrobenchmarks}}
+#'          \code{\link{SparseLuDefaultMicrobenchmarks}}
+#'          \code{\link{SparseQrDefaultMicrobenchmarks}}
 #' @export
 SparseMatrixBenchmark <- function(runIdentifier,
    resultsDirectory,
@@ -227,6 +231,7 @@ PerformSparseMatrixKernelMicrobenchmarking <- function(microbenchmarks,
 #'   microbenchmarks to be executed.  The microbenchmarks appear in the order
 #'   listed in the function description and are assigned the names enumerate
 #'   in the description.
+#' @family sparse matrix default microbenchmarks
 #' @export
 SparseMatrixVectorDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
@@ -305,6 +310,8 @@ SparseMatrixVectorDefaultMicrobenchmarks <- function() {
 #'   microbenchmarks to be executed.  The microbenchmarks appear in the order
 #'   listed in the function description and are assigned the names enumerated
 #'   in the description.
+#' @family sparse matrix default microbenchmarks
+#' @export
 SparseCholeskyDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
    microbenchmarks[["ct20stif"]] <- methods::new(
@@ -382,6 +389,8 @@ SparseCholeskyDefaultMicrobenchmarks <- function() {
 #'   microbenchmarks to be executed.  The microbenchmarks appear in the order
 #'   listed in the function description and are assigned the names enumerated
 #'   in the description.
+#' @family sparse matrix default microbenchmarks
+#' @export
 SparseLuDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
    microbenchmarks[["circuit5M_dc"]] <- methods::new(
@@ -457,6 +466,9 @@ SparseLuDefaultMicrobenchmarks <- function() {
 #'   microbenchmarks to be executed.  The microbenchmarks appear in the order
 #'   listed in the function description and are assigned the names enumerated
 #'   in the description.
+#'   \code{\link{SparseQrDefaultMicrobenchmarks}}
+#' @family sparse matrix default microbenchmarks
+#' @export
 SparseQrDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
    microbenchmarks[["Maragal_6"]] <- methods::new(

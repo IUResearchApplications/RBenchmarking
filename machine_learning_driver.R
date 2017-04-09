@@ -20,33 +20,25 @@ devtools::load_all("RHPCBenchmark")
 args <- commandArgs(trailingOnly=TRUE)
 
 if (length(args) != 2) {
-   write("USAGE: sparse_matrix_driver runIdentifier resultsDirectory", stderr())
+   write("USAGE: machine_learning_driver runIdentifier resultsDirectory", stderr())
    quit(status=1)
 }
 
 runIdentifier <- args[1]
 resultsDirectory <- args[2]
 
-myMatvec <- SparseMatrixVectorDefaultMicrobenchmarks()
+myClustering <- ClusteringDefaultMicrobenchmarks()
+myClustering[["pam_cluster_3_7_5000"]]$active <- FALSE
+myClustering[["pam_cluster_3_7_5715"]]$active <- FALSE
+myClustering[["pam_cluster_16_33_1213"]]$active <- FALSE
+myClustering[["pam_cluster_64_33_1213"]]$active <- FALSE
+myClustering[["pam_cluster_16_7_2858"]]$active <- FALSE
+myClustering[["pam_cluster_32_7_2858"]]$active <- FALSE
+myClustering[["pam_cluster_64_7_5715"]]$active <- FALSE
 
-myCholesky <- SparseCholeskyDefaultMicrobenchmarks()
-#myCholesky[["ct20stif"]]$active <- FALSE
-#myCholesky[["Andrews"]]$active <- FALSE
-#myCholesky[["G3_circuit"]]$active <- FALSE
-
-myLu <- SparseLuDefaultMicrobenchmarks()
-#myLu[["circuit5M_dc"]]$active <- FALSE
-#myLu[["stomach"]]$active <- FALSE
-#myLu[["torso3"]]$active <- FALSE
-
-myQr <- SparseQrDefaultMicrobenchmarks()
-#myQr[["Maragal_6"]]$active <- FALSE
-#myQr[["landmark"]]$active <- FALSE
-
-sparseMatrixResults <- SparseMatrixBenchmark(runIdentifier, resultsDirectory,
-   matrixVectorMicrobenchmarks=myMatvec, choleskyMicrobenchmarks=myCholesky,
-   luMicrobenchmarks=myLu, qrMicrobenchmarks=myQr)
-dataFrameFileName <- file.path(resultsDirectory, "sparseMatrixResults.RData")
-save(sparseMatrixResults, file=dataFrameFileName)
+machineLearningResults <- MachineLearningBenchmark(runIdentifier,
+   resultsDirectory, clusteringMicrobenchmarks=myClustering)
+dataFrameFileName <- file.path(resultsDirectory, "machineLearningResults.RData")
+save(machineLearningResults, file=dataFrameFileName)
 cat("Warnings (NULL, if none):\n")
 warnings()

@@ -127,7 +127,7 @@ PrintDenseMatrixMicrobenchmarkResults <- function(benchmarkName,
    cat(sprintf("numberOfThreads=%s\n", numberOfThreads))
    cat(  "---------------------------------------------------------------------------------\n")
    cat(c("N | Number of | Min Wall     | Max Wall     | Average      | Standard\n"))
-   cat(c("          | Trials    | Time         | Time         | Wall Time    | deviation\n"))
+   cat(c("  | Trials    | Time         | Time         | Wall Time    | deviation\n"))
    cat(  "---------------------------------------------------------------------------------\n")
 
    for (i in 1:numberOfDimensions) {
@@ -165,6 +165,7 @@ PrintDenseMatrixMicrobenchmarkResults <- function(benchmarkName,
 #'   be greater than zero
 #' @param numberOfColumns the number of expected columns in the matrix; assumed
 #'   to be greater than zero
+#' @param numberOfNonzeros the number of non-zero elements in the matrix
 #' @param numberOfSuccessfulTrials an integer vector specifying the number of
 #'   performance trials that were successfully performed for each matrix tested
 #' @param trialTimes a real matrix with each column containing the run times
@@ -176,21 +177,90 @@ PrintDenseMatrixMicrobenchmarkResults <- function(benchmarkName,
 #' @param standardDeviations a vector of standard deviations of the wall clock
 #'   times obtained for each matrix tested during the performance trials
 PrintSparseMatrixMicrobenchmarkResults <- function(benchmarkName,
-     numberOfThreads, numberOfRows, numberOfColumns, numberOfSuccessfulTrials,
-     trialTimes, averageWallClockTimes, standardDeviations) {
+     numberOfThreads, numberOfRows, numberOfColumns, numberOfNonzeros, 
+     numberOfSuccessfulTrials, trialTimes, averageWallClockTimes,
+     standardDeviations) {
 
    cat(  "------------------------------------------------------------------------------------------------\n")
    cat(sprintf("Timings summary for microbenchmark %s\n", benchmarkName))
    cat(  "------------------------------------------------------------------------------------------------\n")
    cat(sprintf("numberOfThreads=%s\n", numberOfThreads))
    cat(  "------------------------------------------------------------------------------------------------\n")
-   cat(c("Number of | Number of | Number of    | Min Wall     | Max Wall     | Average      | Standard\n"))
-   cat(c("Rows      | Columns   | Trials       | Time         | Time         | Wall Time    | deviation\n"))
+   cat(c("Number of | Number of | Number of    | Number of    | Min Wall     | Max Wall     | Average      | Standard\n"))
+   cat(c("Rows      | Columns   | Trials       | Nonzeros     | Time         | Time         | Wall Time    | deviation\n"))
    cat(  "------------------------------------------------------------------------------------------------\n")
 
    for (i in 1:length(numberOfRows)) {
       if (numberOfSuccessfulTrials[i] > 0) {
-         cat(sprintf("%-9d   %-9d   %-12d   %-12.6e   %-12.6e   %-12.6e   %-12.6e\n", numberOfRows, numberOfColumns, numberOfSuccessfulTrials[i], min(trialTimes[1:numberOfSuccessfulTrials[i], i]), max(trialTimes[1:numberOfSuccessfulTrials[i], i]), averageWallClockTimes[i], standardDeviations[i]))
+         cat(sprintf("%-9d   %-9d   %-9d   %-12d   %-12.6e   %-12.6e   %-12.6e   %-12.6e\n",
+            numberOfRows, numberOfColumns, numberOfNonzeros,
+            numberOfSuccessfulTrials[i],
+            min(trialTimes[1:numberOfSuccessfulTrials[i], i]),
+            max(trialTimes[1:numberOfSuccessfulTrials[i], i]),
+            averageWallClockTimes[i], standardDeviations[i]))
+      } else {
+         cat("There were no successful performance trials for this microbenchmark.\n")
+         cat("Please look for warnings or errors prior to this report.\n")
+      }
+   }
+
+   cat(  "------------------------------------------------------------------------------------------------\n\n")
+}
+
+
+#' Prints results of a machine learning microbenchmark 
+#'
+#' \code{PrintMachineLearningMicrobenchmarkResults} prints performance results
+#' for a sparse matrix microbenchmark to standard output in a format that is
+#' easily human readable
+#' 
+#' This function prints the performance results obtained by a machine learning
+#' microbenchmark.  Summary statistics for each matrix tested.  The summary
+#' statistics include the minimum, maximum, average, and standard deviation of
+#' the wall clock times obtained by the performance trials with respect to each
+#' data tested.
+#'
+#' @param benchmarkName character string specifying the name of the
+#'   microbenchmark
+#' @param numberOfThreads the number of threads all of the performance trials
+#'   were conducted with
+#' @param numberOfFeatures the number of features, i.e. the dimension of the
+#'   feature vector
+#' @param numberOfFeatureVectors the number of feature vectors in the data set
+#' @param numberOfClusters the number of clusters in the data set
+#' @param numberOfSuccessfulTrials an integer vector specifying the number of
+#'   performance trials that were successfully performed for each data set
+#' @param trialTimes a real matrix with each column containing the run times
+#'   of all of the successful performance trials associated with a particular
+#'   data set.  The number of valid entries in each column are specified by the
+#'   entries in the \code{numberOfSuccessfulTrials} vector
+#' @param averageWallClockTimes a vector of average wall clock times computed
+#'   for each matrix tested during the performance trials
+#' @param standardDeviations a vector of standard deviations of the wall clock
+#'   times obtained for each matrix tested during the performance trials
+PrintMachineLearningMicrobenchmarkResults <- function(benchmarkName,
+     numberOfThreads, numberOfFeatures, numberOfFeatureVectors,
+     numberOfClusters, numberOfSuccessfulTrials, trialTimes,
+     averageWallClockTimes, standardDeviations) {
+
+   cat(  "------------------------------------------------------------------------------------------------\n")
+   cat(sprintf("Timings summary for microbenchmark %s\n", benchmarkName))
+   cat(  "------------------------------------------------------------------------------------------------\n")
+   cat(sprintf("numberOfThreads=%s\n", numberOfThreads))
+   cat(  "------------------------------------------------------------------------------------------------\n")
+   cat(c("Number of | Number of | Number of    | Number of    | Min wall     | Max Wall     | Average      | Standard\n"))
+   cat(c("Features  | Feature   | Clusters     | Trials       | Time         | Time         | Wall Time    | Deviation\n"))
+   cat(c("          | Vectors   |              |              |              |              |              | \n"))
+   cat(  "------------------------------------------------------------------------------------------------\n")
+
+   for (i in 1:length(numberOfFeatureVectors)) {
+      if (numberOfSuccessfulTrials[i] > 0) {
+         cat(sprintf("%-9d   %-9d   %-9d   %-12d   %-12.6e   %-12.6e   %-12.6e   %-12.6e\n",
+            numberOfFeatures, numberOfFeatureVectors, numberOfClusters,
+            numberOfSuccessfulTrials[i],
+            min(trialTimes[1:numberOfSuccessfulTrials[i], i]),
+            max(trialTimes[1:numberOfSuccessfulTrials[i], i]),
+            averageWallClockTimes[i], standardDeviations[i]))
       } else {
          cat("There were no successful performance trials for this microbenchmark.\n")
          cat("Please look for warnings or errors prior to this report.\n")
@@ -207,7 +277,7 @@ PrintSparseMatrixMicrobenchmarkResults <- function(benchmarkName,
 #' for a single dense matrix performance test to a CSV file
 #' 
 #' This function appends the performance results obtained by a single dense
-#' matrix performance test conducted for a specific microbenchmark and matrix.
+#' matrix performance test conducted for a specific matrix.
 #' Thede for the matrix tested.  If the CSV file does not exist, header
 #' information is printed on the first line to describe the subsequent entries.
 #' Each entry consists of the dimension parameter used to specify the dimensions
@@ -245,18 +315,19 @@ WriteDenseMatrixPerformanceResultsCsv <- function(numberOfThreads,
 #' for a single sparse matrix performance test to a CSV file.
 #' 
 #' This function appends the performance results obtained by a single sparse
-#' matrix performance test conducted for a specific microbenchmark and matrix.
+#' matrix performance test conducted for a specific matrix.
 #' If the CSV file does not exist, header information is printed on the first
 #' line to describe the subsequent entries.  Each entry consists of the
 #' dimension parameter used to specify the dimensions of the matrix, the
 #' average of the wall clock times obtained for the performance trials, the
 #' standard deviation of the performance trial wall clock times, and the number
-#' of threads the performance trials conducted with.
+#' of threads the performance trials were conducted with.
 #'
 #' @param numberOfThreads the number of threads all of the performance trials
 #'   were conducted with
 #' @param numberOfRows the number of rows in the matrix
 #' @param numberOfColumns the number of columns in the matrix
+#' @param numberOfNonzeros the number of non-zero elements in the matrix
 #' @param averageWallClockTime average wall clock time computed for the matrix
 #'   tested during the performance trials
 #' @param standardDeviation standard deviation of the wall clock times obtained
@@ -264,15 +335,61 @@ WriteDenseMatrixPerformanceResultsCsv <- function(numberOfThreads,
 #' @param csvResultsFile the CSV results file the performance result will be
 #'   appended to
 WriteSparseMatrixPerformanceResultsCsv <- function(numberOfThreads,
-   numberOfRows, numberOfColumns, averageWallClockTime, standardDeviation,
-   csvResultsFile) {
+   numberOfRows, numberOfColumns, numberOfNonzeros, averageWallClockTime,
+   standardDeviation, csvResultsFile) {
 
    if (csvResultsFile != "" && !file.exists(csvResultsFile)) {
-      cat("Num. Rows", "Num. Cols", "Avg. Wall Clock Time", "Std. Dev", "Number of Threads\n", file=csvResultsFile, sep=",", append=FALSE)
+      cat("Num. Rows", "Num. Cols", "Num. Nonzeros", "Avg. Wall Clock Time", "Std. Dev", "Number of Threads\n", file=csvResultsFile, sep=",", append=FALSE)
    }
 
    if (csvResultsFile != "") {
-      cat(sprintf("%d,%d,%12.6e,%12.6e,%d\n", numberOfRows, numberOfColumns, averageWallClockTime, standardDeviation, numberOfThreads), file=csvResultsFile, append=TRUE)
+      cat(sprintf("%d,%d,%d,%12.6e,%12.6e,%d\n", numberOfRows, numberOfColumns,
+         numberOfNonzeros, averageWallClockTime, numberOfNonzeros,
+         standardDeviation, numberOfThreads), file=csvResultsFile, append=TRUE)
+   }
+}
+
+
+#' Appends machine learning performance test results to a file in CSV format
+#'
+#' \code{WriteMachineLearningPerformanceResultsCsv} appends performance results
+#' for a machine learning function on a single set to a CSV file.
+#' 
+#' This function appends the performance results obtained by a single machine
+#' learning function conducted with a specific data set.
+#' If the CSV file does not exist, header information is printed on the first
+#' line to describe the subsequent entries.  Each entry includes the
+#' number of features, number of feature vectors, and number of clusters in the
+#' data set.  The performance results included in each entry are the average of
+#' the wall clock times obtained for the performance trials, the standard
+#' deviation of the performance trial wall clock times, and the number of
+#' threads the performance trials were conducted with.
+#'
+#' @param numberOfThreads the number of threads all of the performance trials
+#'   were conducted with
+#' @param numberOfFeatures the number of features, i.e. the dimension of the
+#'   feature vector
+#' @param numberOfFeatureVectors the number of feature vectors in the data set
+#' @param numberOfClusters the number of clusters in the data set
+#' @param averageWallClockTime average wall clock time computed for the data
+#'   set tested during the performance trials
+#' @param standardDeviation standard deviation of the wall clock times obtained
+#'   for the performance trials
+#' @param csvResultsFile the CSV results file the performance result will be
+#'   appended to
+WriteMachineLearningPerformanceResultsCsv <- function(numberOfThreads,
+   numberOfFeatures, numberOfFeatureVectors, numberOfClusters,
+   averageWallClockTime, standardDeviation, csvResultsFile) {
+
+   if (csvResultsFile != "" && !file.exists(csvResultsFile)) {
+      cat("Num. Features", "Num. Feature Vectors", "Num. Clusters", "Avg. Wall Clock Time", "Std. Dev", "Number of Threads\n", file=csvResultsFile, sep=",", append=FALSE)
+   }
+
+   if (csvResultsFile != "") {
+      cat(sprintf("%d,%d,%d,%12.6e,%12.6e,%d\n", numberOfFeatures,
+         numberOfFeatureVectors, numberOfClusters, averageWallClockTime,
+         standardDeviation, numberOfThreads),
+         file=csvResultsFile, append=TRUE)
    }
 }
    

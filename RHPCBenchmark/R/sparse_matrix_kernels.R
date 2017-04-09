@@ -15,7 +15,7 @@
 ################################################################################
 
 #' Allocates and initializes input to the matrix-vector multiplication sparse
-#' matrix kernel
+#' matrix kernel microbenchmarks
 #'
 #' \code{SparseMatrixVectorAllocator} allocates and initializes the sparse
 #' matrix and vector that are inputs to the sparse matrix kernel for the
@@ -25,10 +25,10 @@
 #'
 #' @param benchmarkParameters an object of type
 #'   \code{\link{SparseMatrixMicrobenchmark}} specifying various parameters
-#'   needed to generate input to the sparse matrix kernel.
+#'   needed to generate input for the sparse matrix kernel.
 #' @param index an integer index indicating the dimensions of the matrix or
-#'   vector data to be generated as input to the sparse matrix kernel.
-#' @return a list containing the matrices or vectors to be input to the
+#'   vector data to be generated as input for the sparse matrix kernel.
+#' @return a list containing the matrices or vectors to be input for the
 #'   sparse matrix kernel for which a single performance trial is to be
 #'   conducted.
 SparseMatrixVectorAllocator <- function(benchmarkParameters, index) {
@@ -70,7 +70,7 @@ SparseMatrixVectorBenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and initializes input to the Cholesky factorization sparse
-#' matrix kernel
+#' matrix kernel microbenchmarks
 #'
 #' \code{SparseCholeskyAllocator} allocates and initializes the sparse
 #' matrix that is input to the sparse matrix kernel for the
@@ -118,6 +118,7 @@ SparseCholeskyBenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and initializes input to the LU factorization sparse matrix kernel
+#' microbenchmarks
 #'
 #' \code{SparseLuAllocator} allocates and initializes the sparse matrix that is
 #' input to the sparse matrix kernel for the purposes of conducting a single
@@ -165,6 +166,7 @@ SparseLuBenchmark <- function(benchmarkParameters, kernelParameters) {
 
 
 #' Allocates and initializes input to the QR factorization sparse matrix kernel
+#' microbenchmarks
 #'
 #' \code{SparseQrAllocator} allocates and initializes the sparse matrix that is
 #' input to the sparse matrix kernel for the purposes of conducting a single

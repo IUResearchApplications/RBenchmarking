@@ -56,6 +56,7 @@
 #' #microbenchmarks <- DenseMatrixDefaultMicrobenchmarks()
 #' #microbenchmarks[["qr"]]$active <- FALSE
 #' #DenseMatrixBenchmark("test1", "./DenseMatrixResults")
+#' @seealso \code{\link{DenseMatrixDefaultMicrobenchmarks}}
 #' @export
 DenseMatrixBenchmark <- function(runIdentifier, resultsDirectory,
 	microbenchmarks = DenseMatrixDefaultMicrobenchmarks()) {

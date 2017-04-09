@@ -14,9 +14,10 @@
 # limitations under the License.
 ################################################################################
 
-#' @import methods
-#' @import utils
-#' @import cluster
-#' @import Matrix
-RBenchmarkOptions <- list()
-RBenchmarkOptions$rnorm <- rnorm
+# Run this script to generate/update the man pages from the roxygen
+# comments, and update the DESCRIPTION and NAMESPACE files.
+library(devtools)
+
+packagePath <- file.path(getwd(), "RHPCBenchmarkData")
+devtools::document("RHPCBenchmarkData")
+devtools::check_built(packagePath)
