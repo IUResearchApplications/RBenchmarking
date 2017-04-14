@@ -80,8 +80,8 @@ MachineLearningBenchmark <- function(runIdentifier,
    # Loop over all clustering microbenchmarks
    if (length(clusteringMicrobenchmarks) > 0) {
       clusteringResults <- PerformMachineLearningMicrobenchmarking(
-         clusteringMicrobenchmarks, numberOfThreads, runIdentifier,
-         resultsDirectory)
+         clusteringMicrobenchmarks, MicrobenchmarkClusteringKernel,
+         numberOfThreads, runIdentifier, resultsDirectory)
    } else {
       cat(sprintf("WARN: no clustering microbenchmarks to execute, skipping\n\n"))
    }
@@ -105,6 +105,9 @@ MachineLearningBenchmark <- function(runIdentifier,
 #'   \code{MachineLearningMicrobenchmark} objects defining the machine learning
 #'   microbenchmarks to be executed as part of the machine learning
 #'   benchmark.
+#' @param microbenchmarkingFunction a function that performs the run time
+#'   performance trials, computes the summary performance statistics, and
+#'   writes the performance results to standard out, 
 #' @param numberOfThreads the number of threads the microbenchmarks are
 #'   intended to be executed with; the value is for display purposes only as
 #'   the number of threads used is assumed to be controlled through environment
@@ -113,14 +116,12 @@ MachineLearningBenchmark <- function(runIdentifier,
 #'   appended to the base of the file name of the output CSV format files
 #' @param resultsDirectory a character string specifying the directory
 #'   where all of the CSV performance results files will be saved
-#' @param microbenchmarkingFunction a function that performs the run time
-#'   performance trials, computes the summary performance statistics, and
-#'   writes the performance results to standard out, 
 #' @return a list of data frames, one per microbenchmark, each containing the
 #'   user, system, and elapsed (wall clock) times of each performance trial
 #'   used to compute the average performance
 PerformMachineLearningMicrobenchmarking <- function(microbenchmarks,
-   numberOfThreads, runIdentifier, resultsDirectory) {
+   microbenchmarkingFunction, numberOfThreads, runIdentifier,
+   resultsDirectory) {
 
    microbenchmarkResults <- list()
 
@@ -147,14 +148,13 @@ PerformMachineLearningMicrobenchmarking <- function(microbenchmarks,
             })
 
             if (loadSuccessful) {
-               microbenchmarkResults[[benchmarkName]] <- MicrobenchmarkClusteringKernel(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+               microbenchmarkResults[[benchmarkName]] <- microbenchmarkingFunction(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
                remove(list=c(dataObjectName), envir=.GlobalEnv)
                invisible(gc())
             } else {
                microbenchmarkResults[[benchmarkName]] <- NULL
                msg <- sprintf("ERROR: data() failed to read data object '%s', skipping microbenchmark '%s'",
-                  microbenchmarks[[i]]$dataObjectName,
-                  microbenchmarks[[i]]$benchmarkName)
+                  dataObjectName, benchmarkName)
                write(msg, stderr())
             }
          }
