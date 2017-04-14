@@ -55,31 +55,31 @@ methods::setRefClass(
 #' This class specifies a sparse matrix microbenchmark.
 #'
 #' @name SparseMatrixMicrobenchmark
-#' @field active A logical indicating whether the microbenchmark is to be
+#' @field active a logical indicating whether the microbenchmark is to be
 #'   executed (TRUE) or not (FALSE)
-#' @field benchmarkName A character string that is the name of the
+#' @field benchmarkName a character string that is the name of the
 #'   microbenchmark
-#' @field benchmarkDescription A character string describing the microbenchmark
-#' @field matrixFileName A character string specifying the R data file
+#' @field benchmarkDescription a character string describing the microbenchmark
+#' @field matrixFileName a character string specifying the R data file
 #'   containing the sparse matrix data
-#' @field csvResultsBaseFileName A character string that is the base of the file
+#' @field csvResultsBaseFileName a character string that is the base of the file
 #'   name the microbenchmark results will be written to
-#' @field matrixObjectName A character string specifying the name of the sparse
+#' @field matrixObjectName a character string specifying the name of the sparse
 #'   matrix object that is input to the benchmark; the object must be stored in
 #'   the R data file with name \code{matrixFileName}
-#' @field numberOfRows An integer specifying the expected number of rows in the
+#' @field numberOfRows an integer specifying the expected number of rows in the
 #'   input sparse matrix
-#' @field numberOfColumns An integer specifying the expected number of columns
+#' @field numberOfColumns an integer specifying the expected number of columns
 #'   in the input sparse matrix
-#' @field numberOfNonzeros An integer specifying the expected number of nonzeros
+#' @field numberOfNonzeros an integer specifying the expected number of nonzeros
 #'   in the input sparse matrix
-#' @field numberOfTrials An integer vector specifying the number of performance
+#' @field numberOfTrials an integer vector specifying the number of performance
 #'   trials conducted for each matrix to be tested.
-#' @field numberOfWarmupTrials An integer vector specifying the number of warmup
+#' @field numberOfWarmupTrials an integer vector specifying the number of warmup
 #'   trials to be performed for each matrix to be tested
-#' @field allocatorFunction The function that allocates and initializes input
+#' @field allocatorFunction the function that allocates and initializes input
 #'   to the benchmark function
-#' @field benchmarkFunction The benchmark function which executes the
+#' @field benchmarkFunction the benchmark function which executes the
 #'   functionality to be timed
 methods::setRefClass(
    "SparseMatrixMicrobenchmark",
@@ -104,25 +104,33 @@ methods::setRefClass(
 #' This class specifies a machine learning microbenchmark.
 #'
 #' @name MachineLearningMicrobenchmark
-#' @field active A logical indicating whether the microbenchmark is to be
+#' @field active a logical indicating whether the microbenchmark is to be
 #'   executed (TRUE) or not (FALSE)
-#' @field benchmarkName A character string that is the name of the
+#' @field benchmarkName a character string that is the name of the
 #'   microbenchmark
-#' @field benchmarkDescription A character string describing the microbenchmark
-#' @field dataFileName A character string specifying the R data file
+#' @field benchmarkDescription a character string describing the microbenchmark
+#' @field dataFileName a character string specifying the R data file
 #'   containing the data set to be performance tested with
-#' @field csvResultsBaseFileName A character string that is the base of the file
+#' @field csvResultsBaseFileName a character string that is the base of the file
 #'   name the microbenchmark results will be written to
-#' @field dataObjectName A character string specifying the name of the data
+#' @field dataObjectName a character string specifying the name of the data
 #'   object that is input to the benchmark; the object must be stored in
 #'   the R data file with name \code{dataFileName}
-#' @field numberOfTrials An integer specifying the number of performance
+#' @field numberOfTrials an integer specifying the number of performance
 #'   trials conducted on the data set to be tested.
-#' @field numberOfWarmupTrials An integer specifying the number of warmup
+#' @field numberOfWarmupTrials an integer specifying the number of warmup
 #'   trials to be conducted on the data set
-#' @field allocatorFunction The function that allocates and initializes input
-#'   to the benchmark function
-#' @field benchmarkFunction The benchmark function which executes the
+#' @field allocatorFunction the function that allocates and initializes input
+#'   to the benchmark function.  For clustering benchmarks, the allocator
+#'   function should return a list containing the following items:
+#'   \describe{
+#'     \item{numberOfFeatures}{an integer indicating the number of features}
+#'     \item{numberOfFeatureVectors}{an integer indicating the number of feature
+#'       vectors}
+#'     \item{numberOfClusters}{an integer indicating the number of clusters in
+#'       the data set}
+#'   }
+#' @field benchmarkFunction the benchmark function which executes the
 #'   functionality to be timed
 methods::setRefClass(
    "MachineLearningMicrobenchmark",

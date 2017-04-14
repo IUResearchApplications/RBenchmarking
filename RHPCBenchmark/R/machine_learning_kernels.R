@@ -63,3 +63,24 @@ PamClusteringBenchmark <- function(benchmarkParameters, kernelParameters) {
    return (timings)
 }
 
+
+#' Conducts a single performance trial with the cluster::clara function
+#'
+#' \code{ClusteringMicrobenchmark} conducts a single performance trial
+#' of the cluster::clara function with the data given in the
+#' \code{kernelParameters} parameter.
+#'
+#' @param benchmarkParameters an object of type
+#'   \code{\link{MachineLearningMicrobenchmark}} specifying various parameters
+#'   for microbenchmarking the cluster::clara function
+#' @param kernelParameters a list of data objects to be used as input to
+#'   the clustering function
+#' @return a vector containing the user, system, and elapsed performance
+#'   timings in that order
+ClaraClusteringBenchmark <- function(benchmarkParameters, kernelParameters) {
+   timings <- system.time({clusterObj <- cluster::clara(kernelParameters$featureVectors,
+      kernelParameters$numberOfClusters, samples=50, trace=0, keep.data=FALSE,
+      rngR=TRUE, pamLike=TRUE)})
+   return (timings)
+}
+

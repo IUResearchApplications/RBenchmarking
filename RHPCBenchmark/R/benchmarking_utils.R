@@ -34,58 +34,6 @@ GetConfigurableEnvParameter <- function(configurableVariable) {
    return(value)
 }
 
-
-#set_configurable_env_parameter <- function(configurableVariable, value) {
-#   # Set the name of an environment varible through a reference to a
-#   # configurable environment variable.
-#   envVariable <- Sys.getenv(configurableVariable)
-#
-#   if (envVariable == "") {
-#      write(sprintf("ERROR: Configurable environment variable '%s' is undefined", configurableVariable), stderr())
-#      quit(status=1)
-#   } else {
-#      args <- list(value)
-#      names(args) <- envVariable
-#      returnValues <- do.call(Sys.setenv, args)
-#
-#      if (returnValues[1] == FALSE) {
-#         write(sprintf("ERROR: Environment variable '%s' was not set", envVariable), stderr())
-#         quit(status=1)
-#      }
-#   }
-#}
-
-
-#read_parameters <- function() {
-#
-#   # For SLURM:
-#   # R_BENCH_NUM_THREADS_VARIABLE = MKL_NUM_THREADS
-#   # R_BENCH_OUTPUT_DIR_VARIABLE = SLURM_SUBMIT_DIR
-#   # R_BENCH_JOB_DESCRIPTOR_VARIABLE = SLURM_JOB_NAME
-#   # R_BENCH_TEST_SUITE_ID_VARIABLE = SLURM_JOB_ID
-#
-#   # For PBS:
-#   # R_BENCH_NUM_THREADS_VARIABLE = MKL_NUM_THREADS
-#   # R_BENCH_OUTPUT_DIR_VARIABLE = PBS_O_WORKDIR
-#   # R_BENCH_JOB_DESCRIPTOR_VARIABLE = PBS_JOBNAME
-#   # R_BENCH_TEST_SUITE_ID_VARIABLE = PBS_JOBID
-#
-#   numberOfThreads <- strtoi(get_configurable_env_parameter("R_BENCH_NUM_THREADS_VARIABLE")) 
-#
-#   if (is.na(numberOfThreads)) {
-#      write("ERROR: Non-integer number of threads specified in environment", stderr())
-#      quit(status=1)
-#   }
-#
-#   outputDirectoryStr <- get_configurable_env_parameter("R_BENCH_OUTPUT_DIR_VARIABLE")
-#   jobDescriptorStr <- get_configurable_env_parameter("R_BENCH_JOB_DESCRIPTOR_VARIABLE")
-#   #test_suite_job_id_str <- get_configurable_env_parameter("R_BENCH_TEST_SUITE_ID_VARIABLE")
-#   csvResultsFile <- paste(outputDirectoryStr, "/", jobDescriptorStr, ".csv", sep="")
-#
-#   return (list("numberOfThreads" = numberOfThreads, "csvResultsFile" = csvResultsFile))
-#}
-  
-
 #' Prints results of a dense matrix microbenchmark 
 #'
 #' \code{PrintDenseMatrixMicrobenchmarkResults} prints performance results for a
@@ -150,12 +98,11 @@ PrintDenseMatrixMicrobenchmarkResults <- function(benchmarkName,
 #' a sparse matrix microbenchmark to standard output in a format that is easily
 #' human readable
 #' 
-#' This function prints the performance results obtained by a sparse matrix
-#' microbenchmark for matrices of various dimensions.  The results include
-#' summary statistics for each matrix tested.  The summary statistics
-#' include the minimum, maximum, average, and standard deviation of the wall
-#' clock times obtained by the performance trials with respect to each matrix
-#' tested.
+#' This function prints the run time performance results obtained by a sparse
+#' matrix microbenchmark for matrices of various dimensions.  The summary
+#' statistics include the minimum, maximum, average, and standard deviation of
+#' the wall clock times obtained by the performance trials with respect to each
+#' matrix tested.
 #'
 #' @param benchmarkName character string specifying the name of the
 #'   microbenchmark
@@ -208,14 +155,15 @@ PrintSparseMatrixMicrobenchmarkResults <- function(benchmarkName,
 }
 
 
-#' Prints results of a machine learning microbenchmark 
+#' Prints results of a clustering for machine learning microbenchmark 
 #'
-#' \code{PrintMachineLearningMicrobenchmarkResults} prints performance results
-#' for a sparse matrix microbenchmark to standard output in a format that is
-#' easily human readable
+#' \code{PrintClusteringMicrobenchmarkResults} prints performance results
+#' for a clustering for machine learning microbenchmark to standard output in a
+#' format that is easily human readable
 #' 
-#' This function prints the performance results obtained by a machine learning
-#' microbenchmark.  Summary statistics for each matrix tested.  The summary
+#' This function prints the performance results obtained by a clustering for
+#' machine learning microbenchmark.  Summary run time performance statistics for
+#' each clustering data set tested are computed and printed.  The summary
 #' statistics include the minimum, maximum, average, and standard deviation of
 #' the wall clock times obtained by the performance trials with respect to each
 #' data tested.
@@ -238,7 +186,8 @@ PrintSparseMatrixMicrobenchmarkResults <- function(benchmarkName,
 #'   for each matrix tested during the performance trials
 #' @param standardDeviations a vector of standard deviations of the wall clock
 #'   times obtained for each matrix tested during the performance trials
-PrintMachineLearningMicrobenchmarkResults <- function(benchmarkName,
+#' @family print machine learning performance results
+PrintClusteringMicrobenchmarkResults <- function(benchmarkName,
      numberOfThreads, numberOfFeatures, numberOfFeatureVectors,
      numberOfClusters, numberOfSuccessfulTrials, trialTimes,
      averageWallClockTimes, standardDeviations) {
@@ -274,16 +223,16 @@ PrintMachineLearningMicrobenchmarkResults <- function(benchmarkName,
 #' Appends dense matrix performance test results to a file in CSV format
 #'
 #' \code{WriteDenseMatrixPerformanceResultsCsv} appends performance results
-#' for a single dense matrix performance test to a CSV file
+#' for a single dense matrix microbenchmark to a CSV file
 #' 
-#' This function appends the performance results obtained by a single dense
-#' matrix performance test conducted for a specific matrix.
-#' Thede for the matrix tested.  If the CSV file does not exist, header
-#' information is printed on the first line to describe the subsequent entries.
-#' Each entry consists of the dimension parameter used to specify the dimensions
-#' of the matrix, the average of the wall clock times obtained for the
-#' performance trials, the standard deviation of the performance trial wall
-#' clock times, and the number of threads the performance trials conducted with.
+#' This function appends to a CSV file the performance results obtained by a
+#' single dense matrix performance microbenchmark conducted for a specific
+#' matrix.  If the CSV file does not exist, header information is printed on the
+#' first line to describe the subsequent entries.  Each entry consists of the
+#' dimension parameter used to specify the dimensions of the matrix, the average
+#' of the wall clock times obtained for the performance trials, the standard
+#' deviation of the performance trial wall clock times, and the number of
+#' threads the performance trials conducted with.
 #'
 #' @param numberOfThreads the number of threads all of the performance trials
 #'   were conducted with
@@ -315,7 +264,7 @@ WriteDenseMatrixPerformanceResultsCsv <- function(numberOfThreads,
 #' for a single sparse matrix performance test to a CSV file.
 #' 
 #' This function appends the performance results obtained by a single sparse
-#' matrix performance test conducted for a specific matrix.
+#' matrix microbenchmark conducted for a specific matrix.
 #' If the CSV file does not exist, header information is printed on the first
 #' line to describe the subsequent entries.  Each entry consists of the
 #' dimension parameter used to specify the dimensions of the matrix, the
@@ -350,13 +299,14 @@ WriteSparseMatrixPerformanceResultsCsv <- function(numberOfThreads,
 }
 
 
-#' Appends machine learning performance test results to a file in CSV format
+#' Appends performance test results of a clustering microbenchmark to a file in
+#' CSV format 
 #'
-#' \code{WriteMachineLearningPerformanceResultsCsv} appends performance results
-#' for a machine learning function on a single set to a CSV file.
+#' \code{WriteClusteringPerformanceResultsCsv} appends performance results
+#' for a clustering for machine learning microbenchmark to a CSV file.
 #' 
-#' This function appends the performance results obtained by a single machine
-#' learning function conducted with a specific data set.
+#' This function appends the performance results obtained by a single clustering
+#' for machine learning microbenchmark conducted with a specific data set.
 #' If the CSV file does not exist, header information is printed on the first
 #' line to describe the subsequent entries.  Each entry includes the
 #' number of features, number of feature vectors, and number of clusters in the
@@ -377,7 +327,8 @@ WriteSparseMatrixPerformanceResultsCsv <- function(numberOfThreads,
 #'   for the performance trials
 #' @param csvResultsFile the CSV results file the performance result will be
 #'   appended to
-WriteMachineLearningPerformanceResultsCsv <- function(numberOfThreads,
+#' @family write machine learning performance results
+WriteClusteringPerformanceResultsCsv <- function(numberOfThreads,
    numberOfFeatures, numberOfFeatureVectors, numberOfClusters,
    averageWallClockTime, standardDeviation, csvResultsFile) {
 

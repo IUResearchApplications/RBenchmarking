@@ -113,6 +113,9 @@ MachineLearningBenchmark <- function(runIdentifier,
 #'   appended to the base of the file name of the output CSV format files
 #' @param resultsDirectory a character string specifying the directory
 #'   where all of the CSV performance results files will be saved
+#' @param microbenchmarkingFunction a function that performs the run time
+#'   performance trials, computes the summary performance statistics, and
+#'   writes the performance results to standard out, 
 #' @return a list of data frames, one per microbenchmark, each containing the
 #'   user, system, and elapsed (wall clock) times of each performance trial
 #'   used to compute the average performance
@@ -144,7 +147,7 @@ PerformMachineLearningMicrobenchmarking <- function(microbenchmarks,
             })
 
             if (loadSuccessful) {
-               microbenchmarkResults[[benchmarkName]] <- MicrobenchmarkMachineLearningKernel(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+               microbenchmarkResults[[benchmarkName]] <- MicrobenchmarkClusteringKernel(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
                remove(list=c(dataObjectName), envir=.GlobalEnv)
                invisible(gc())
             } else {
@@ -302,6 +305,118 @@ ClusteringDefaultMicrobenchmarks <- function() {
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
       benchmarkFunction = PamClusteringBenchmark
+   )
+
+   microbenchmarks[["clara_cluster_3_7_2500"]] <- methods::new(
+      "MachineLearningMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "clara_cluster_3_7_2500",
+      benchmarkDescription = "Clustering of 17500 3-dimensional feature vectors into seven clusters using clara function",
+      dataFileName = "cluster_3_7_2500",
+      csvResultsBaseFileName = "pam_cluster_3_7_2500",
+      dataObjectName = "cluster_3_7_2500",
+      numberOfTrials = as.integer(2),
+      numberOfWarmupTrials = as.integer(0),
+      allocatorFunction = ClusteringAllocator,
+      benchmarkFunction = ClaraClusteringBenchmark
+   )
+
+   microbenchmarks[["clara_cluster_3_7_5000"]] <- methods::new(
+      "MachineLearningMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "clara_cluster_3_7_5000",
+      benchmarkDescription = "Clustering of 35000 3-dimensional feature vectors into seven clusters using clara function",
+      dataFileName = "cluster_3_7_5000",
+      csvResultsBaseFileName = "clara_cluster_3_7_5000",
+      dataObjectName = "cluster_3_7_5000",
+      numberOfTrials = as.integer(3),
+      numberOfWarmupTrials = as.integer(1),
+      allocatorFunction = ClusteringAllocator,
+      benchmarkFunction = ClaraClusteringBenchmark
+   )
+
+   microbenchmarks[["clara_cluster_3_7_5715"]] <- methods::new(
+      "MachineLearningMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "clara_cluster_3_7_5715",
+      benchmarkDescription = "Clustering of 40005 3-dimensional feature vectors into seven clusters using clara function",
+      dataFileName = "cluster_3_7_5715",
+      csvResultsBaseFileName = "clara_cluster_3_7_5715",
+      dataObjectName = "cluster_3_7_5715",
+      numberOfTrials = as.integer(3),
+      numberOfWarmupTrials = as.integer(1),
+      allocatorFunction = ClusteringAllocator,
+      benchmarkFunction = ClaraClusteringBenchmark
+   )
+
+   microbenchmarks[["clara_cluster_16_33_1213"]] <- methods::new(
+      "MachineLearningMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "clara_cluster_16_33_1213",
+      benchmarkDescription = "Clustering of 40029 16-dimensional feature vectors into 33 clusters using clara function",
+      dataFileName = "cluster_16_33_1213",
+      csvResultsBaseFileName = "clara_cluster_16_33_1213",
+      dataObjectName = "cluster_16_33_1213",
+      numberOfTrials = as.integer(3),
+      numberOfWarmupTrials = as.integer(1),
+      allocatorFunction = ClusteringAllocator,
+      benchmarkFunction = ClaraClusteringBenchmark
+   )
+
+   microbenchmarks[["clara_cluster_64_33_1213"]] <- methods::new(
+      "MachineLearningMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "clara_cluster_64_33_1213",
+      benchmarkDescription = "Clustering of 40029 64-dimensional feature vectors into 33 clusters using clara function",
+      dataFileName = "cluster_64_33_1213",
+      csvResultsBaseFileName = "clara_cluster_64_33_1213",
+      dataObjectName = "cluster_64_33_1213",
+      numberOfTrials = as.integer(3),
+      numberOfWarmupTrials = as.integer(1),
+      allocatorFunction = ClusteringAllocator,
+      benchmarkFunction = ClaraClusteringBenchmark
+   )
+
+   microbenchmarks[["clara_cluster_16_7_2858"]] <- methods::new(
+      "MachineLearningMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "clara_cluster_16_7_2858",
+      benchmarkDescription = "Clustering of 20006 16-dimensional feature vectors into seven clusters using clara function",
+      dataFileName = "cluster_16_7_2858",
+      csvResultsBaseFileName = "clara_cluster_16_7_2858",
+      dataObjectName = "cluster_16_7_2858",
+      numberOfTrials = as.integer(3),
+      numberOfWarmupTrials = as.integer(1),
+      allocatorFunction = ClusteringAllocator,
+      benchmarkFunction = ClaraClusteringBenchmark
+   )
+
+   microbenchmarks[["clara_cluster_32_7_2858"]] <- methods::new(
+      "MachineLearningMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "clara_cluster_32_7_2858",
+      benchmarkDescription = "Clustering of 20006 32-dimensional feature vectors into seven clusters using clara function",
+      dataFileName = "cluster_32_7_2858",
+      csvResultsBaseFileName = "clara_cluster_32_7_2858",
+      dataObjectName = "cluster_32_7_2858",
+      numberOfTrials = as.integer(3),
+      numberOfWarmupTrials = as.integer(1),
+      allocatorFunction = ClusteringAllocator,
+      benchmarkFunction = ClaraClusteringBenchmark
+   )
+
+   microbenchmarks[["clara_cluster_64_7_5715"]] <- methods::new(
+      "MachineLearningMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "clara_cluster_64_7_5715",
+      benchmarkDescription = "Clustering of 40005 64-dimensional feature vectors into seven clusters using clara function",
+      dataFileName = "cluster_64_7_5715",
+      csvResultsBaseFileName = "clara_cluster_64_7_5715",
+      dataObjectName = "cluster_64_7_5715",
+      numberOfTrials = as.integer(3),
+      numberOfWarmupTrials = as.integer(1),
+      allocatorFunction = ClusteringAllocator,
+      benchmarkFunction = ClaraClusteringBenchmark
    )
 
    return (microbenchmarks)

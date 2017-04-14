@@ -14,12 +14,12 @@
 # limitations under the License.
 ################################################################################
 
-#' Performs microbenchmarking of a machine learning kernel
+#' Performs microbenchmarking of a clustering for machine learning kernel
 #'
-#' \code{MicrobenchmarkLearningKernel} performs microbenchmarking of a
-#' machine learning kernel for a given data set
+#' \code{MicrobenchmarkClusteringKernel} performs microbenchmarking of a
+#' clustering for machine learning kernel for a given data set
 #'
-#' This function performs microbenchmarking of a machine learning
+#' This function performs microbenchmarking of a clustering for machine learning
 #' kernel for a given data set and a given number of threads.  The
 #' kernel to be performance tested and other parameters specifying how the
 #' kernel is to be benchmarked are given in the input object
@@ -63,7 +63,7 @@
 #'     \item{DateFinished}{The date and time the performance trial ended}
 #'   }
 #'
-MicrobenchmarkMachineLearningKernel <- function(benchmarkParameters,
+MicrobenchmarkClusteringKernel <- function(benchmarkParameters,
    numberOfThreads, resultsDirectory, runIdentifier) {
 
    resultsFrame <- data.frame(BenchmarkName=character(),
@@ -74,7 +74,7 @@ MicrobenchmarkMachineLearningKernel <- function(benchmarkParameters,
 
    # Make sure needed parameters exist   
    parameterCheck <- tryCatch({
-      cat(sprintf("Running microbenchmark: %s\n", benchmarkParameters$benchmarkName))
+      cat(sprintf("Running clustering microbenchmark: %s\n", benchmarkParameters$benchmarkName))
       cat(sprintf("Microbenchmark description: %s\n", benchmarkParameters$benchmarkDescription))
       allocator <- match.fun(benchmarkParameters$allocatorFunction)
       benchmark <- match.fun(benchmarkParameters$benchmarkFunction)
@@ -88,7 +88,7 @@ MicrobenchmarkMachineLearningKernel <- function(benchmarkParameters,
          paste(csvResultsBaseFileName, "_", runIdentifier, ".csv", sep=""))
 
       if (length(numberOfTrials) != length(numberOfWarmupTrials)) {
-         stop(sprintf("ERROR: Input checking failed for microbenchmark '%s' -- lengths of numberOfTrials and numberOfWarmupTrials arrays must be equal", benchmarkName))
+         stop(sprintf("ERROR: Input checking failed for clustering microbenchmark '%s' -- lengths of numberOfTrials and numberOfWarmupTrials arrays must be equal", benchmarkName))
       }
 
       dir.create(resultsDirectory, showWarnings=FALSE, recursive=TRUE)    
@@ -183,11 +183,11 @@ MicrobenchmarkMachineLearningKernel <- function(benchmarkParameters,
       trialTimes) 
    standardDeviation <- ComputeStandardDeviation(numberOfSuccessfulTrials,
       trialTimes)
-   WriteMachineLearningPerformanceResultsCsv(numberOfThreads, numberOfFeatures,
+   WriteClusteringPerformanceResultsCsv(numberOfThreads, numberOfFeatures,
       numberOfFeatureVectors, numberOfClusters, averageWallClockTime,
       standardDeviation, csvResultsFileName)
 
-   PrintMachineLearningMicrobenchmarkResults(benchmarkName, numberOfThreads,
+   PrintClusteringMicrobenchmarkResults(benchmarkName, numberOfThreads,
       numberOfFeatures, numberOfFeatureVectors, numberOfClusters,
       numberOfSuccessfulTrials, trialTimes, averageWallClockTime,
       standardDeviation)
