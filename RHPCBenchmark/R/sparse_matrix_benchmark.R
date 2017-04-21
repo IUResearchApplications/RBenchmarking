@@ -181,7 +181,10 @@ PerformSparseMatrixKernelMicrobenchmarking <- function(microbenchmarks,
             # The matrices are read in to the global environment so that they
             # only have to be read from storage once.
             loadSuccessful <- tryCatch({
-               utils::data(list=c(matrixObjectName))
+               if (!is.na(matrixObjectName)) {
+                  utils::data(list=c(matrixObjectName))
+               }
+
                TRUE
             }, warning = function(war) {
                msg <- sprintf("ERROR: data() threw a warning -- %s", war)
@@ -195,7 +198,11 @@ PerformSparseMatrixKernelMicrobenchmarking <- function(microbenchmarks,
 
             if (loadSuccessful) {
                microbenchmarkResults[[benchmarkName]] <- MicrobenchmarkSparseMatrixKernel(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
-               remove(list=c(matrixObjectName), envir=.GlobalEnv)
+              
+               if (!is.na(matrixObjectName)) {
+                  remove(list=c(matrixObjectName), envir=.GlobalEnv)
+               }
+
                invisible(gc())
             } else {
                microbenchmarkResults[[benchmarkName]] <- NULL
@@ -240,7 +247,6 @@ SparseMatrixVectorDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "matvec_laplacian7pt_100",
       benchmarkDescription = "sparse matrix-vector mult. with 100x100x100 7-point Laplacian operator",
-      matrixFileName = "laplacian7pt_100.RData",
       csvResultsBaseFileName = "matvec_laplacian7pt_100",
       matrixObjectName = "laplacian7pt_100",
       numberOfRows = as.integer(1000000),
@@ -257,7 +263,6 @@ SparseMatrixVectorDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "matvec_laplacian7pt_200",
       benchmarkDescription = "Sparse matrix-vector mult. with 200x200x200 7-point Laplacian operator",
-      matrixFileName = "laplacian7pt_200.RData",
       csvResultsBaseFileName = "matvec_laplacian7pt_200",
       matrixObjectName = "laplacian7pt_200",
       numberOfRows = as.integer(8000000),
@@ -274,7 +279,6 @@ SparseMatrixVectorDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "matvec_ca2010",
       benchmarkDescription = "Sparse matrix-vector mult. with undirected weighted graph matrix ca2010 from the University of Florida Sparse Matrix Collection DIMACS10 matrix group",
-      matrixFileName = "ca2010.RData",
       csvResultsBaseFileName = "matvec_ca2010",
       matrixObjectName = "ca2010",
       numberOfRows = as.integer(710145),
@@ -319,7 +323,6 @@ SparseCholeskyDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "cholesky_ct20stif",
       benchmarkDescription = "Cholesky factorization of ct20stif matrix from University of Florida Sparse Matrix Collection Boeing group; CT20 engine block -- stiffness matrix, Boeing",
-      matrixFileName = "ct20stif.RData",
       csvResultsBaseFileName = "cholesky_ct20stif",
       matrixObjectName = "ct20stif",
       numberOfRows = as.integer(52329),
@@ -336,7 +339,6 @@ SparseCholeskyDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "cholesky_Andrews",
       benchmarkDescription = "Cholesky factorization of Andrews matrix from University of Florida Sparse Matrix Collection Andrews group; Eigenvalue problem, Stuart Andrews, Brown Univ.",
-      matrixFileName = "Andrews.RData",
       csvResultsBaseFileName = "cholesky_Andrews",
       matrixObjectName = "Andrews",
       numberOfRows = as.integer(60000),
@@ -353,7 +355,6 @@ SparseCholeskyDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "cholesky_G3_circuit",
       benchmarkDescription = "Cholesky factorization of G3_circuit matrix from University of Florida Sparse Matrix Collection AMD group; circuit simulation problem, Ufuk Okuyucu, AMD, Inc.",
-      matrixFileName = "G3_circuit.RData",
       csvResultsBaseFileName = "cholesky_G3_circuit",
       matrixObjectName = "G3_circuit",
       numberOfRows = as.integer(1585478),
@@ -398,7 +399,6 @@ SparseLuDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "lu_circuit5M_dc",
       benchmarkDescription = "LU decomposition of circuit5M_dc matrix from University of Florida Sparse Matrix Collection Freescale group; Large circuit (DC analysis) K. Gullapalli, Freescale Semiconductor",
-      matrixFileName = "circuit5M_dc.RData",
       csvResultsBaseFileName = "lu_circuit5M_dc",
       matrixObjectName = "circuit5M_dc",
       numberOfRows = as.integer(3523317),
@@ -415,7 +415,6 @@ SparseLuDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "lu_stomach",
       benchmarkDescription = "LU decomposition of stomach matrix from University of Florida Sparse Matrix Collection Norris group; S.Norris, Univ. Auckland. 3D electro-physical model of a duodenum",
-      matrixFileName = "stomach.RData",
       csvResultsBaseFileName = "lu_stomach",
       matrixObjectName = "stomach",
       numberOfRows = as.integer(213360),
@@ -432,7 +431,6 @@ SparseLuDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "lu_torso3",
       benchmarkDescription = "LU decomposition of torso3 matrix from University of Florida Sparse Matrix Collection Norris group; S.Norris, Univ Auckland. finite diff. electro-phys.  3D model of torso",
-      matrixFileName = "torso3.RData",
       csvResultsBaseFileName = "lu_torso3",
       matrixObjectName = "torso3",
       numberOfRows = as.integer(259156),
@@ -476,7 +474,6 @@ SparseQrDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "qr_Maragal_6",
       benchmarkDescription = "QR factorization of Maragal_6 matrix from University of Florida Sparse Matrix Collection NYPA group; rank deficient least squares problem, D. Maragal, NY Power Authority",
-      matrixFileName = "Maragal_6.RData",
       csvResultsBaseFileName = "qr_Maragal_6",
       matrixObjectName = "Maragal_6",
       numberOfRows = as.integer(21255),
@@ -493,7 +490,6 @@ SparseQrDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "qr_landmark",
       benchmarkDescription = "QR factorization of landmark matrix from University of Florida Sparse Matrix Collection Pereyra group; Matrix from Victor Pereyra, Stanford University",
-      matrixFileName = "landmark.RData",
       csvResultsBaseFileName = "qr_landmark",
       matrixObjectName = "landmark",
       numberOfRows = as.integer(71952),

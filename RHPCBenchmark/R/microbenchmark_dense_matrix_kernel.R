@@ -131,6 +131,9 @@ MicrobenchmarkDenseMatrixKernel <- function(benchmarkParameters,
          cat(sprintf("Running performance trial %d for matrix dimension %d x %d...\n", i, d, d))
 
          allocationSuccessful <- tryCatch({
+            RNGkind(kind=RBenchmarkOptions$rng.kind,
+               normal.kind=RBenchmarkOptions$rng.normal.kind)
+            set.seed(RBenchmarkOptions$rng.seed)
             kernelParameters <- allocator(benchmarkParameters, j)
             TRUE
          }, warning = function(war) {

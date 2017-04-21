@@ -133,6 +133,9 @@ MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters,
          cat(sprintf("Running performance trial %d for matrix dimensions %d x %d...\n", i, numberOfRows[j], numberOfColumns[j]))
 
          allocationSuccessful <- tryCatch({
+            RNGkind(kind=RBenchmarkOptions$rng.kind,
+               normal.kind=RBenchmarkOptions$rng.normal.kind)
+            set.seed(RBenchmarkOptions$rng.seed)
             kernelParameters <- allocator(benchmarkParameters, j)
             TRUE
          }, warning = function(war) {

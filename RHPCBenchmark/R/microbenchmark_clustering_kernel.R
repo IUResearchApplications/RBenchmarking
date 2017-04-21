@@ -24,17 +24,17 @@
 #' kernel to be performance tested and other parameters specifying how the
 #' kernel is to be benchmarked are given in the input object
 #' \code{benchmarkParameters} which is an instance of the class
-#' \code{\link{MachineLearningMicrobenchmark}}.  The
+#' \code{\link{ClusteringMicrobenchmark}}.  The
 #' performance results are averaged over the number of performance trials
 #' and written to a CSV file.  The results of the individual performance
 #' trials are retained in a data frame that is returned upon completion of the
 #' microbenchmark.  The kernel can be executed with multiple threads if the
 #' kernel supports multithreading.  See
-#' \code{\link{MachineLearningMicrobenchmark}} for more details on the
+#' \code{\link{ClusteringMicrobenchmark}} for more details on the
 #' benchmarking parameters.
 #' 
 #' @param benchmarkParameters an object of type
-#'   \code{\link{MachineLearningMicrobenchmark}} specifying the data set
+#'   \code{\link{ClusteringMicrobenchmark}} specifying the data set
 #'   to be read in or generated and the number of performance trials
 #'   to perform with the data set.
 #' @param numberOfThreads the number of threads the microbenchmark is being
@@ -49,7 +49,6 @@
 #'   averaging.  The columns of the data frame are the following:
 #'   \describe{
 #'     \item{BenchmarkName}{The name of the microbenchmark}
-#'     \item{DataFileName}{A string specifying the data set that was tested}
 #'     \item{NumberOfFeatures}{The number of featres in each feature vector}
 #'     \item{NumberOfFeatureVectors}{The number of featres in the data set}
 #'     \item{NumberOfClusters}{The number of clusters in the data set}
@@ -67,10 +66,10 @@ MicrobenchmarkClusteringKernel <- function(benchmarkParameters,
    numberOfThreads, resultsDirectory, runIdentifier) {
 
    resultsFrame <- data.frame(BenchmarkName=character(),
-      DataFileName=character(), NumberOfFeatures=integer(),
-      NumberOfFeatureVectors=integer(), NumberOfClusters=integer(),
-      UserTime=numeric(), SystemTime=numeric(), WallClockTime=numeric(),
-      DateStarted=character(), DateFinished=character(), stringsAsFactors=FALSE)
+      NumberOfFeatures=integer(), NumberOfFeatureVectors=integer(),
+      NumberOfClusters=integer(), UserTime=numeric(), SystemTime=numeric(),
+      WallClockTime=numeric(), DateStarted=character(),
+      DateFinished=character(), stringsAsFactors=FALSE)
 
    # Make sure needed parameters exist   
    parameterCheck <- tryCatch({
@@ -82,7 +81,6 @@ MicrobenchmarkClusteringKernel <- function(benchmarkParameters,
       numberOfTrials <- benchmarkParameters$numberOfTrials
       numberOfWarmupTrials <- benchmarkParameters$numberOfWarmupTrials
       benchmarkName <- benchmarkParameters$benchmarkName
-      dataFileName <- benchmarkParameters$dataFileName
       csvResultsBaseFileName <- benchmarkParameters$csvResultsBaseFileName
       csvResultsFileName <- file.path(resultsDirectory,
          paste(csvResultsBaseFileName, "_", runIdentifier, ".csv", sep=""))
@@ -117,6 +115,9 @@ MicrobenchmarkClusteringKernel <- function(benchmarkParameters,
       cat(sprintf("Running performance trial %d...\n", i))
 
       allocationSuccessful <- tryCatch({
+         RNGkind(kind=RBenchmarkOptions$rng.kind,
+            normal.kind=RBenchmarkOptions$rng.normal.kind)
+         set.seed(RBenchmarkOptions$rng.seed)
          kernelParameters <- allocator(benchmarkParameters)
          numberOfFeatures <- kernelParameters$numberOfFeatures
          numberOfFeatureVectors <- kernelParameters$numberOfFeatureVectors
@@ -164,7 +165,7 @@ MicrobenchmarkClusteringKernel <- function(benchmarkParameters,
       if (i > numberOfWarmupTrials) {
          numberOfSuccessfulTrials <- numberOfSuccessfulTrials + 1 
          resultsFrame[nrow(resultsFrame)+1, ] <- list(
-            benchmarkName, dataFileName, as.integer(numberOfFeatures),
+            benchmarkName, as.integer(numberOfFeatures),
             as.integer(numberOfFeatureVectors), as.integer(numberOfClusters),
             userTime, systemTime, wallClockTime, dateStarted, dateFinished)
       }

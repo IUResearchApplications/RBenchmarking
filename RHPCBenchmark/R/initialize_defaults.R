@@ -13,10 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-
 #' @import methods
 #' @import utils
 #' @import cluster
+#' @import mvtnorm
 #' @import Matrix
+
 RBenchmarkOptions <- list()
-RBenchmarkOptions$rnorm <- rnorm
+RBenchmarkOptions$rng.kind <- "Mersenne-Twister"
+RBenchmarkOptions$rng.normal.kind <- "Inversion"

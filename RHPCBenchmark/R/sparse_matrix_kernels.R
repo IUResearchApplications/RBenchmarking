@@ -44,7 +44,7 @@ SparseMatrixVectorAllocator <- function(benchmarkParameters, index) {
    }
 
    s <- ncol(kernelParameters$A)
-   kernelParameters$x <- matrix(RBenchmarkOptions$rnorm(s), nrow=s, ncol=1)
+   kernelParameters$x <- matrix(stats::rnorm(s), nrow=s, ncol=1)
    return (kernelParameters)
 }
 

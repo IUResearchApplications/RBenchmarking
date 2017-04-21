@@ -14,29 +14,107 @@
 # limitations under the License.
 ################################################################################
 
-#' Allocates and initializes input to the machine learning microbenchmarks
+#' Generates clusters from multivariate normal distributions
+#'
+#' \code{GenerateClusterData} generates clusters of feature vectors drawn
+#' from multivariate normal (MVN) distributions.  The mean values of the normal
+#' distribution corresponding to the first cluster is always at the origin. 
+#' The remaining clusters are generated from MVN distributions with mean values
+#' at v_i and -v_i where v_i is the i-th unit vector.  The clusters are
+#' generated in the following order by mean value of the MVN for each cluster:
+#' origin, v_1, -v_1, v_2, -v_2, v_3, -v_3,..., v_{(numberOfClusters-1)/2},
+#' -v_{(numberOfClusters-1)/2} (if \code{numberOfClusters} is odd)
+#' origin, v_1, -v_1, v_2, -v_2, v_3, -v_3,..., v_{(numberOfClusters-1)/2}
+#' (if \code{numberOfClusters} is even). 
+#'
+#' @param numberOfFeatures the number of features, the dimension of the feature
+#'   space
+#' @param numberOfVectorsPerCluster the number of vectors to randomly generate
+#'   for each cluster
+#' @param numberOfClusters the number of clusters to be generated.  The value
+#'   of this parameter must be in the interval [1,2*\code{numberOfFeatures}+1]
+#' @return a list containing a matrix of feature vectors \code{featureVectors}
+#'   as rows of feature vectors,
+#'   number of features \code{numberOfFeatures}, number of feature vectors
+#'   \code{numberOfFeatureVectors}, and number of clusters
+#'   \code{numberOfClusters}.
+GenerateClusterData <- function(numberOfFeatures, numberOfVectorsPerCluster, numberOfClusters=2*numberOfFeatures+1) {
+
+   if (numberOfClusters < 1) {
+      stop("numberOfClusters must be greater than zero")
+   }
+
+   inflationFactor <- 3
+   numberOfFeatureVectors <- numberOfClusters*numberOfVectorsPerCluster
+   featureVectors <- rep(0.0, numberOfFeatureVectors*numberOfFeatures)
+   dim(featureVectors) <- c(numberOfFeatureVectors, numberOfFeatures)
+
+   # Generate cluster at origin
+   mu <- rep(0.0, numberOfFeatures)
+   dim(mu) <- c(1, numberOfFeatures)
+   S <- diag(inflationFactor*stats::runif(numberOfFeatures), numberOfFeatures, numberOfFeatures)
+   cat(sprintf("Populating feature vectors %d--%d\n", 1, numberOfVectorsPerCluster))
+   featureVectors[1:numberOfVectorsPerCluster, ] <- mvtnorm::rmvnorm(numberOfVectorsPerCluster, mu, S)
+
+   if (numberOfClusters > 1) {
+      for (i in 1:(numberOfClusters-1)) {
+         if (i %% 2 == 0) {
+            d <- i/2
+            v <- -1
+         } else {
+            d <- (i+1)/2
+            v <- 1
+         }
+
+         mu <- rep(0.0, numberOfFeatures)
+         mu[d] <- v
+
+         S <- diag(inflationFactor*stats::runif(numberOfFeatures), numberOfFeatures, numberOfFeatures)
+
+         rangeStart <- i*numberOfVectorsPerCluster+1
+         rangeEnd <- rangeStart + numberOfVectorsPerCluster - 1
+         cat(sprintf("Populating feature vectors %d--%d\n", rangeStart, rangeEnd))
+         featureVectors[rangeStart:rangeEnd, ] <- mvtnorm::rmvnorm(numberOfVectorsPerCluster, mu, S)
+
+
+#         if (i == 1) {
+#            print(mu)
+#            print(S)
+#            print(featureVectors[rangeStart:rangeEnd,])
+#         }
+      }
+   }
+
+   cat(sprintf("featureVectors        : %d x %d\n", dim(featureVectors)[1], dim(featureVectors)[2]))
+   cat(sprintf("numberOfFeatures      : %d\n", numberOfFeatures))
+   cat(sprintf("numberOfFeatureVectors: %d\n", numberOfFeatureVectors))
+   cat(sprintf("numberOfClusters      : %d\n", numberOfClusters))
+
+   return (list("featureVectors" = featureVectors, "numberOfFeatures" = numberOfFeatures, "numberOfFeatureVectors" = numberOfFeatureVectors, "numberOfClusters" = numberOfClusters))
+
+}
+
+
+#' Allocates and initializes input to the clustering for machine learning
+#' microbenchmarks
 #'
 #' \code{ClusteringAllocator} allocates and initializes the data sets that are
-#' inputs to clustering microbenchmarks for the purposes of conducting a single
-#' performance trial with the \code{ClusteringMicrobenchmark} function.  The
-#' data set is populated and returned in the \code{kernelParameters} list.
+#' input to the clustering microbenchmarks for the purposes of conducting a
+#' single performance trial with one of the clustering microbenchmark functions.
 #'
 #' @param benchmarkParameters an object of type
-#'   \code{\link{MachineLearningMicrobenchmark}} specifying various parameters
-#'   needed to generate input for the machine learning microbenchmark.
+#'   \code{\link{ClusteringMicrobenchmark}} specifying various parameters
+#'   needed to generate input for the clustering microbenchmarks.
 #' @return a list containing the data objects to be input to the
-#'   clustering microbenchmark for which a single performance trial is to be
-#'   conducted.
+#'   clustering microbenchmark
+#' @seealso \code{\link{PamClusteringBenchmark}} \code{\link{ClaraClusteringBenchmark}}
 ClusteringAllocator <- function(benchmarkParameters) {
    # Create list of kernel parameters
-   kernelParameters <- get(benchmarkParameters$dataObjectName)
-   kernelParameters$numberOfFeatures <- dim(kernelParameters$featureVectors)[2]
-   kernelParameters$numberOfFeatureVectors <- dim(kernelParameters$featureVectors)[1]
-   kernelParameters$numberOfClusters <- dim(kernelParameters$mu)[1]
+   kernelParameters <- GenerateClusterData(benchmarkParameters$numberOfFeatures,
+      benchmarkParameters$numberOfFeatureVectorsPerCluster,
+      benchmarkParameters$numberOfClusters)
 
-   if (nrow(kernelParameters$mu) != dim(kernelParameters$S)[1]) {
-      stop("Number of mean values must be equal to the number of covariance matrices")
-   } else if (dim(kernelParameters$featureVectors)[1] %% kernelParameters$numberOfClusters != 0) {
+   if (dim(kernelParameters$featureVectors)[1] %% kernelParameters$numberOfClusters != 0) {
       stop("Number of feature vectors must be a multiple of the number of clusters")
    }
 
@@ -51,7 +129,7 @@ ClusteringAllocator <- function(benchmarkParameters) {
 #' \code{kernelParameters} parameter.
 #'
 #' @param benchmarkParameters an object of type
-#'   \code{\link{MachineLearningMicrobenchmark}} specifying various parameters
+#'   \code{\link{ClusteringMicrobenchmark}} specifying various parameters
 #'   for microbenchmarking the cluster::pam function
 #' @param kernelParameters a list of data objects to be used as input to
 #'   the clustering function
@@ -71,7 +149,7 @@ PamClusteringBenchmark <- function(benchmarkParameters, kernelParameters) {
 #' \code{kernelParameters} parameter.
 #'
 #' @param benchmarkParameters an object of type
-#'   \code{\link{MachineLearningMicrobenchmark}} specifying various parameters
+#'   \code{\link{ClusteringMicrobenchmark}} specifying various parameters
 #'   for microbenchmarking the cluster::clara function
 #' @param kernelParameters a list of data objects to be used as input to
 #'   the clustering function
