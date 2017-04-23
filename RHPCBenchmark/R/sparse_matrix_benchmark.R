@@ -67,11 +67,11 @@
 #'   objects defining the QR factorization microbenchmarks to execute as part
 #'   of the sparse matrix benchmark.  Default values are provided by the
 #'   function \code{\link{SparseQrDefaultMicrobenchmarks}}.
-#' @return a list of lists of data frames, one sublist for each supported
+#' @return a list of data frames, one data frame for each supported
 #'   category of sparse matrix microbenchmarks, with each data frame
 #'   containing the dimensions of the sparse matrix tested and the user,
 #'   system, and elapsed (wall clock) time of times of each performance
-#'   trial used to compute the average performance 
+#'   trial
 #'   
 #' @examples 
 #' ## Run the default sparse matrix microbenchmarks and place the results files
@@ -163,13 +163,13 @@ SparseMatrixBenchmark <- function(runIdentifier,
 #'   appended to the base of the file name of the output CSV format files
 #' @param resultsDirectory a character string specifying the directory
 #'   where all of the CSV performance results files will be saved
-#' @return a list of data frames, one per microbenchmark, each containing the
-#'   user, system, and elapsed (wall clock) times of each performance trial
-#'   used to compute the average performance
+#' @return a data frame containing the benchmark name, user, system, and
+#'   elapsed (wall clock) times of each performance trial for each
+#'   microbenchmark
 PerformSparseMatrixKernelMicrobenchmarking <- function(microbenchmarks,
    numberOfThreads, runIdentifier, resultsDirectory) {
 
-   microbenchmarkResults <- list()
+   microbenchmarkResults <- NULL
 
    if (length(microbenchmarks) > 0) {
       for (i in 1:length(microbenchmarks)) {
@@ -197,7 +197,8 @@ PerformSparseMatrixKernelMicrobenchmarking <- function(microbenchmarks,
             })
 
             if (loadSuccessful) {
-               microbenchmarkResults[[benchmarkName]] <- MicrobenchmarkSparseMatrixKernel(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+               resultsFrame <- MicrobenchmarkSparseMatrixKernel(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+               microbenchmarkResults <- rbind(microbenchmarkResults, resultsFrame)
               
                if (!is.na(matrixObjectName)) {
                   remove(list=c(matrixObjectName), envir=.GlobalEnv)

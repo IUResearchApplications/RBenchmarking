@@ -50,10 +50,10 @@
 #'   microbenchmarks to execute as part of the machine learning benchmark.
 #'   Default values are provided by the function
 #'   \code{\link{ClusteringDefaultMicrobenchmarks}}.
-#' @return a list of lists of data frames, one sublist for each supported
+#' @return a list of data frames, one data frame for each supported
 #'   category of machine learning microbenchmarks, with each data frame
 #'   containing the user, system, and elapsed (wall clock) time of times of each
-#'   performance trial used to compute the average performance 
+#'   performance trial
 #'   
 #' @examples 
 #' ## Run the default machine learning microbenchmarks and place the results
@@ -116,14 +116,13 @@ MachineLearningBenchmark <- function(runIdentifier,
 #'   appended to the base of the file name of the output CSV format files
 #' @param resultsDirectory a character string specifying the directory
 #'   where all of the CSV performance results files will be saved
-#' @return a list of data frames, one per microbenchmark, each containing the
-#'   user, system, and elapsed (wall clock) times of each performance trial
-#'   used to compute the average performance
+#' @return a data frame containing the benchmark name, user, system, and elapsed
+#'   (wall clock) times of each performance trial each microbenchmark
 PerformClusteringMicrobenchmarking <- function(microbenchmarks,
    microbenchmarkingFunction, numberOfThreads, runIdentifier,
    resultsDirectory) {
 
-   microbenchmarkResults <- list()
+   microbenchmarkResults <- NULL
 
    if (length(microbenchmarks) > 0) {
       for (i in 1:length(microbenchmarks)) {
@@ -151,7 +150,8 @@ PerformClusteringMicrobenchmarking <- function(microbenchmarks,
             })
 
             if (loadSuccessful) {
-               microbenchmarkResults[[benchmarkName]] <- microbenchmarkingFunction(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+               resultsFrame <- microbenchmarkingFunction(microbenchmarks[[i]], numberOfThreads, resultsDirectory, runIdentifier)
+               microbenchmarkResults <- rbind(microbenchmarkResults, resultsFrame)
 
                if (!is.na(dataObjectName)) {
                   remove(list=c(dataObjectName), envir=.GlobalEnv)
@@ -353,7 +353,7 @@ ClusteringDefaultMicrobenchmarks <- function() {
       benchmarkDescription = "Clustering of 99000 1000-dimensional feature vectors into 99 clusters using clara function",
       csvResultsBaseFileName = "clara_cluster_1000_99_1000",
       numberOfFeatures = as.integer(1000),
-      numberOfClusters = as.integer(50),
+      numberOfClusters = as.integer(90),
       numberOfFeatureVectorsPerCluster = as.integer(1000),
       dataObjectName = NA_character_,
       numberOfTrials = as.integer(3),

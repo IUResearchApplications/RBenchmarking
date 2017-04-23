@@ -28,13 +28,18 @@ runIdentifier <- args[1]
 resultsDirectory <- args[2]
 
 myClustering <- ClusteringDefaultMicrobenchmarks()
-myClustering[["pam_cluster_3_7_5000"]]$active <- FALSE
-myClustering[["pam_cluster_3_7_5715"]]$active <- FALSE
-myClustering[["pam_cluster_16_33_1213"]]$active <- FALSE
-myClustering[["pam_cluster_64_33_1213"]]$active <- FALSE
-myClustering[["pam_cluster_16_7_2858"]]$active <- FALSE
-myClustering[["pam_cluster_32_7_2858"]]$active <- FALSE
-myClustering[["pam_cluster_64_7_5715"]]$active <- FALSE
+#myClustering[["pam_cluster_3_7_2500"]]$active <- FALSE
+#myClustering[["pam_cluster_3_7_5000"]]$active <- FALSE
+#myClustering[["pam_cluster_3_7_5715"]]$active <- FALSE
+#myClustering[["pam_cluster_16_33_1213"]]$active <- FALSE
+#myClustering[["pam_cluster_64_33_1213"]]$active <- FALSE
+#myClustering[["pam_cluster_16_7_2858"]]$active <- FALSE
+#myClustering[["pam_cluster_32_7_2858"]]$active <- FALSE
+#myClustering[["pam_cluster_64_7_5715"]]$active <- FALSE
+#myClustering[["pam_cluster_64_33_1213"]]$active <- FALSE
+#myClustering[["pam_cluster_1000_99_1000"]]$active <- FALSE
+#myClustering[["clara_cluster_64_33_1213"]]$active <- FALSE
+#myClustering[["clara_cluster_1000_99_1000"]]$active <- FALSE
 
 machineLearningResults <- MachineLearningBenchmark(runIdentifier,
    resultsDirectory, clusteringMicrobenchmarks=myClustering)

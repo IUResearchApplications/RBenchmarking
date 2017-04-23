@@ -41,9 +41,9 @@
 #'   defining the microbenchmarks to execute as part of the dense matrix
 #'   benchmark.  Default values are provided by the function
 #'   \code{\link{DenseMatrixDefaultMicrobenchmarks}}.
-#' @return a list of data frames, one per microbenchmark, each containing the
+#' @return a data frame containing the benchmark name, 
 #'   user, system, and elapsed (wall clock) times of each performance trial
-#'   used to compute the average performance
+#'   for each microbenchmark
 #' @examples 
 #' ## Run the default dense matrix benchmarks and place the results files
 #' ## in the directory ./DenseMatrixResults with the run identifier test1
@@ -63,7 +63,7 @@ DenseMatrixBenchmark <- function(runIdentifier, resultsDirectory,
 
    numberOfThreads <- strtoi(GetConfigurableEnvParameter("R_BENCH_NUM_THREADS_VARIABLE"))
 
-   microbenchmarkResults <- list()
+   microbenchmarkResults <- NULL
 
    # Loop over all matrix kernel tests
 
@@ -71,9 +71,10 @@ DenseMatrixBenchmark <- function(runIdentifier, resultsDirectory,
       if (microbenchmarks[[i]]$active) {
          benchmarkName <- microbenchmarks[[i]]$benchmarkName
 
-         microbenchmarkResults[[benchmarkName]] <- MicrobenchmarkDenseMatrixKernel(
+         resultsFrame <- MicrobenchmarkDenseMatrixKernel(
             microbenchmarks[[i]], numberOfThreads, resultsDirectory,
             runIdentifier)
+         microbenchmarkResults <- rbind(microbenchmarkResults, resultsFrame)
          invisible(gc())
       }
    }
