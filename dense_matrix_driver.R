@@ -17,7 +17,6 @@ library(devtools)
 
 devtools::load_all("RHPCBenchmark")
 
-
 args <- commandArgs(trailingOnly=TRUE)
 
 if (length(args) != 2) {
@@ -28,7 +27,7 @@ if (length(args) != 2) {
 runIdentifier <- args[1]
 resultsDirectory <- args[2]
 
-denseMatrixResults <- DenseMatrixBenchmark(runIdentifier, resultsDirectory)
+denseMatrixResults <- RunDenseMatrixBenchmark(runIdentifier, resultsDirectory)
 dataFrameFileName <- file.path(resultsDirectory, "denseMatrixResults.RData")
 save(denseMatrixResults, file=dataFrameFileName)
 

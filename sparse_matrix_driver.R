@@ -27,23 +27,23 @@ if (length(args) != 2) {
 runIdentifier <- args[1]
 resultsDirectory <- args[2]
 
-myMatvec <- SparseMatrixVectorDefaultMicrobenchmarks()
+myMatvec <- GetSparseMatrixVectorDefaultMicrobenchmarks()
 
-myCholesky <- SparseCholeskyDefaultMicrobenchmarks()
+myCholesky <- GetSparseCholeskyDefaultMicrobenchmarks()
 #myCholesky[["ct20stif"]]$active <- FALSE
 #myCholesky[["Andrews"]]$active <- FALSE
 #myCholesky[["G3_circuit"]]$active <- FALSE
 
-myLu <- SparseLuDefaultMicrobenchmarks()
+myLu <- GetSparseLuDefaultMicrobenchmarks()
 #myLu[["circuit5M_dc"]]$active <- FALSE
 #myLu[["stomach"]]$active <- FALSE
 #myLu[["torso3"]]$active <- FALSE
 
-myQr <- SparseQrDefaultMicrobenchmarks()
+myQr <- GetSparseQrDefaultMicrobenchmarks()
 #myQr[["Maragal_6"]]$active <- FALSE
 #myQr[["landmark"]]$active <- FALSE
 
-sparseMatrixResults <- SparseMatrixBenchmark(runIdentifier, resultsDirectory,
+sparseMatrixResults <- RunSparseMatrixBenchmark(runIdentifier, resultsDirectory,
    matrixVectorMicrobenchmarks=myMatvec, choleskyMicrobenchmarks=myCholesky,
    luMicrobenchmarks=myLu, qrMicrobenchmarks=myQr)
 dataFrameFileName <- file.path(resultsDirectory, "sparseMatrixResults.RData")

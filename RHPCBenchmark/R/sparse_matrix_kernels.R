@@ -112,7 +112,7 @@ SparseCholeskyAllocator <- function(benchmarkParameters, index) {
 #'
 #' @inheritParams SparseMatrixVectorBenchmark
 SparseCholeskyBenchmark <- function(benchmarkParameters, kernelParameters) {
-   timings <- system.time({b <- Cholesky(kernelParameters$A)})
+   timings <- system.time({b <- Matrix::Cholesky(kernelParameters$A)})
    return (timings)
 }
 
@@ -159,7 +159,7 @@ SparseLuAllocator <- function(benchmarkParameters, index) {
 #'
 #' @inheritParams SparseMatrixVectorBenchmark
 SparseLuBenchmark <- function(benchmarkParameters, kernelParameters) {
-   timings <- system.time({b <- lu(kernelParameters$A)})
+   timings <- system.time({b <- Matrix::lu(kernelParameters$A)})
    return (timings)
 }
 
@@ -199,6 +199,6 @@ SparseQrAllocator <- function(benchmarkParameters, index) {
 #'
 #' @inheritParams SparseMatrixVectorBenchmark
 SparseQrBenchmark <- function(benchmarkParameters, kernelParameters) {
-   timings <- system.time({b <- qr(kernelParameters$A)})
+   timings <- system.time({b <- Matrix::qr(kernelParameters$A)})
    return (timings)
 }

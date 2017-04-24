@@ -27,7 +27,7 @@ if (length(args) != 2) {
 runIdentifier <- args[1]
 resultsDirectory <- args[2]
 
-myClustering <- ClusteringDefaultMicrobenchmarks()
+myClustering <- GetClusteringDefaultMicrobenchmarks()
 #myClustering[["pam_cluster_3_7_2500"]]$active <- FALSE
 #myClustering[["pam_cluster_3_7_5000"]]$active <- FALSE
 #myClustering[["pam_cluster_3_7_5715"]]$active <- FALSE
@@ -41,7 +41,7 @@ myClustering <- ClusteringDefaultMicrobenchmarks()
 #myClustering[["clara_cluster_64_33_1213"]]$active <- FALSE
 #myClustering[["clara_cluster_1000_99_1000"]]$active <- FALSE
 
-machineLearningResults <- MachineLearningBenchmark(runIdentifier,
+machineLearningResults <- RunMachineLearningBenchmark(runIdentifier,
    resultsDirectory, clusteringMicrobenchmarks=myClustering)
 dataFrameFileName <- file.path(resultsDirectory, "machineLearningResults.RData")
 save(machineLearningResults, file=dataFrameFileName)

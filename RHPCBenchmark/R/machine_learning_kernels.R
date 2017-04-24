@@ -38,7 +38,8 @@
 #'   number of features \code{numberOfFeatures}, number of feature vectors
 #'   \code{numberOfFeatureVectors}, and number of clusters
 #'   \code{numberOfClusters}.
-GenerateClusterData <- function(numberOfFeatures, numberOfVectorsPerCluster, numberOfClusters=2*numberOfFeatures+1) {
+GenerateClusterData <- function(numberOfFeatures, numberOfVectorsPerCluster,
+   numberOfClusters=2*numberOfFeatures+1) {
 
    if (numberOfClusters < 1) {
       stop("numberOfClusters must be greater than zero")
