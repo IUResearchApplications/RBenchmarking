@@ -1,7 +1,7 @@
 #' RHPCBenchmark: A package for performance testing R functionality and common
 #' packages relevant to high-performance computing
 #'
-#' The benchmarking is divided into three categories: dense matrix linear
+#' The benchmarks are divided into three categories: dense matrix linear
 #' algebra kernels, sparse matrix linear algebra kernels, and machine learning
 #' functionality.  All of the dense linear algebra kernels are implemented
 #' around BLAS or LAPACK interfaces.  The sparse linear algebra kernels are
