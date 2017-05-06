@@ -14,8 +14,11 @@
 # limitations under the License.
 ################################################################################
 
-#' @import methods
-RBenchmarkOptions <- list()
-RBenchmarkOptions$rng.kind <- "Mersenne-Twister"
-RBenchmarkOptions$rng.normal.kind <- "Inversion"
-RBenchmarkOptions$numThreadsVariable <- "R_BENCH_NUM_THREADS_VARIABLE"
+# Run this script to perform a devtools install of the package to
+# test the installation process.  It ought to be run after the package
+# has been checked using devtools::check_built().
+library(devtools)
+
+packagePath <- file.path(getwd(), "RHPCBenchmark")
+devtools::install(pkg=packagePath, local=FALSE, upgrade_dependencies=FALSE,
+   build_vignettes=TRUE)

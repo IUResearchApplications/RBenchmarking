@@ -17,18 +17,14 @@ library(devtools)
 
 devtools::load_all("RHPCBenchmark")
 
-args <- commandArgs(trailingOnly=TRUE)
+Sys.setenv(R_BENCH_NUM_THREADS_VARIABLE="MKL_NUM_THREADS")
+Sys.setenv(MKL_NUM_THREADS="1")
 
-if (length(args) != 2) {
-   write("USAGE: machine_learning_driver runIdentifier resultsDirectory", stderr())
-   quit(status=1)
-}
+runIdentifier <- "windows1"
+resultsDirectory <- "./windowsMachineLearning"
 
-runIdentifier <- args[1]
-resultsDirectory <- args[2]
-
-myClustering <- GetClusteringDefaultMicrobenchmarks()
-#myClustering[["pam_cluster_3_7_2500"]]$active <- FALSE
+myClustering <- ClusteringDefaultMicrobenchmarks()
+myClustering[["pam_cluster_3_7_2500"]]$active <- TRUE
 myClustering[["pam_cluster_3_7_5000"]]$active <- FALSE
 myClustering[["pam_cluster_3_7_5715"]]$active <- FALSE
 myClustering[["pam_cluster_16_33_1213"]]$active <- FALSE
@@ -37,11 +33,9 @@ myClustering[["pam_cluster_16_7_2858"]]$active <- FALSE
 myClustering[["pam_cluster_32_7_2858"]]$active <- FALSE
 myClustering[["pam_cluster_64_7_5715"]]$active <- FALSE
 myClustering[["pam_cluster_64_33_1213"]]$active <- FALSE
-myClustering[["pam_cluster_1000_99_1000"]]$active <- FALSE
-myClustering[["clara_cluster_64_33_1213"]]$active <- FALSE
-myClustering[["clara_cluster_1000_99_1000"]]$active <- FALSE
+myClustering[["pam_cluster_1000_99_1000"]]$active <- TRUE
 
-machineLearningResults <- RunMachineLearningBenchmark(runIdentifier,
+machineLearningResults <- MachineLearningBenchmark(runIdentifier,
    resultsDirectory, clusteringMicrobenchmarks=myClustering)
 dataFrameFileName <- file.path(resultsDirectory, "machineLearningResults.RData")
 save(machineLearningResults, file=dataFrameFileName)

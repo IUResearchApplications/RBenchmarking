@@ -15,7 +15,8 @@
 ################################################################################
 
 # Run this script to generate/update the man pages from the roxygen
-# comments, and update the DESCRIPTION and NAMESPACE files.
+# comments, update the DESCRIPTION and NAMESPACE files, and to perform
+# validation checks on the package.
 library(devtools)
 
 packagePath <- file.path(getwd(), "RHPCBenchmark")

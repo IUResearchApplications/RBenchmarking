@@ -1,5 +1,5 @@
-#' RHPCBenchmark: A package for performance testing R functionality and common
-#' packages relevant to high-performance computing
+#' RHPCBenchmark: A package for performance testing intrinsic R functionality
+#' and established packages relevant to high-performance computing
 #'
 #' The benchmarks are divided into three categories: dense matrix linear
 #' algebra kernels, sparse matrix linear algebra kernels, and machine learning
@@ -7,9 +7,9 @@
 #' around BLAS or LAPACK interfaces.  The sparse linear algebra kernels are
 #' members of the R Matrix library.  The machine learning benchmarks currently
 #' only cover variants of K-means functionality for clustering using the
-#' \code{cluster} package.  The the dense matrix linear algebra kernels, sparse
+#' \code{cluster} package.  The dense matrix linear algebra kernels, sparse
 #' matrix linear algebra kernels, and machine learning functions that are
-#' benchmarked are all part of the R interpreter's intrinsic functionlity or
+#' benchmarked are all part of the R interpreter's intrinsic functionality or
 #' packages included the with the R programming environment standard
 #' distributions from CRAN.
 #'
@@ -18,7 +18,7 @@
 #' It is also important to have substantial amounts of memory (16GB minimum)
 #' to run most of the microbenchmarks.  If any of the microbenchmarks fails
 #' to run in a timely manner or fails due to memory constraints, the matrix
-#' sizes and number of performance trials per matrix can be adjusted; see
+#' sizes and number of performance trials per matrix can be adjusted.  See
 #' the documentation for top-level benchmark functions and the microbenchmark
 #' definition classes listed below for information on how to configure the
 #' individual microbenchmarks.

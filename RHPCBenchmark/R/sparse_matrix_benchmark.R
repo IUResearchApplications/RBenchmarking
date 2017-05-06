@@ -23,11 +23,11 @@
 #' into four categories supported by this benchmark, defined in the
 #' \code{matrixVectorMicrobenchmarks}, \code{choleskyMicrobenchmarks}, 
 #' \code{luMicrobenchmarks}, and \code{qrMicrobenchmarks} input vectors
-#' For each microbenchmark, it creates a
-#' seperate output file in CSV format containing the performance results for
-#' each matrix tested by the microbenchmark.  The names of the output files
-#' follow the format \code{csvResultsBaseFileName}_\code{runIdentifier}.csv,
-#' where \code{csvResultsBaseFileName} is specified in the
+#' For each microbenchmark, it creates a separate output file in CSV format
+#' containing the performance results for each matrix tested by the
+#' microbenchmark.  The names of the output files follow the format
+#' \code{benchmarkName}_\code{runIdentifier}.csv, where
+#' \code{benchmarkName} is specified in the
 #' \code{SparseMatrixMicrobenchmark} object of each microbenchmark and
 #' \code{runIdentifier} is an input parameter to this function.  Each
 #' input vector contains instances of the
@@ -43,7 +43,20 @@
 #' sparse matrix object needed by the microbenchmark.  The needed R data files
 #' should either be given in an attached R package or given in the \code{data}
 #' subdirectory of the current working directory, and they should have the
-#' extension \code{.RData}.
+#' extension \code{.RData}.  If the linear algebra kernels are multithreaded,
+#' by linking to multithreaded BLAS or LAPACK libraries for example, then the
+#' number of threads must be retrievable from an environment variable which is
+#' set before execution of the R programming environment.  The name of the
+#' environment variable specifying the number of threads must be provided in
+#' the R HPC benchmark environment variable R_BENCH_NUM_THREADS_VARIABLE.  This
+#' function will retrieve the number of threads through
+#' R_BENCH_NUM_THREADS_VARIABLE so that the number of threads can be printed to
+#' the results files and recorded in data frames for reporting purposes.  This
+#' function utilizes the number of threads only for reporting purposes and is
+#' not used by the benchmark to effect the actual number of threads utilized by
+#' the kernels, as that is assumed to be controlled by the numerical library.
+#' An error exception will be thrown if the environment variable
+#' R_BENCH_NUM_THREADS_VARIABLE and the variable it is set to are not both set.
 #'
 #' @param runIdentifier a character string specifying the suffix to be
 #'   appended to the base of the file name of the output CSV format files
@@ -53,25 +66,31 @@
 #'   \code{SparseMatrixMicrobenchmark} objects defining the matrix-vector
 #'   multiplication microbenchmarks to execute as part of the sparse matrix
 #'   benchmark.  Default values are provided by the function
-#'   \code{\link{GetSparseMatrixVectorDefaultMicrobenchmarks}}.
+#'   \code{\link{GetSparseMatrixVectorDefaultMicrobenchmarks}}.  If the
+#'   value is NULL, then all of the matrix-vector multiplication
+#'   microbenchmarks will be skipped.
 #' @param choleskyMicrobenchmarks a vector of
 #'   \code{SparseMatrixMicrobenchmark} objects defining the Cholesky
 #'   factorization microbenchmarks to execute as part of the sparse matrix
 #'   benchmark.  Default values are provided by the function
-#'   \code{\link{GetSparseCholeskyDefaultMicrobenchmarks}}.
+#'   \code{\link{GetSparseCholeskyDefaultMicrobenchmarks}}.  If the value
+#'   is NULL, then all of the Cholesky factorization microbenchmarks will
+#'   be skipped.
 #' @param luMicrobenchmarks a vector of \code{SparseMatrixMicrobenchmark}
 #'   objects defining the LU factorization microbenchmarks to execute as part
 #'   of the sparse matrix benchmark.  Default values are provided by the
-#'   function \code{\link{GetSparseLuDefaultMicrobenchmarks}}.
+#'   function \code{\link{GetSparseLuDefaultMicrobenchmarks}}.  If the value
+#'   is NULL, then all of the LU factorization microbenchmarks will
+#'   be skipped.
 #' @param qrMicrobenchmarks a vector of \code{SparseMatrixMicrobenchmark}
 #'   objects defining the QR factorization microbenchmarks to execute as part
 #'   of the sparse matrix benchmark.  Default values are provided by the
-#'   function \code{\link{GetSparseQrDefaultMicrobenchmarks}}.
-#' @return a list of data frames, one data frame for each supported
-#'   category of sparse matrix microbenchmarks, with each data frame
-#'   containing the dimensions of the sparse matrix tested and the user,
-#'   system, and elapsed (wall clock) time of times of each performance
-#'   trial
+#'   function \code{\link{GetSparseQrDefaultMicrobenchmarks}}.  If the value
+#'   is NULL, then all of the QR factorization microbenchmarks will
+#'   be skipped.
+#' @return a data frame containing the benchmark name, user, system, and
+#'   elapsed (wall clock) times of each performance trial for each
+#'   microbenchmark
 #'   
 #' @examples 
 #' ## Run the default sparse matrix microbenchmarks and place the results files
@@ -96,13 +115,14 @@ RunSparseMatrixBenchmark <- function(runIdentifier,
    luMicrobenchmarks = GetSparseLuDefaultMicrobenchmarks(),
    qrMicrobenchmarks = GetSparseQrDefaultMicrobenchmarks()) {
 
-   numberOfThreads <- strtoi(GetConfigurableEnvParameter("R_BENCH_NUM_THREADS_VARIABLE"))
+   numberOfThreads <- GetNumberOfThreads()
 
-   allResults <- list()
-   matrixVectorResults <- list()
-   choleskyResults <- list()
-   luResults <- list()
-   qrResults <- list()
+#   allResults <- list()
+   allResults <- NULL
+   matrixVectorResults <- NULL
+   choleskyResults <- NULL
+   luResults <- NULL
+   qrResults <- NULL
 
    # Loop over all sparse matrix-vector multiplication microbenchmarks
    if (length(matrixVectorMicrobenchmarks) > 0) {
@@ -132,13 +152,12 @@ RunSparseMatrixBenchmark <- function(runIdentifier,
       cat(sprintf("WARN: no sparse QR factorization microbenchmarks to execute, skipping\n\n"))
    }
 
-   allResults[["matrixVectorResults"]] <- matrixVectorResults
-   allResults[["choleskyResults"]] <- choleskyResults
-   allResults[["luResults"]] <- luResults
-   allResults[["qrResults"]] <- qrResults
+   allResults <- rbind(allResults, matrixVectorResults)
+   allResults <- rbind(allResults, choleskyResults)
+   allResults <- rbind(allResults, luResults)
+   allResults <- rbind(allResults, qrResults)
 
    return(allResults)
- 
 }
 
 
@@ -150,6 +169,16 @@ RunSparseMatrixBenchmark <- function(runIdentifier,
 #' \code{SparseMatrixMicrobenchmark} objects.  Objects with the \code{active}
 #' flag set to TRUE indicate that the corresponding microbenchmark will be
 #' performed; FALSE indicates that the microbenchmark will be skipped.
+#' If the \code{matrixObjectName} field of an input
+#' \code{SparseMatrixMicrobenchmark} object is set to \code{NA_character_},
+#' then the sparse matrix is assumed to be dynamically generated by the
+#' allocator function specified in the \code{allocatorFunction} field.
+#' If the \code{matrixObjectName} field is specified, then the sparse
+#' matrix object is expected to be found in an \code{.RData} file with
+#' base file name the same as the value of \code{matrixObjectName}, and
+#' located in the either an attached R data package or a directory named
+#' \code{data} in the current working directory.  See the
+#' the \code{\link[utils]{data}} package for more details.
 #'
 #' @param microbenchmarks a vector of
 #'   \code{SparseMatrixMicrobenchmark} objects defining the sparse matrix
@@ -166,6 +195,7 @@ RunSparseMatrixBenchmark <- function(runIdentifier,
 #' @return a data frame containing the benchmark name, user, system, and
 #'   elapsed (wall clock) times of each performance trial for each
 #'   microbenchmark
+#' @seealso \code{\link[utils]{data}}
 PerformSparseMatrixKernelMicrobenchmarking <- function(microbenchmarks,
    numberOfThreads, runIdentifier, resultsDirectory) {
 
@@ -228,9 +258,10 @@ PerformSparseMatrixKernelMicrobenchmarking <- function(microbenchmarks,
 #' matrix-vector microbenchmarks cover a variety of matrices of different
 #' dimensions and number of non-zero values.  They are as follows:
 #' \enumerate{
-#'   \item laplacian7pt_100 -- 100x100x100 7-point Laplacian operator
-#'   \item laplacian7pt_200 -- 200x200x200 7-point Laplacian operator
-#'   \item ca2010 -- DIMACS10/ca2010 710145x710145 undirected graph matrix
+#'   \item matvec_laplacian7pt_100 -- 100x100x100 7-point Laplacian operator
+#'   \item matvec_laplacian7pt_200 -- 200x200x200 7-point Laplacian operator
+#'   \item matvec_ca2010 -- DIMACS10/ca2010 710145x710145 undirected graph
+#'      matrix
 #' }
 #' See the documentation for the
 #' \code{\link{SparseMatrixMicrobenchmark}} class for more details.
@@ -243,49 +274,46 @@ PerformSparseMatrixKernelMicrobenchmarking <- function(microbenchmarks,
 #' @export
 GetSparseMatrixVectorDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["laplacian7pt_100"]] <- methods::new(
+   microbenchmarks[["matvec_laplacian7pt_100"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "matvec_laplacian7pt_100",
       benchmarkDescription = "sparse matrix-vector mult. with 100x100x100 7-point Laplacian operator",
-      csvResultsBaseFileName = "matvec_laplacian7pt_100",
       matrixObjectName = "laplacian7pt_100",
       numberOfRows = as.integer(1000000),
       numberOfColumns = as.integer(1000000),
       numberOfNonzeros = as.integer(6940000),
-      numberOfTrials = as.integer(c(3)),
+      numberOfTrials = as.integer(c(20)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseMatrixVectorAllocator,
       benchmarkFunction = SparseMatrixVectorBenchmark
    )
 
-   microbenchmarks[["laplacian7pt_200"]] <- methods::new(
+   microbenchmarks[["matvec_laplacian7pt_200"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "matvec_laplacian7pt_200",
       benchmarkDescription = "Sparse matrix-vector mult. with 200x200x200 7-point Laplacian operator",
-      csvResultsBaseFileName = "matvec_laplacian7pt_200",
       matrixObjectName = "laplacian7pt_200",
       numberOfRows = as.integer(8000000),
       numberOfColumns = as.integer(8000000),
       numberOfNonzeros = as.integer(55760000),
-      numberOfTrials = as.integer(c(3)),
+      numberOfTrials = as.integer(c(20)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseMatrixVectorAllocator,
       benchmarkFunction = SparseMatrixVectorBenchmark
    )   
 
-   microbenchmarks[["ca2010"]] <- methods::new(
+   microbenchmarks[["matvec_ca2010"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "matvec_ca2010",
       benchmarkDescription = "Sparse matrix-vector mult. with undirected weighted graph matrix ca2010 from the University of Florida Sparse Matrix Collection DIMACS10 matrix group",
-      csvResultsBaseFileName = "matvec_ca2010",
       matrixObjectName = "ca2010",
       numberOfRows = as.integer(710145),
       numberOfColumns = as.integer(710145),
       numberOfNonzeros = as.integer(3489366),
-      numberOfTrials = as.integer(c(3)),
+      numberOfTrials = as.integer(c(20)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseMatrixVectorAllocator,
       benchmarkFunction = SparseMatrixVectorBenchmark
@@ -304,9 +332,10 @@ GetSparseMatrixVectorDefaultMicrobenchmarks <- function() {
 #' Cholesky factorization microbenchmarks cover a variety of matrices of
 #' different dimensions and number of non-zero values.  They are as follows:
 #' \enumerate{
-#'   \item ct20stif -- Boeing structural matrix with 2600295 nonzeros
-#'   \item Andrews -- computer vision matrix with 760154
-#'   \item G3_circuit -- AMD circuit simulation matrix with 7660826 nonzeros
+#'   \item cholesky_ct20stif -- Boeing structural matrix with 2600295 nonzeros
+#'   \item cholesky_Andrews -- computer vision matrix with 760154
+#'   \item cholesky_G3_circuit -- AMD circuit simulation matrix with 7660826
+#'      nonzeros
 #' }
 #' See the documentation for the
 #' \code{\link{SparseMatrixMicrobenchmark}} class for more details.
@@ -319,12 +348,11 @@ GetSparseMatrixVectorDefaultMicrobenchmarks <- function() {
 #' @export
 GetSparseCholeskyDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["ct20stif"]] <- methods::new(
+   microbenchmarks[["cholesky_ct20stif"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "cholesky_ct20stif",
-      benchmarkDescription = "Cholesky factorization of ct20stif matrix from University of Florida Sparse Matrix Collection Boeing group; CT20 engine block -- stiffness matrix, Boeing",
-      csvResultsBaseFileName = "cholesky_ct20stif",
+      benchmarkDescription = "Cholesky factorization of ct20stif matrix from University of Florida Sparse Matrix Collection Boeing group; CT20 engine block structural problem -- stiffness matrix, Boeing",
       matrixObjectName = "ct20stif",
       numberOfRows = as.integer(52329),
       numberOfColumns = as.integer(52329),
@@ -335,12 +363,11 @@ GetSparseCholeskyDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseCholeskyBenchmark
    )
 
-   microbenchmarks[["Andrews"]] <- methods::new(
+   microbenchmarks[["cholesky_Andrews"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "cholesky_Andrews",
-      benchmarkDescription = "Cholesky factorization of Andrews matrix from University of Florida Sparse Matrix Collection Andrews group; Eigenvalue problem, Stuart Andrews, Brown Univ.",
-      csvResultsBaseFileName = "cholesky_Andrews",
+      benchmarkDescription = "Cholesky factorization of Andrews matrix from University of Florida Sparse Matrix Collection Andrews group; Eigenvalue problem from computer vision/graphics, Stuart Andrews, Brown Univ.",
       matrixObjectName = "Andrews",
       numberOfRows = as.integer(60000),
       numberOfColumns = as.integer(60000),
@@ -351,12 +378,11 @@ GetSparseCholeskyDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseCholeskyBenchmark
    )
 
-   microbenchmarks[["G3_circuit"]] <- methods::new(
+   microbenchmarks[["cholesky_G3_circuit"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "cholesky_G3_circuit",
       benchmarkDescription = "Cholesky factorization of G3_circuit matrix from University of Florida Sparse Matrix Collection AMD group; circuit simulation problem, Ufuk Okuyucu, AMD, Inc.",
-      csvResultsBaseFileName = "cholesky_G3_circuit",
       matrixObjectName = "G3_circuit",
       numberOfRows = as.integer(1585478),
       numberOfColumns = as.integer(1585478),
@@ -379,10 +405,10 @@ GetSparseCholeskyDefaultMicrobenchmarks <- function() {
 #' factorization microbenchmarks cover a variety of matrices of different
 #' dimensions and number of non-zero values.  They are as follows:
 #' \enumerate{
-#'   \item circuit5M_dc -- Freescale DC circuit simulation matrix 2600295
+#'   \item lu_circuit5M_dc -- Freescale DC circuit simulation matrix 2600295
 #'     nonzeros
-#'   \item stomach -- 3D electro-physical model matrix with 3021648 nonzeros
-#'   \item torso3 -- 3D electro-physical model matrix with 4429042 nonzeros
+#'   \item lu_stomach -- 3D electro-physical model matrix with 3021648 nonzeros
+#'   \item lu_torso3 -- 3D electro-physical model matrix with 4429042 nonzeros
 #' }
 #' See the documentation for the
 #' \code{\link{SparseMatrixMicrobenchmark}} class for more details.
@@ -395,12 +421,11 @@ GetSparseCholeskyDefaultMicrobenchmarks <- function() {
 #' @export
 GetSparseLuDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["circuit5M_dc"]] <- methods::new(
+   microbenchmarks[["lu_circuit5M_dc"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "lu_circuit5M_dc",
       benchmarkDescription = "LU decomposition of circuit5M_dc matrix from University of Florida Sparse Matrix Collection Freescale group; Large circuit (DC analysis) K. Gullapalli, Freescale Semiconductor",
-      csvResultsBaseFileName = "lu_circuit5M_dc",
       matrixObjectName = "circuit5M_dc",
       numberOfRows = as.integer(3523317),
       numberOfColumns = as.integer(3523317),
@@ -411,12 +436,11 @@ GetSparseLuDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseLuBenchmark
    )
 
-   microbenchmarks[["stomach"]] <- methods::new(
+   microbenchmarks[["lu_stomach"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "lu_stomach",
       benchmarkDescription = "LU decomposition of stomach matrix from University of Florida Sparse Matrix Collection Norris group; S.Norris, Univ. Auckland. 3D electro-physical model of a duodenum",
-      csvResultsBaseFileName = "lu_stomach",
       matrixObjectName = "stomach",
       numberOfRows = as.integer(213360),
       numberOfColumns = as.integer(213360),
@@ -427,12 +451,11 @@ GetSparseLuDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseLuBenchmark
    )
 
-   microbenchmarks[["torso3"]] <- methods::new(
+   microbenchmarks[["lu_torso3"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "lu_torso3",
       benchmarkDescription = "LU decomposition of torso3 matrix from University of Florida Sparse Matrix Collection Norris group; S.Norris, Univ Auckland. finite diff. electro-phys.  3D model of torso",
-      csvResultsBaseFileName = "lu_torso3",
       matrixObjectName = "torso3",
       numberOfRows = as.integer(259156),
       numberOfColumns = as.integer(259156),
@@ -469,12 +492,11 @@ GetSparseLuDefaultMicrobenchmarks <- function() {
 #' @export
 GetSparseQrDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()
-   microbenchmarks[["Maragal_6"]] <- methods::new(
+   microbenchmarks[["qr_Maragal_6"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "qr_Maragal_6",
       benchmarkDescription = "QR factorization of Maragal_6 matrix from University of Florida Sparse Matrix Collection NYPA group; rank deficient least squares problem, D. Maragal, NY Power Authority",
-      csvResultsBaseFileName = "qr_Maragal_6",
       matrixObjectName = "Maragal_6",
       numberOfRows = as.integer(21255),
       numberOfColumns = as.integer(10152),
@@ -485,12 +507,11 @@ GetSparseQrDefaultMicrobenchmarks <- function() {
       benchmarkFunction = SparseQrBenchmark
    )
 
-   microbenchmarks[["landmark"]] <- methods::new(
+   microbenchmarks[["qr_landmark"]] <- methods::new(
       "SparseMatrixMicrobenchmark",
       active = TRUE,
       benchmarkName = "qr_landmark",
       benchmarkDescription = "QR factorization of landmark matrix from University of Florida Sparse Matrix Collection Pereyra group; Matrix from Victor Pereyra, Stanford University",
-      csvResultsBaseFileName = "qr_landmark",
       matrixObjectName = "landmark",
       numberOfRows = as.integer(71952),
       numberOfColumns = as.integer(2704),

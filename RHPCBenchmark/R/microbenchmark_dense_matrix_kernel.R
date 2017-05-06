@@ -26,7 +26,7 @@
 #' the input object \code{benchmarkParameters} which is an instance of
 #' the class \code{\link{DenseMatrixMicrobenchmark}}.  For each matrix dimension
 #' to be tested, the run time performance of the kernel is averaged over
-#' multiple perforance trials, and the averages are written to a CSV file.  The
+#' multiple performance trials, and the averages are written to a CSV file.  The
 #' results of the individual performance trials are retained in a data frame
 #' that is returned upon completion of the microbenchmark.  The kernel can also
 #' be executed with multiple threads if the kernel supports multithreading.  See
@@ -81,7 +81,7 @@ MicrobenchmarkDenseMatrixKernel <- function(benchmarkParameters,
       numberOfTrials <- benchmarkParameters$numberOfTrials
       numberOfWarmupTrials <- benchmarkParameters$numberOfWarmupTrials
       benchmarkName <- benchmarkParameters$benchmarkName
-      csvResultsBaseFileName <- benchmarkParameters$csvResultsBaseFileName
+      csvResultsBaseFileName <- benchmarkParameters$benchmarkName
       csvResultsFileName <- file.path(resultsDirectory,
          paste(csvResultsBaseFileName, "_", runIdentifier, ".csv", sep=""))
 

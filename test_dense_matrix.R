@@ -13,9 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+library(devtools)
 
-#' @import methods
-RBenchmarkOptions <- list()
-RBenchmarkOptions$rng.kind <- "Mersenne-Twister"
-RBenchmarkOptions$rng.normal.kind <- "Inversion"
-RBenchmarkOptions$numThreadsVariable <- "R_BENCH_NUM_THREADS_VARIABLE"
+devtools::load_all("RHPCBenchmark")
+
+Sys.setenv(R_BENCH_NUM_THREADS_VARIABLE="MKL_NUM_THREADS")
+Sys.setenv(MKL_NUM_THREADS="1")
+
+runIdentifier <- "windows1"
+resultsDirectory <- "./windowsDense"
+
+denseMatrixResults <- DenseMatrixBenchmark(runIdentifier, resultsDirectory)
+dataFrameFileName <- file.path(resultsDirectory, "denseMatrixResults.RData")
+save(denseMatrixResults, file=dataFrameFileName)
+
+# Display warnings
+cat("Warnings (NULL if none):\n")
+warnings()

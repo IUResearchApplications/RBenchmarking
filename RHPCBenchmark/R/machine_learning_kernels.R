@@ -54,7 +54,7 @@ GenerateClusterData <- function(numberOfFeatures, numberOfVectorsPerCluster,
    mu <- rep(0.0, numberOfFeatures)
    dim(mu) <- c(1, numberOfFeatures)
    S <- diag(inflationFactor*stats::runif(numberOfFeatures), numberOfFeatures, numberOfFeatures)
-   cat(sprintf("Populating feature vectors %d--%d\n", 1, numberOfVectorsPerCluster))
+#  cat(sprintf("Populating feature vectors %d--%d\n", 1, numberOfVectorsPerCluster))
    featureVectors[1:numberOfVectorsPerCluster, ] <- mvtnorm::rmvnorm(numberOfVectorsPerCluster, mu, S)
 
    if (numberOfClusters > 1) {
@@ -74,25 +74,17 @@ GenerateClusterData <- function(numberOfFeatures, numberOfVectorsPerCluster,
 
          rangeStart <- i*numberOfVectorsPerCluster+1
          rangeEnd <- rangeStart + numberOfVectorsPerCluster - 1
-         cat(sprintf("Populating feature vectors %d--%d\n", rangeStart, rangeEnd))
+#         cat(sprintf("Populating feature vectors %d--%d\n", rangeStart, rangeEnd))
          featureVectors[rangeStart:rangeEnd, ] <- mvtnorm::rmvnorm(numberOfVectorsPerCluster, mu, S)
-
-
-#         if (i == 1) {
-#            print(mu)
-#            print(S)
-#            print(featureVectors[rangeStart:rangeEnd,])
-#         }
       }
    }
 
-   cat(sprintf("featureVectors        : %d x %d\n", dim(featureVectors)[1], dim(featureVectors)[2]))
-   cat(sprintf("numberOfFeatures      : %d\n", numberOfFeatures))
-   cat(sprintf("numberOfFeatureVectors: %d\n", numberOfFeatureVectors))
-   cat(sprintf("numberOfClusters      : %d\n", numberOfClusters))
+#  cat(sprintf("featureVectors        : %d x %d\n", dim(featureVectors)[1], dim(featureVectors)[2]))
+#  cat(sprintf("numberOfFeatures      : %d\n", numberOfFeatures))
+#  cat(sprintf("numberOfFeatureVectors: %d\n", numberOfFeatureVectors))
+#  cat(sprintf("numberOfClusters      : %d\n", numberOfClusters))
 
    return (list("featureVectors" = featureVectors, "numberOfFeatures" = numberOfFeatures, "numberOfFeatureVectors" = numberOfFeatureVectors, "numberOfClusters" = numberOfClusters))
-
 }
 
 

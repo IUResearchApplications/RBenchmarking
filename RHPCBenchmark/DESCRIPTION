@@ -6,9 +6,9 @@ Maintainer: James McCombs <jmccombs@iu.edu>
 Authors@R: person("James", "McCombs", email = "jmccombs@iu.edu", role = c("aut", "cre"))
 Description: This package provides microbenchmarks for determining the run time
   performance of aspects of the R programming environment and packages
-  commonly used for high-performance computation.
-  measures the performance of dense linear algebra kernels from the base
-  package and sparse linear algebra kernels from the Matrix package.
+  relevant to high-performance computation.  The benchmarks are divided into
+  three categories: dense matrix linear algebra kernels, sparse matrix linear
+  algebra kernels, and machine learning functionality.
 Depends: R (>= 3.3.1),
   methods
 Imports:
@@ -20,3 +20,6 @@ License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -22,11 +22,11 @@
 #' This function runs the machine learning microbenchmarks, which are divided
 #' into four categories supported by this benchmark, defined in the
 #' \code{clusteringMicrobenchmarks} input vector.  For each microbenchmark, it
-#' creates a seperate output file in CSV format containing the performance
+#' creates a separate output file in CSV format containing the performance
 #' results for data set and function tested by the microbenchmark.  The names
 #' of the output files follow the format
-#' \code{csvResultsBaseFileName}_\code{runIdentifier}.csv, where
-#' \code{csvResultsBaseFileName} is specified in the
+#' \code{benchmarkName}_\code{runIdentifier}.csv, where
+#' \code{benchmarkName} is specified in the
 #' \code{ClusteringMicrobenchmark} object of each microbenchmark and
 #' \code{runIdentifier} is an input parameter to this function.  Each
 #' input vector contains instances of the
@@ -39,7 +39,21 @@
 #' the data object needed by the microbenchmark.  The needed R data
 #' files should either be given in an attached R package or given in the
 #' \code{data} subdirectory of the current working directory, and they should
-#' have the extension \code{.RData}.
+#' have the extension \code{.RData}.  If the linear algebra kernels are
+#' multithreaded, by linking to multithreaded BLAS or LAPACK libraries for
+#' example, then the number of threads must be retrievable from an environment
+#' variable which is set before execution of the R programming environment.
+#' The name of the environment variable specifying the number of threads must
+#' be provided in the R HPC benchmark environment variable
+#' R_BENCH_NUM_THREADS_VARIABLE.  This function will retrieve the number of
+#' threads through R_BENCH_NUM_THREADS_VARIABLE so that the number of threads
+#' can be printed to the results files and recorded in data frames for reporting
+#' purposes.  This function utilizes the number of threads only for reporting
+#' purposes and is not used by the benchmark to effect the actual number of
+#' threads utilized by the kernels, as that is assumed to be controlled by the
+#' numerical library.  An error exception will be thrown if the environment
+#' variable R_BENCH_NUM_THREADS_VARIABLE and the variable it is set to are not
+#' both set.
 #'
 #' @param runIdentifier a character string specifying the suffix to be
 #'   appended to the base of the file name of the output CSV format files
@@ -50,10 +64,8 @@
 #'   microbenchmarks to execute as part of the machine learning benchmark.
 #'   Default values are provided by the function
 #'   \code{\link{GetClusteringDefaultMicrobenchmarks}}.
-#' @return a list of data frames, one data frame for each supported
-#'   category of machine learning microbenchmarks, with each data frame
-#'   containing the user, system, and elapsed (wall clock) time of times of each
-#'   performance trial
+#' @return a data frame containing the user, system, and elapsed (wall clock)
+#'   time of times of each performance trial
 #'   
 #' @examples 
 #' ## Run the default machine learning microbenchmarks and place the results
@@ -72,10 +84,7 @@ RunMachineLearningBenchmark <- function(runIdentifier,
    resultsDirectory,
    clusteringMicrobenchmarks = GetClusteringDefaultMicrobenchmarks()) {
 
-   numberOfThreads <- strtoi(GetConfigurableEnvParameter("R_BENCH_NUM_THREADS_VARIABLE"))
-
-   allResults <- list()
-   clusteringResults <- list()
+   numberOfThreads <- GetNumberOfThreads()
 
    # Loop over all clustering microbenchmarks
    if (length(clusteringMicrobenchmarks) > 0) {
@@ -86,9 +95,7 @@ RunMachineLearningBenchmark <- function(runIdentifier,
       cat(sprintf("WARN: no clustering microbenchmarks to execute, skipping\n\n"))
    }
 
-   allResults[["clusteringResults"]] <- clusteringResults
-
-   return(allResults)
+   return(clusteringResults)
 }
 
 
@@ -216,7 +223,6 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "pam_cluster_3_7_2500",
       benchmarkDescription = "Clustering of 17500 3-dimensional feature vectors into seven clusters using pam function",
-      csvResultsBaseFileName = "pam_cluster_3_7_2500",
       dataObjectName = NA_character_,
       numberOfFeatures = as.integer(3),
       numberOfClusters = as.integer(7),
@@ -232,7 +238,6 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "pam_cluster_3_7_5000",
       benchmarkDescription = "Clustering of 35000 3-dimensional feature vectors into seven clusters using pam function",
-      csvResultsBaseFileName = "pam_cluster_3_7_5000",
       numberOfFeatures = as.integer(3),
       numberOfClusters = as.integer(7),
       numberOfFeatureVectorsPerCluster = as.integer(5000),
@@ -248,7 +253,6 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "pam_cluster_3_7_5715",
       benchmarkDescription = "Clustering of 40005 3-dimensional feature vectors into seven clusters using pam function",
-      csvResultsBaseFileName = "pam_cluster_3_7_5715",
       numberOfFeatures = as.integer(3),
       numberOfClusters = as.integer(7),
       numberOfFeatureVectorsPerCluster = as.integer(5715),
@@ -264,7 +268,6 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "pam_cluster_16_33_1213",
       benchmarkDescription = "Clustering of 40029 16-dimensional feature vectors into 33 clusters using pam function",
-      csvResultsBaseFileName = "pam_cluster_16_33_1213",
       numberOfFeatures = as.integer(16),
       numberOfClusters = as.integer(33),
       numberOfFeatureVectorsPerCluster = as.integer(1213),
@@ -280,7 +283,6 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "pam_cluster_64_33_1213",
       benchmarkDescription = "Clustering of 40029 64-dimensional feature vectors into 33 clusters using pam function",
-      csvResultsBaseFileName = "pam_cluster_64_33_1213",
       numberOfFeatures = as.integer(64),
       numberOfClusters = as.integer(33),
       numberOfFeatureVectorsPerCluster = as.integer(1213),
@@ -296,7 +298,6 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "pam_cluster_16_7_2858",
       benchmarkDescription = "Clustering of 20006 16-dimensional feature vectors into seven clusters using pam function",
-      csvResultsBaseFileName = "pam_cluster_16_7_2858",
       numberOfFeatures = as.integer(16),
       numberOfClusters = as.integer(7),
       numberOfFeatureVectorsPerCluster = as.integer(2858),
@@ -312,7 +313,6 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "pam_cluster_32_7_2858",
       benchmarkDescription = "Clustering of 20006 32-dimensional feature vectors into seven clusters using pam function",
-      csvResultsBaseFileName = "pam_cluster_32_7_2858",
       numberOfFeatures = as.integer(32),
       numberOfClusters = as.integer(7),
       numberOfFeatureVectorsPerCluster = as.integer(2858),
@@ -328,7 +328,6 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "pam_cluster_64_7_5715",
       benchmarkDescription = "Clustering of 40005 64-dimensional feature vectors into seven clusters using pam function",
-      csvResultsBaseFileName = "pam_cluster_64_7_5715",
       numberOfFeatures = as.integer(64),
       numberOfClusters = as.integer(7),
       numberOfFeatureVectorsPerCluster = as.integer(5715),
@@ -344,7 +343,6 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "clara_cluster_64_33_1213",
       benchmarkDescription = "Clustering of 40029 64-dimensional feature vectors into 33 clusters using clara function",
-      csvResultsBaseFileName = "clara_cluster_64_33_1213",
       numberOfFeatures = as.integer(64),
       numberOfClusters = as.integer(33),
       numberOfFeatureVectorsPerCluster = as.integer(1213),
@@ -360,9 +358,8 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       active = TRUE,
       benchmarkName = "clara_cluster_1000_99_1000",
       benchmarkDescription = "Clustering of 99000 1000-dimensional feature vectors into 99 clusters using clara function",
-      csvResultsBaseFileName = "clara_cluster_1000_99_1000",
       numberOfFeatures = as.integer(1000),
-      numberOfClusters = as.integer(90),
+      numberOfClusters = as.integer(99),
       numberOfFeatureVectorsPerCluster = as.integer(1000),
       dataObjectName = NA_character_,
       numberOfTrials = as.integer(3),

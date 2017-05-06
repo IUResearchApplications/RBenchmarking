@@ -17,33 +17,32 @@ library(devtools)
 
 devtools::load_all("RHPCBenchmark")
 
-args <- commandArgs(trailingOnly=TRUE)
+Sys.setenv(R_BENCH_NUM_THREADS_VARIABLE="MKL_NUM_THREADS")
+Sys.setenv(MKL_NUM_THREADS="1")
 
-if (length(args) != 2) {
-   write("USAGE: sparse_matrix_driver runIdentifier resultsDirectory", stderr())
-   quit(status=1)
-}
+runIdentifier <- "windows1"
+resultsDirectory <- "./windowsSparse"
 
-runIdentifier <- args[1]
-resultsDirectory <- args[2]
+myMatvec <- SparseMatrixVectorDefaultMicrobenchmarks()
 
-myMatvec <- GetSparseMatrixVectorDefaultMicrobenchmarks()
+myCholesky <- SparseCholeskyDefaultMicrobenchmarks()
+myCholesky <- NULL
+#myCholesky[["ct20stif"]]$active <- FALSE
+#myCholesky[["Andrews"]]$active <- FALSE
+#myCholesky[["G3_circuit"]]$active <- FALSE
 
-myCholesky <- GetSparseCholeskyDefaultMicrobenchmarks()
-myCholesky[["cholesky_ct20stif"]]$active <- FALSE
-myCholesky[["cholesky_Andrews"]]$active <- FALSE
-myCholesky[["cholesky_G3_circuit"]]$active <- FALSE
+myLu <- SparseLuDefaultMicrobenchmarks()
+myLu <- NULL
+#myLu[["circuit5M_dc"]]$active <- FALSE
+#myLu[["stomach"]]$active <- FALSE
+#myLu[["torso3"]]$active <- FALSE
 
-myLu <- GetSparseLuDefaultMicrobenchmarks()
-myLu[["lu_circuit5M_dc"]]$active <- FALSE
-myLu[["lu_stomach"]]$active <- FALSE
-myLu[["lu_torso3"]]$active <- FALSE
+myQr <- SparseQrDefaultMicrobenchmarks()
+myQr <- NULL
+#myQr[["Maragal_6"]]$active <- FALSE
+#myQr[["landmark"]]$active <- FALSE
 
-myQr <- GetSparseQrDefaultMicrobenchmarks()
-myQr[["qr_Maragal_6"]]$active <- FALSE
-myQr[["qr_landmark"]]$active <- FALSE
-
-sparseMatrixResults <- RunSparseMatrixBenchmark(runIdentifier, resultsDirectory,
+sparseMatrixResults <- SparseMatrixBenchmark(runIdentifier, resultsDirectory,
    matrixVectorMicrobenchmarks=myMatvec, choleskyMicrobenchmarks=myCholesky,
    luMicrobenchmarks=myLu, qrMicrobenchmarks=myQr)
 dataFrameFileName <- file.path(resultsDirectory, "sparseMatrixResults.RData")

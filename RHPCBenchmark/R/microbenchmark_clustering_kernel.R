@@ -49,8 +49,8 @@
 #'   averaging.  The columns of the data frame are the following:
 #'   \describe{
 #'     \item{BenchmarkName}{The name of the microbenchmark}
-#'     \item{NumberOfFeatures}{The number of featres in each feature vector}
-#'     \item{NumberOfFeatureVectors}{The number of featres in the data set}
+#'     \item{NumberOfFeatures}{The number of features in each feature vector}
+#'     \item{NumberOfFeatureVectors}{The number of features in the data set}
 #'     \item{NumberOfClusters}{The number of clusters in the data set}
 #'     \item{UserTime}{The amount of time spent in user-mode code within the
 #'       microbenchmarked code}
@@ -81,7 +81,7 @@ MicrobenchmarkClusteringKernel <- function(benchmarkParameters,
       numberOfTrials <- benchmarkParameters$numberOfTrials
       numberOfWarmupTrials <- benchmarkParameters$numberOfWarmupTrials
       benchmarkName <- benchmarkParameters$benchmarkName
-      csvResultsBaseFileName <- benchmarkParameters$csvResultsBaseFileName
+      csvResultsBaseFileName <- benchmarkParameters$benchmarkName
       csvResultsFileName <- file.path(resultsDirectory,
          paste(csvResultsBaseFileName, "_", runIdentifier, ".csv", sep=""))
 

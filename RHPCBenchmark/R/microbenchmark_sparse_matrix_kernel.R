@@ -83,7 +83,7 @@ MicrobenchmarkSparseMatrixKernel <- function(benchmarkParameters,
       numberOfTrials <- benchmarkParameters$numberOfTrials
       numberOfWarmupTrials <- benchmarkParameters$numberOfWarmupTrials
       benchmarkName <- benchmarkParameters$benchmarkName
-      csvResultsBaseFileName <- benchmarkParameters$csvResultsBaseFileName
+      csvResultsBaseFileName <- benchmarkParameters$benchmarkName
 
       if (length(numberOfRows) != length(numberOfTrials)) {
          stop(sprintf("ERROR: Input checking failed for microbenchmark '%s'  -- lengths of numberOfTrials and numberOfRows arrays must be equal", benchmarkName))

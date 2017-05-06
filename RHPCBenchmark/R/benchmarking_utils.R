@@ -14,25 +14,75 @@
 # limitations under the License.
 ################################################################################
 
+#' Retrieves the value of an environment variable referenced by another
+#' environment variable
+#'
+#' \code{GetConfigurableEnvParameters} returns the value of the environment
+#' variable referenced by the argument \code{configurableVariable} which
+#' is also an environment variable
+#' 
+#' This function takes the argument \code{configurableVariable} which
+#' contains the name of an environment variable whose value is an
+#' environment variable referencing a value to be returned by this
+#' function.
+#'
+#' @param configurableVariable a string parameter containing the name
+#'   of an environment variable which itself references another 
+#'   environment variable
+#' @return the value of the environment variable referenced by the
+#'   environment variable specified in the \code{configurableVariable}
+#'   parameter
 GetConfigurableEnvParameter <- function(configurableVariable) {
-   # Get the name of the wanted environment varible from the
+   # Get the name of the wanted environment variable from the
    # configurable environment variable.
    envVariable <- Sys.getenv(configurableVariable)
 
    if (envVariable == "") {
-      write(sprintf("ERROR: Configurable environment variable '%s' is undefined", configurableVariable), stderr())
-      quit(status=1)
+      stop(sprintf("ERROR: Configurable environment variable '%s' is undefined", configurableVariable))
    } else {
       value <- Sys.getenv(envVariable)
 
       if (value == "") {
-         write(sprintf("ERROR: Environment variable '%s' is undefined", envVariable), stderr())
-         quit(status=1)
+         stop(sprintf("ERROR: Environment variable '%s' is undefined", envVariable))
       }
    }
 
    return(value)
 }
+
+
+#' Retrieves the number of threads from the environment
+#'
+#' \code{GetNumberOfThreads} retrieves from the environment the number of
+#' threads kernels are intended to be executed with
+#' 
+#' This function retrieves the number of threads kernels are intended to be
+#' microbenchmarked with.  The number of threads is assumed to be stored
+#' in an environment variable which this function retrieves.
+#'
+#' @return the number of threads retrieved from the environment
+GetNumberOfThreads <- function() {
+   success <- tryCatch({
+      numberOfThreadsStr <- GetConfigurableEnvParameter(RBenchmarkOptions$numThreadsVariable)
+      numberOfThreads <- strtoi(numberOfThreadsStr)
+      TRUE
+   }, warning = function(war) {
+      msg <- sprintf("ERROR: GetNumberOfThreads caught a warning -- %s", war)
+      write(msg, stderr())
+      return(FALSE)
+   }, error = function(err) {
+      msg <- sprintf("ERROR: GetNumberOfThreads caught an error -- %s", err)
+      write(msg, stderr())
+      return(FALSE)
+   })
+
+   if (!success) {   
+      quit(status=1)
+   }
+
+   return(numberOfThreads)
+}
+
 
 #' Prints results of a dense matrix microbenchmark 
 #'
