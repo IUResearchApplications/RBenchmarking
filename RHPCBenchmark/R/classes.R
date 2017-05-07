@@ -31,9 +31,14 @@
 #' @field numberOfWarmupTrials an integer vector specifying the number of warmup
 #'   trials to be performed for each matrix to be tested.
 #' @field allocatorFunction the function that allocates and initializes input to
-#'   the benchmark function.
+#'   the benchmark function.  The function takes a
+#'   \code{DenseMatrixMicrobenchmark} object and an integer index indicating
+#'   which matrix dimension parameter from \code{dimensionParameters} should
+#'   be used to generate the matrix. 
 #' @field benchmarkFunction the benchmark function which executes the
-#'   functionality to be timed.
+#'   functionality to be timed.  The function takes a
+#'   \code{DenseMatrixMicrobenchmark} and a list of kernel parameters
+#'   returned by the allocator function.
 methods::setRefClass(
    "DenseMatrixMicrobenchmark",
    fields = list(
@@ -74,9 +79,14 @@ methods::setRefClass(
 #' @field numberOfWarmupTrials an integer vector specifying the number of warmup
 #'   trials to be performed for each matrix to be tested.
 #' @field allocatorFunction the function that allocates and initializes input
-#'   to the benchmark function.
+#'   to the benchmark function.  The function takes a
+#'   \code{SparseMatrixMicrobenchmark} object and an integer index indicating
+#'   which matrix parameter from \code{numberOfRows}, \code{numberOfColumns},
+#'   and \code{numberOfNonzeros} should be used to generate the matrix. 
 #' @field benchmarkFunction the benchmark function which executes the
-#'   functionality to be timed.
+#'   functionality to be timed.  The function takes a
+#'   \code{SparseMatrixMicrobenchmark} and a list of kernel parameters
+#'   returned by the allocator function.
 methods::setRefClass(
    "SparseMatrixMicrobenchmark",
    fields = list(
@@ -125,8 +135,9 @@ methods::setRefClass(
 #' @field numberOfWarmupTrials an integer specifying the number of warmup
 #'   trials to be conducted on the data set.
 #' @field allocatorFunction the function that allocates and initializes input
-#'   to the benchmark function.  For clustering benchmarks, the allocator
-#'   function should return a list containing the following items:
+#'   to the benchmark function.  The function takes a
+#'   \code{ClusteringMicrobenchmark} object.  For clustering benchmarks, the
+#'   allocator function should return a list containing the following items:
 #'   \describe{
 #'     \item{featureVectors}{a matrix, the rows of which are the feature
 #'       vectors}
@@ -137,7 +148,9 @@ methods::setRefClass(
 #'       the data set}
 #'   }
 #' @field benchmarkFunction the benchmark function which executes the
-#'   functionality to be timed.
+#'   functionality to be timed.  The function takes a
+#'   \code{SparseMatrixMicrobenchmark} and a list of kernel parameters
+#'   returned by the allocator function.
 methods::setRefClass(
    "ClusteringMicrobenchmark",
    fields = list(

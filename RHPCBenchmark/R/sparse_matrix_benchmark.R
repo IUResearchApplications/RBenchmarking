@@ -23,13 +23,14 @@
 #' into four categories supported by this benchmark, defined in the
 #' \code{matrixVectorMicrobenchmarks}, \code{choleskyMicrobenchmarks}, 
 #' \code{luMicrobenchmarks}, and \code{qrMicrobenchmarks} input vectors
-#' For each microbenchmark, it creates a separate output file in CSV format
-#' containing the performance results for each matrix tested by the
+#' For each microbenchmark, it attempts to create a separate output file in CSV
+#' format containing the performance results for each matrix tested by the
 #' microbenchmark.  The names of the output files follow the format
 #' \code{benchmarkName}_\code{runIdentifier}.csv, where
 #' \code{benchmarkName} is specified in the
 #' \code{SparseMatrixMicrobenchmark} object of each microbenchmark and
-#' \code{runIdentifier} is an input parameter to this function.  Each
+#' \code{runIdentifier} is an input parameter to this function.  If the file,
+#' already exists, the results will be appended to the existing file.  Each
 #' input vector contains instances of the
 #' \code{\link{SparseMatrixMicrobenchmark}} class defining each microbenchmark.
 #' Each microbenchmark object with the

@@ -55,7 +55,9 @@ the performance trials.  The results of each microbenchmark performance trial
 are written to a data frame returned by the top-level benchmark functions.  The
 summary statistics for each microbenchmark are written to files in CSV format
 as the benchmark function progresses through the microbenchmarks, permitting
-retention of data if the benchmark function is terminated prematurely.
+retention of data if the benchmark function is terminated prematurely.  If a
+CSV file already exists in an output directory, the new results will be
+concatenated to the existing file.
 
 See the object documentation for the top-level benchmark functions and the
 microbenchmark definition classes listed below for information on how to

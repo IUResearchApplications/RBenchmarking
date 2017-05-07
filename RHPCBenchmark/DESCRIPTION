@@ -1,10 +1,10 @@
 Package: RHPCBenchmark
-Title: R benchmarking package for high-performance computing environments
-Version: 0.0.0.9000
+Title: R Benchmarking Package for High-Performance Computing Environments
+Version: 0.1.0.0
 Author: James McCombs [aut, cre]
 Maintainer: James McCombs <jmccombs@iu.edu>
 Authors@R: person("James", "McCombs", email = "jmccombs@iu.edu", role = c("aut", "cre"))
-Description: This package provides microbenchmarks for determining the run time
+Description: Microbenchmarks for determining the run time
   performance of aspects of the R programming environment and packages
   relevant to high-performance computation.  The benchmarks are divided into
   three categories: dense matrix linear algebra kernels, sparse matrix linear
