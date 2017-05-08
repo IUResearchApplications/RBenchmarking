@@ -15,9 +15,12 @@
 ################################################################################
 
 # Run this script to generate/update the man pages from the roxygen
-# comments, and update the DESCRIPTION and NAMESPACE files.
+# comments, and update the namespace of the RHPCBenchmarkData package.  Use
+# the generate_data_package.R script to generate the tarred and compressed
+# R package.
 library(devtools)
 
 packagePath <- file.path(getwd(), "RHPCBenchmarkData")
 devtools::document("RHPCBenchmarkData")
 devtools::check_built(packagePath)
+readline(prompt="Press [ENTER] to continue")

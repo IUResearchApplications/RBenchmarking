@@ -158,7 +158,7 @@ with the benchmark, the rest of the matrices come from the
 [University of Florida Sparse Matrix Collection](https://www.cise.ufl.edu/research/sparse/matrices/).
 More detailed descriptions of the matrices from the *Sparse Matrix Collection*
 can be found on the web site.  The R data files containing the sparse matrices
-can be downloaded in the companion package `RHPCBenchmarkData`
+can be downloaded in the companion package [RHPCBenchmarkData](https://github.com/IUResearchAnalytics/RBenchmarking/blob/master/RHPCBenchmarkData_0.1.0.0.tar.gz).
 
 | Matrix name            | Number of rows | Number of columns | Number of non-zeros | Symmetry and Structure    |
 |:-----------------------|:--------------:|:-----------------:|:-------------------:|:-------------------------:| 

@@ -15,8 +15,9 @@
 ################################################################################
 
 # Run this script to generate/update the man pages from the roxygen
-# comments, update the DESCRIPTION and NAMESPACE files, and to perform
-# validation checks on the package.
+# comments, update the namespaces, and to perform validation checks on the
+# package.  Use the generate_benchmark_package.R script to generate the 
+# vignettes tarred and comparessed R package.
 library(devtools)
 
 packagePath <- file.path(getwd(), "RHPCBenchmark")

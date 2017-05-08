@@ -11,8 +11,8 @@ SparseMatrixMicrobenchmark, and ClusteringMicrobenchmark; see the object
 documentation for each of these classes for how new microbenchmarks can be 
 constructed.  The companion data package 'RHPCBenchmarkData' contains the
 sparse matrix files needed by the sparse matrix benchmarking package and
-can be downloaded from 
+can be downloaded from https://github.com/IUResearchAnalytics/RBenchmarking/blob/master/RHPCBenchmarkData_0.1.0.0.tar.gz
 
-Installation of the package is trivial using install.packages on the package
-file.
+Installation of the packages are trivial using install.packages on the package
+files.
 
