@@ -14,7 +14,7 @@
 # limitations under the License.
 ################################################################################
 library(devtools)
-devtools::load_all("RHPCBenchmark")
+devtools::load_all(pkg="RHPCBenchmark", export_all=FALSE)
 
 GetClusteringTestMicrobenchmarks <- function() {
    microbenchmarks <- list()
@@ -182,19 +182,7 @@ if (length(args) != 2) {
 runIdentifier <- args[1]
 resultsDirectory <- args[2]
 
-myClustering <- GetClusteringDefaultMicrobenchmarks()
-#myClustering[["pam_cluster_3_7_2500"]]$active <- FALSE
-myClustering[["pam_cluster_3_7_5000"]]$active <- FALSE
-myClustering[["pam_cluster_3_7_5715"]]$active <- FALSE
-myClustering[["pam_cluster_16_33_1213"]]$active <- FALSE
-myClustering[["pam_cluster_64_33_1213"]]$active <- FALSE
-myClustering[["pam_cluster_16_7_2858"]]$active <- FALSE
-myClustering[["pam_cluster_32_7_2858"]]$active <- FALSE
-myClustering[["pam_cluster_64_7_5715"]]$active <- FALSE
-myClustering[["pam_cluster_64_33_1213"]]$active <- FALSE
-myClustering[["pam_cluster_1000_99_1000"]]$active <- FALSE
-myClustering[["clara_cluster_64_33_1213"]]$active <- FALSE
-myClustering[["clara_cluster_1000_99_1000"]]$active <- FALSE
+myClustering <- GetClusteringTestMicrobenchmarks()
 
 machineLearningResults <- RunMachineLearningBenchmark(runIdentifier,
    resultsDirectory, clusteringMicrobenchmarks=myClustering)

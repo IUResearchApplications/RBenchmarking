@@ -120,7 +120,7 @@ PrintDenseMatrixMicrobenchmarkResults <- function(benchmarkName,
    numberOfDimensions <- length(dimensionParameters)
 
    cat(  "-------------------------------------------------------------------------------\n")
-   cat(sprintf(" Timings summary for microbenchmark %s\n", benchmarkName))
+   cat(sprintf(" Timings summary for microbenchmark: %s\n", benchmarkName))
    cat(  "-------------------------------------------------------------------------------\n")
    cat(sprintf(" numberOfThreads=%s\n", numberOfThreads))
    cat(  "-------------------------------------------------------------------------------\n")
@@ -179,7 +179,7 @@ PrintSparseMatrixMicrobenchmarkResults <- function(benchmarkName,
      standardDeviations) {
 
    cat(  "-------------------------------------------------------------------------------------------------------\n")
-   cat(sprintf(" Timings summary for microbenchmark %s\n", benchmarkName))
+   cat(sprintf(" Timings summary for microbenchmark: %s\n", benchmarkName))
    cat(  "-------------------------------------------------------------------------------------------------------\n")
    cat(sprintf(" numberOfThreads=%s\n", numberOfThreads))
    cat(  "-------------------------------------------------------------------------------------------------------\n")
@@ -243,7 +243,7 @@ PrintClusteringMicrobenchmarkResults <- function(benchmarkName,
      averageWallClockTimes, standardDeviations) {
 
    cat(  "-------------------------------------------------------------------------------------------------------\n")
-   cat(sprintf(" Timings summary for microbenchmark %s\n", benchmarkName))
+   cat(sprintf(" Timings summary for microbenchmark: %s\n", benchmarkName))
    cat(  "-------------------------------------------------------------------------------------------------------\n")
    cat(sprintf(" numberOfThreads=%s\n", numberOfThreads))
    cat(  "-------------------------------------------------------------------------------------------------------\n")

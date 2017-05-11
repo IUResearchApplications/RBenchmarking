@@ -31,6 +31,8 @@
 #' @return a list containing the matrices or vectors to be input for the
 #'   dense matrix kernel for which a single performance trial is to be
 #'   conducted.
+#' 
+#' @export
 CholeskyAllocator <- function(benchmarkParameters, index) {
    RNGkind(kind=RBenchmarkOptions$rng.kind, normal.kind=RBenchmarkOptions$rng.normal.kind)
    set.seed(RBenchmarkOptions$rng.seed)
@@ -58,6 +60,8 @@ CholeskyAllocator <- function(benchmarkParameters, index) {
 #'   the dense matrix kernel
 #' @return a vector containing the user, system, and elapsed performance
 #'   timings in that order
+#'
+#' @export
 CholeskyMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({C <- chol(kernelParameters$A)})
    return (timings)
@@ -74,6 +78,8 @@ CholeskyMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' allocated, initialized and returned in the \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 CrossprodAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list("A")   
@@ -91,6 +97,8 @@ CrossprodAllocator <- function(benchmarkParameters, index) {
 #' call \code{crossprod(kernelParameters$A)}.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 CrossprodMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({C <- crossprod(kernelParameters$A)})
 }
@@ -107,6 +115,8 @@ CrossprodMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' and returned in the \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 DeformtransAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
@@ -130,6 +140,8 @@ DeformtransAllocator <- function(benchmarkParameters, index) {
 #' resized matrix.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 DeformtransMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    nr <- nrow(kernelParameters$A)
    nc <- ncol(kernelParameters$A)
@@ -154,6 +166,8 @@ DeformtransMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' allocated, initialized and returned in the \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 DeterminantAllocator <- function(benchmarkParameters, index) {
   # Create list of kernel parameters
   kernelParameters <- list("A")
@@ -171,6 +185,8 @@ DeterminantAllocator <- function(benchmarkParameters, index) {
 #' call \code{determinant(kernelParameters$A)}.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 DeterminantMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({d <- determinant(kernelParameters$A)})
    return(timings) 
@@ -187,6 +203,8 @@ DeterminantMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' allocated, initialized and returned in the \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 EigenAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
@@ -204,6 +222,8 @@ EigenAllocator <- function(benchmarkParameters, index) {
 #' call \code{eigen(kernelParameters$A, symmetric=FALSE, only.values=FALSE)}.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 EigenMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({
          E <- eigen(kernelParameters$A, symmetric=FALSE, only.values=FALSE)
@@ -222,6 +242,8 @@ EigenMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' allocated, initialized and returned in the \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 LsfitAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list("A", "b")
@@ -245,6 +267,8 @@ LsfitAllocator <- function(benchmarkParameters, index) {
 #' call \code{lsfit(kernelParameters$A, kernelParameters$b, intercept=FALSE)}.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 LsfitMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({
       x <- stats::lsfit(kernelParameters$A, kernelParameters$b, intercept=FALSE)
@@ -265,6 +289,8 @@ LsfitMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 MatmatAllocator <- function(benchmarkParameters, index) {
   # Create list of kernel parameters
   kernelParameters <- list("A", "B")
@@ -283,6 +309,8 @@ MatmatAllocator <- function(benchmarkParameters, index) {
 #' call \code{kernelParameters$A \%*\% kernelParameters$B}.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 MatmatMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({
       C <- kernelParameters$A %*% kernelParameters$B
@@ -302,6 +330,8 @@ MatmatMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 MatvecAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list("A", "b")
@@ -320,6 +350,8 @@ MatvecAllocator <- function(benchmarkParameters, index) {
 #' call \code{kernelParameters$A \%*\% kernelParameters$b}.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 MatvecMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({
       C <- kernelParameters$A %*% kernelParameters$b
@@ -340,6 +372,8 @@ MatvecMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 QrAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
@@ -357,6 +391,8 @@ QrAllocator <- function(benchmarkParameters, index) {
 #' call \code{qr(kernelParameters$A, LAPACK=TRUE)}.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 QrMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({
       qr_result <- qr(kernelParameters$A, LAPACK=TRUE)
@@ -376,6 +412,8 @@ QrMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' the \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 SolveAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list("A", "B")
@@ -397,6 +435,8 @@ SolveAllocator <- function(benchmarkParameters, index) {
 #' call \code{solve(kernelParameters$A, kernelParameters$B, LAPACK=TRUE)}.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 SolveMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({X <- solve(kernelParameters$A, kernelParameters$B)})
    return(timings)
@@ -413,6 +453,8 @@ SolveMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' and returned in the \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 SvdAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
@@ -430,6 +472,8 @@ SvdAllocator <- function(benchmarkParameters, index) {
 #' \code{svd(kernelParameters$A)}.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 SvdMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({
       svd_results <- svd(kernelParameters$A)
@@ -449,6 +493,8 @@ SvdMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #' allocated, initialized and returned in the \code{kernelParameters} list.
 #'
 #' @inheritParams CholeskyAllocator
+#'
+#' @export
 TransposeAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list("A")
@@ -466,6 +512,8 @@ TransposeAllocator <- function(benchmarkParameters, index) {
 #' \code{svd(transposeParameters$A)}.
 #'
 #' @inheritParams CholeskyMicrobenchmark
+#'
+#' @export
 TransposeMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({
       B <- t(kernelParameters$A)

@@ -31,6 +31,8 @@
 #' @return a list containing the matrices or vectors to be input for the
 #'   sparse matrix kernel for which a single performance trial is to be
 #'   conducted.
+#'
+#' @export
 SparseMatrixVectorAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list()
@@ -63,6 +65,8 @@ SparseMatrixVectorAllocator <- function(benchmarkParameters, index) {
 #'   the sparse matrix kernel
 #' @return a vector containing the user, system, and elapsed performance
 #'   timings in that order
+#'
+#' @export
 SparseMatrixVectorBenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- kernelParameters$A %*% kernelParameters$x})
    return (timings)
@@ -79,6 +83,8 @@ SparseMatrixVectorBenchmark <- function(benchmarkParameters, kernelParameters) {
 #' and returned in the \code{kernelParameters} list.
 #'
 #' @inheritParams SparseMatrixVectorAllocator
+#'
+#' @export
 SparseCholeskyAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list()
@@ -111,6 +117,8 @@ SparseCholeskyAllocator <- function(benchmarkParameters, index) {
 #'   timings in that order
 #'
 #' @inheritParams SparseMatrixVectorBenchmark
+#'
+#' @export
 SparseCholeskyBenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- Matrix::Cholesky(kernelParameters$A)})
    return (timings)
@@ -126,6 +134,8 @@ SparseCholeskyBenchmark <- function(benchmarkParameters, kernelParameters) {
 #' matrix is populated and returned in the \code{kernelParameters} list.
 #'
 #' @inheritParams SparseMatrixVectorAllocator
+#'
+#' @export
 SparseLuAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list()
@@ -158,6 +168,8 @@ SparseLuAllocator <- function(benchmarkParameters, index) {
 #' call \code{kernelParameters$A \%*\% kernelParameters$b}.
 #'
 #' @inheritParams SparseMatrixVectorBenchmark
+#'
+#' @export
 SparseLuBenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- Matrix::lu(kernelParameters$A)})
    return (timings)
@@ -174,6 +186,8 @@ SparseLuBenchmark <- function(benchmarkParameters, kernelParameters) {
 #' matrix is populated and returned in the \code{kernelParameters} list.
 #'
 #' @inheritParams SparseMatrixVectorAllocator
+#'
+#' @export
 SparseQrAllocator <- function(benchmarkParameters, index) {
    # Create list of kernel parameters
    kernelParameters <- list()
@@ -198,6 +212,8 @@ SparseQrAllocator <- function(benchmarkParameters, index) {
 #' function call \code{qr(kernelParameters$A)}.
 #'
 #' @inheritParams SparseMatrixVectorBenchmark
+#'
+#' @export
 SparseQrBenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- Matrix::qr(kernelParameters$A)})
    return (timings)

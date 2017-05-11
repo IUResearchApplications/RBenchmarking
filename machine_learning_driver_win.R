@@ -15,7 +15,7 @@
 ################################################################################
 library(devtools)
 
-devtools::load_all("RHPCBenchmark")
+devtools::load_all(pkg="RHPCBenchmark", export_all=FALSE)
 
 Sys.setenv(R_BENCH_NUM_THREADS_VARIABLE="MKL_NUM_THREADS")
 Sys.setenv(MKL_NUM_THREADS="1")

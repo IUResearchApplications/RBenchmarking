@@ -14,7 +14,7 @@
 # limitations under the License.
 ################################################################################
 library(devtools)
-devtools::load_all("RHPCBenchmark")
+devtools::load_all(pkg="RHPCBenchmark", export_all=FALSE)
 
 
 GetDenseMatrixTestMicrobenchmarks <- function() {

@@ -1,6 +1,6 @@
 Package: RHPCBenchmark
-Title: R Benchmarking Package for High-Performance Computing Environments
-Version: 0.1.0.0
+Title: Benchmarks for High-Performance Computing Environments
+Version: 0.1.0
 Author: James McCombs [aut, cre]
 Maintainer: James McCombs <jmccombs@iu.edu>
 Authors@R: person("James", "McCombs", email = "jmccombs@iu.edu", role = c("aut", "cre"))

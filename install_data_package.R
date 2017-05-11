@@ -14,9 +14,10 @@
 # limitations under the License.
 ################################################################################
 
-# Use this script to generate the vignettes tarred and comparessed R package.
+# Use this script to generate the tarred and compressed R benchmark data
+# package.
 library(devtools)
 
-packagePath <- file.path(getwd(), "RHPCBenchmark")
-devtools::build(packagePath)
+packagePath <- file.path(getwd(), "RHPCBenchmarkData")
+devtools::install(pkg=packagePath, local=FALSE, upgrade_dependencies=FALSE, build_vignettes=TRUE)
 readline(prompt="Press [ENTER] to continue")

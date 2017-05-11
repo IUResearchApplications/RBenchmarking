@@ -14,12 +14,9 @@
 # limitations under the License.
 ################################################################################
 
-# Run this script to update vignettes and install a development version
-# of the package so that the vignettes can be viewed.
+# Use this script to build the R package.
 library(devtools)
 
 packagePath <- file.path(getwd(), "RHPCBenchmark")
-devtools::build_vignettes("RHPCBenchmark")
-devtools::install(pkg=packagePath, local=FALSE, upgrade_dependencies=FALSE,
-   build_vignettes=TRUE)
-vignette(topic="vignette", package="RHPCBenchmark")
+devtools::install(pkg=packagePath, local=FALSE, upgrade_dependencies=FALSE, build_vignettes=TRUE)
+readline(prompt="Press [ENTER] to continue")
