@@ -45,6 +45,10 @@ GenerateClusterData <- function(numberOfFeatures, numberOfVectorsPerCluster,
       stop("numberOfClusters must be greater than zero")
    }
 
+   if (numberOfClusters > 2*numberOfFeatures+1) {
+      stop("numberOfClusters must be less than or equal to 2*numberOfFeatures+1")
+   }
+
    inflationFactor <- 3
    numberOfFeatureVectors <- numberOfClusters*numberOfVectorsPerCluster
    featureVectors <- rep(0.0, numberOfFeatureVectors*numberOfFeatures)

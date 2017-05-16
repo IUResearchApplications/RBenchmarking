@@ -14,9 +14,12 @@
 # limitations under the License.
 ################################################################################
 
-#' @import methods
-RBenchmarkOptions <- list()
-RBenchmarkOptions$rng.kind <- "Mersenne-Twister"
-RBenchmarkOptions$rng.normal.kind <- "Inversion"
-RBenchmarkOptions$numThreadsVariable <- "R_BENCH_NUM_THREADS_VARIABLE"
-RBenchmarkOptions$rng.seed <- 500
+# Run this script to update the benchmark vignettes and install a development
+# version of the data package so that the vignettes can be viewed.
+library(devtools)
+
+packagePath <- file.path(getwd(), "RHPCBenchmarkData")
+devtools::build_vignettes("RHPCBenchmarkData")
+devtools::install(pkg=packagePath, local=FALSE, upgrade_dependencies=FALSE,
+   build_vignettes=TRUE)
+vignette(topic="vignette", package="RHPCBenchmarkData")

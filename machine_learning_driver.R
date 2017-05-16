@@ -16,6 +16,26 @@
 library(devtools)
 devtools::load_all(pkg="RHPCBenchmark", export_all=FALSE)
 
+GetClusteringTestMicrobenchmarks1 <- function() {
+   microbenchmarks <- list()
+   microbenchmarks[["pam_cluster_3_4_1000"]] <- methods::new(
+      "ClusteringMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "pam_cluster_3_4_1000",
+      benchmarkDescription = "Clustering of 1000 3-dimensional feature vectors into seven clusters using pam function",
+      dataObjectName = NA_character_,
+      numberOfFeatures = as.integer(3),
+      numberOfClusters = as.integer(4),
+      numberOfFeatureVectorsPerCluster = as.integer(1000),
+      numberOfTrials = as.integer(2),
+      numberOfWarmupTrials = as.integer(1),
+      allocatorFunction = ClusteringAllocator,
+      benchmarkFunction = PamClusteringBenchmark
+   )
+
+   return (microbenchmarks)
+}
+
 GetClusteringTestMicrobenchmarks <- function() {
    microbenchmarks <- list()
    microbenchmarks[["pam_cluster_3_7_2500"]] <- methods::new(
@@ -182,7 +202,7 @@ if (length(args) != 2) {
 runIdentifier <- args[1]
 resultsDirectory <- args[2]
 
-myClustering <- GetClusteringTestMicrobenchmarks()
+myClustering <- GetClusteringTestMicrobenchmarks1()
 
 machineLearningResults <- RunMachineLearningBenchmark(runIdentifier,
    resultsDirectory, clusteringMicrobenchmarks=myClustering)

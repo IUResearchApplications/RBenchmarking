@@ -14,8 +14,8 @@
 # limitations under the License.
 ################################################################################
 
-# Run this script to update vignettes and install a development version
-# of the package so that the vignettes can be viewed.
+# Run this script to update the benchmark vignettes and install a development
+# version of the package so that the vignettes can be viewed.
 library(devtools)
 
 packagePath <- file.path(getwd(), "RHPCBenchmark")

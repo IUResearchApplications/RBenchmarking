@@ -117,7 +117,9 @@ MicrobenchmarkClusteringKernel <- function(benchmarkParameters,
       allocationSuccessful <- tryCatch({
          RNGkind(kind=RBenchmarkOptions$rng.kind,
             normal.kind=RBenchmarkOptions$rng.normal.kind)
-         set.seed(RBenchmarkOptions$rng.seed)
+         set.seed(RBenchmarkOptions$rng.seed,
+            kind=RBenchmarkOptions$rng.kind,
+            normal.kind=RBenchmarkOptions$rng.normal.kind)
          kernelParameters <- allocator(benchmarkParameters)
          numberOfFeatures <- kernelParameters$numberOfFeatures
          numberOfFeatureVectors <- kernelParameters$numberOfFeatureVectors

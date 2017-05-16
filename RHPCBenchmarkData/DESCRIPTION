@@ -1,5 +1,5 @@
 Package: RHPCBenchmarkData
-Title: Data files for use with RHPCBenchmark package
+Title: Data Files for RHPCBenchmark
 Version: 0.1.0
 Author: James McCombs [aut, cre]
 Maintainer: James McCombs <jmccombs@iu.edu>
@@ -17,3 +17,6 @@ License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

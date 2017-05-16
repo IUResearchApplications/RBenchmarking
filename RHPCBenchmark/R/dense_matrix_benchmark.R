@@ -66,7 +66,7 @@
 #' #
 #' # Note: The environment variables are usually set by the user before starting
 #' #       the R programming environment; they are set here only to facilitate
-#' #       a working example.  See the multithreading section in the vignette
+#' #       a working example.  See the section on multithreading in the vignette
 #' #       for further details.
 #' Sys.setenv(R_BENCH_NUM_THREADS_VARIABLE="MKL_NUM_THREADS")
 #' Sys.setenv(MKL_NUM_THREADS="1")
@@ -135,6 +135,7 @@ RunDenseMatrixBenchmark <- function(runIdentifier, resultsDirectory,
 #'   listed in the function description and are assigned the following names:
 #'   cholesky, crossprod, determinant, eigen, solve, lsfit, deformtrans,
 #'   transpose, matmat, matvec, qr, and svd. 
+#' @seealso \code{\link{DenseMatrixMicrobenchmark}}
 #' @export
 GetDenseMatrixDefaultMicrobenchmarks <- function() {
    microbenchmarks <- list()

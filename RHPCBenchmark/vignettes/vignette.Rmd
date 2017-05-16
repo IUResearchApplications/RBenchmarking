@@ -228,26 +228,30 @@ the machine learning benchmark.  The clustering benchmark generates clusters of
 normally distributed feature vectors in an $N$-dimensional, real-valued feature
 space where the mean of one cluster is located at the origin and the means of two clusters are
 each located at positions -1 and 1 of one or more of the axes.  See the object
-documentation of the function `GenerateClusterData` for more details on how the
-clusters are generated.  Two cluster identification functions `pam` and `clara`,
-from the `cluster` package provided with the **R** distribution.  The `pam`
-function implements the *partitioning around medoids* algorithm.  The `clara`
-function is used for large data sets and implements a more efficient algorithm
-than that used by `pam`.  See the object documentation for the
+documentation for the function `GenerateClusterData` for more details on how the
+clusters are generated.  Microbenchmarking is performed with two cluster
+identification functions `pam` and `clara`, from the `cluster` package provided
+with the **R** distribution.  The `pam` function implements the *partitioning
+around medoids* algorithm which has
+quadratic time complexity.  The `clara` function is used for large data sets and
+operates in linear time complexity.  The `pam` function is called with
+`cluster.only=TRUE` so that only assignments of feature vectors to clusters is
+reported.  The `clara` function is called with `samples=50`, `keep.data=FALSE`,
+`rngG=TRUE`, and `pamLike=TRUE`.  See the object documentation for the
 `RunMachineLearningBenchmark`, `pam`, and `clara` functions for more details.
 
-| Microbenchmark name        | Functionality tested       | Number of features        | Number of clusters | Number of feature vectors per cluster |
-|:---------------------------|:---------------------------|:-------------------------:|:------------------:|:-------------------------------------:|
-| pam_cluster_3_7_2500       | `pam` clustering           | 3                         | 7                  | 2500                                  |
-| pam_cluster_3_7_5000       | `pam` clustering           | 3                         | 7                  | 5000                                  |
-| pam_cluster_3_7_5715       | `pam` clustering           | 3                         | 7                  | 5715                                  |
-| pam_cluster_16_33_1213     | `pam` clustering           | 16                        | 33                 | 1213                                  |
-| pam_cluster_64_33_1213     | `pam` clustering           | 64                        | 33                 | 1213                                  |
-| pam_cluster_16_7_2858      | `pam` clustering           | 16                        | 7                  | 2858                                  |
-| pam_cluster_32_7_2858      | `pam` clustering           | 32                        | 7                  | 2858                                  |
-| pam_cluster_64_7_5715      | `pam` clustering           | 64                        | 7                  | 5715                                  |
-| clara_cluster_64_33_1213   | `clara` clustering         | 64                        | 33                 | 1213                                  |
-| clara_cluster_1000_99_1000 | `clara` clustering         | 1000                      | 99                 | 1000                                  |
+| Microbenchmark name        | Functionality tested | Kernel function | Number of features        | Number of clusters | Number of feature vectors per cluster |
+|:---------------------------|:---------------------|:----------------|:-------------------------:|:------------------:|:-------------------------------------:|
+| pam_cluster_3_7_2500       | clustering           | cluster::pam    | 3                         | 7                  | 2500                                  |
+| pam_cluster_3_7_5000       | clustering           | cluster::pam    | 3                         | 7                  | 5000                                  |
+| pam_cluster_3_7_5715       | clustering           | cluster::pam    | 3                         | 7                  | 5715                                  |
+| pam_cluster_16_33_1213     | clustering           | cluster::pam    | 16                        | 33                 | 1213                                  |
+| pam_cluster_64_33_1213     | clustering           | cluster::pam    | 64                        | 33                 | 1213                                  |
+| pam_cluster_16_7_2858      | clustering           | cluster::pam    | 16                        | 7                  | 2858                                  |
+| pam_cluster_32_7_2858      | clustering           | cluster::pam    | 32                        | 7                  | 2858                                  |
+| pam_cluster_64_7_5715      | clustering           | cluster::pam    | 64                        | 7                  | 5715                                  |
+| clara_cluster_64_33_1213   | clustering           | cluster::clara  | 64                        | 33                 | 1213                                  |
+| clara_cluster_1000_99_1000 | clustering           | cluster::clara  | 1000                      | 99                 | 1000                                  |
 
 The function `GetClusteringDefaultMicrobenchmarks` defines the default
 microbenchmarks referenced in the table.  The function returns a vector of
