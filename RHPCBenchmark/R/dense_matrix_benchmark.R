@@ -89,6 +89,25 @@
 #' runIdentifier <- "example"
 #' resultsFrame <- RunDenseMatrixBenchmark(runIdentifier, resultsDirectory,
 #'    microbenchmarks=exampleMicrobenchmarks)
+#'
+#' # This example runs all but the matrix transpose microbenchmarks.
+#' exampleMicrobenchmarks[["transpose"]]$active <- FALSE
+#' # Set an appropriate run identifier
+#' runIdentifier <- "no_transpose"
+#' exTransposeResultsFrame <- RunDenseMatrixBenchmark(runIdentifier,
+#'   resultsDirectory, microbenchmarks=exampleMicrobenchmarks)
+#'
+#' # This example runs only the matrix-matrix multiplication microbenchmark,
+#' # and it adds a larger matrix to test.
+#' matMatMicrobenchmark <- list()
+#' matMatMicrobenchmark[["matmat"]] <- GetDenseMatrixExampleMicrobenchmarks()[["matmat"]]
+#' matMatMicrobenchmark[["matmat"]]$dimensionParameters <- as.integer(c(1000, 2000))
+#' matMatMicrobenchmark[["matmat"]]$numberOfTrials <- as.integer(c(3, 3))
+#' matMatMicrobenchmark[["matmat"]]$numberOfWarmupTrials <- as.integer(c(1, 1))
+#' # Set an appropriate run identifier
+#' runIdentifier <- "matmat"
+#' matMatResults <- RunDenseMatrixBenchmark(runIdentifier, resultsDirectory,
+#'    microbenchmarks=matMatMicrobenchmark)
 #' 
 #' @seealso \code{\link{GetDenseMatrixDefaultMicrobenchmarks}}
 #'          \code{\link{GetDenseMatrixExampleMicrobenchmarks}}
@@ -168,6 +187,19 @@ GetDenseMatrixDefaultMicrobenchmarks <- function() {
       benchmarkFunction = CrossprodMicrobenchmark
    )
 
+   # Matrix deformation and transpose
+   microbenchmarks[["deformtrans"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "deformtrans",
+      benchmarkDescription = "Dense matrix deformation and transpose",
+      dimensionParameters = as.integer(c(1000, 2000, 4000, 8000, 10000, 15000, 20000, 20000)),
+      numberOfTrials = as.integer(c(20, 20, 10, 5, 5, 5, 5, 5)),
+      numberOfWarmupTrials = as.integer(c(1, 1, 1, 1, 1, 1, 1, 1)),
+      allocatorFunction = DeformtransAllocator,
+      benchmarkFunction = DeformtransMicrobenchmark
+   )
+
    # matrix determinant
    microbenchmarks[["determinant"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
@@ -194,19 +226,6 @@ GetDenseMatrixDefaultMicrobenchmarks <- function() {
       benchmarkFunction = EigenMicrobenchmark
    )
 
-   # Linear solve with multiple right hand sides
-   microbenchmarks[["solve"]] <- methods::new(
-      "DenseMatrixMicrobenchmark",
-      active = TRUE,
-      benchmarkName = "solve",
-      benchmarkDescription = "Dense linear solve with multiple r.h.s.",
-      dimensionParameters = as.integer(c(1000, 2000, 4000, 8000, 10000, 15000, 20000, 20000)),
-      numberOfTrials = as.integer(c(20, 20, 10, 5, 5, 5, 5, 5)),
-      numberOfWarmupTrials = as.integer(c(1, 1, 1, 1, 1, 1, 1, 1)),
-      allocatorFunction = SolveAllocator,
-      benchmarkFunction = SolveMicrobenchmark
-   )
-   
    # Least squares fit
    microbenchmarks[["lsfit"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
@@ -218,32 +237,6 @@ GetDenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfWarmupTrials = as.integer(c(1, 1, 1, 1, 1, 1, 1, 1)),
       allocatorFunction = LsfitAllocator,
       benchmarkFunction = LsfitMicrobenchmark
-   )
-
-   # Matrix deformation and transpose
-   microbenchmarks[["deformtrans"]] <- methods::new(
-      "DenseMatrixMicrobenchmark",
-      active = TRUE,
-      benchmarkName = "deformtrans",
-      benchmarkDescription = "Dense matrix deformation and transpose",
-      dimensionParameters = as.integer(c(1000, 2000, 4000, 8000, 10000, 15000, 20000, 20000)),
-      numberOfTrials = as.integer(c(20, 20, 10, 5, 5, 5, 5, 5)),
-      numberOfWarmupTrials = as.integer(c(1, 1, 1, 1, 1, 1, 1, 1)),
-      allocatorFunction = DeformtransAllocator,
-      benchmarkFunction = DeformtransMicrobenchmark
-   )
-
-   # Matrix transpose
-   microbenchmarks[["transpose"]] <- methods::new(
-      "DenseMatrixMicrobenchmark",
-      active = TRUE,
-      benchmarkName = "transpose",
-      benchmarkDescription = "Dense matrix transpose",
-      dimensionParameters = as.integer(c(1000, 2000, 4000, 8000, 10000, 15000, 20000, 20000)),
-      numberOfTrials = as.integer(c(20, 20, 10, 5, 5, 5, 5, 5)),
-      numberOfWarmupTrials = as.integer(c(1, 1, 1, 1, 1, 1, 1, 1)),
-      allocatorFunction = TransposeAllocator,
-      benchmarkFunction = TransposeMicrobenchmark
    )
 
    # Matrix-matrix multiplication
@@ -285,6 +278,19 @@ GetDenseMatrixDefaultMicrobenchmarks <- function() {
       benchmarkFunction = QrMicrobenchmark
    )
 
+   # Linear solve with multiple right hand sides
+   microbenchmarks[["solve"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "solve",
+      benchmarkDescription = "Dense linear solve with multiple r.h.s.",
+      dimensionParameters = as.integer(c(1000, 2000, 4000, 8000, 10000, 15000, 20000, 20000)),
+      numberOfTrials = as.integer(c(20, 20, 10, 5, 5, 5, 5, 5)),
+      numberOfWarmupTrials = as.integer(c(1, 1, 1, 1, 1, 1, 1, 1)),
+      allocatorFunction = SolveAllocator,
+      benchmarkFunction = SolveMicrobenchmark
+   )
+
    # Singular value decomposition
    microbenchmarks[["svd"]] <- methods::new(
       "DenseMatrixMicrobenchmark",
@@ -296,6 +302,19 @@ GetDenseMatrixDefaultMicrobenchmarks <- function() {
       numberOfWarmupTrials = as.integer(c(1, 1, 1, 1, 1, 1, 1, 1)),
       allocatorFunction = SvdAllocator,
       benchmarkFunction = SvdMicrobenchmark
+   )
+
+   # Matrix transpose
+   microbenchmarks[["transpose"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "transpose",
+      benchmarkDescription = "Dense matrix transpose",
+      dimensionParameters = as.integer(c(1000, 2000, 4000, 8000, 10000, 15000, 20000, 20000)),
+      numberOfTrials = as.integer(c(20, 20, 10, 5, 5, 5, 5, 5)),
+      numberOfWarmupTrials = as.integer(c(1, 1, 1, 1, 1, 1, 1, 1)),
+      allocatorFunction = TransposeAllocator,
+      benchmarkFunction = TransposeMicrobenchmark
    )
 
    return (microbenchmarks)
@@ -326,7 +345,7 @@ GetDenseMatrixExampleMicrobenchmarks <- function() {
       benchmarkName = "cholesky",
       benchmarkDescription = "Dense matrix Cholesky factorization",
       dimensionParameters = as.integer(c(1000)),
-      numberOfTrials = as.integer(c(2)),
+      numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = CholeskyAllocator,
       benchmarkFunction = CholeskyMicrobenchmark
@@ -339,12 +358,38 @@ GetDenseMatrixExampleMicrobenchmarks <- function() {
       benchmarkName = "crossprod",
       benchmarkDescription = "Dense matrix cross product",
       dimensionParameters = as.integer(c(1000)),
-      numberOfTrials = as.integer(c(2)),
+      numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = CrossprodAllocator,
       benchmarkFunction = CrossprodMicrobenchmark
    )  
 
+   # Matrix-matrix multiplication
+   microbenchmarks[["matmat"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "matmat",
+      benchmarkDescription = "Dense matrix-matrix multiplication",
+      dimensionParameters = as.integer(c(1000)),
+      numberOfTrials = as.integer(c(3)),
+      numberOfWarmupTrials = as.integer(c(1)),
+      allocatorFunction = MatmatAllocator,
+      benchmarkFunction = MatmatMicrobenchmark
+   )
+
+   # Matrix transpose
+   microbenchmarks[["transpose"]] <- methods::new(
+      "DenseMatrixMicrobenchmark",
+      active = TRUE,
+      benchmarkName = "transpose",
+      benchmarkDescription = "Dense matrix transpose",
+      dimensionParameters = as.integer(c(1000)),
+      numberOfTrials = as.integer(c(3)),
+      numberOfWarmupTrials = as.integer(c(1)),
+      allocatorFunction = TransposeAllocator,
+      benchmarkFunction = TransposeMicrobenchmark
+   )
+ 
    return (microbenchmarks)
 }
    

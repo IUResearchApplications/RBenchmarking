@@ -96,6 +96,32 @@
 #' runIdentifier <- "example"
 #' resultsFrame <- RunMachineLearningBenchmark(runIdentifier, resultsDirectory,
 #'    clusteringMicrobenchmarks=exampleMicrobenchmarks)
+#'
+#' # Create a new clustering microbenchmark that tests the clara method from
+#' # the cluster package using a data set with 16 features, 8 clusters, and
+#' # 1000 normally distributed feature vectors per cluster. 
+#' claraMicrobenchmark <- list()
+#' claraMicrobenchmark[["clara_cluster_16_8_1000"]] <- methods::new(
+#'    "ClusteringMicrobenchmark",
+#'    active = TRUE,
+#'    benchmarkName = "clara_cluster_16_8_1000",
+#'    benchmarkDescription = "Example of new clara microbenchmark",
+#'    dataObjectName = NA_character_,
+#'    numberOfFeatures = as.integer(16),
+#'    numberOfClusters = as.integer(8),
+#'    numberOfFeatureVectorsPerCluster = as.integer(1000),
+#'    numberOfTrials = as.integer(3),
+#'    numberOfWarmupTrials = as.integer(1),
+#'    allocatorFunction = ClusteringAllocator,
+#'    benchmarkFunction = ClaraClusteringMicrobenchmark
+#' )
+#'
+#' # Set an appropriate run identifier
+#' runIdentifier <- "clara_new"
+#' # Run the clara microbenchmark
+#' claraResults <- RunMachineLearningBenchmark(runIdentifier, resultsDirectory,
+#'    clusteringMicrobenchmarks=claraMicrobenchmark)
+#'
 #' @seealso \code{\link{GetClusteringDefaultMicrobenchmarks}}
 #'          \code{\link{GetClusteringExampleMicrobenchmarks}}
 #' @export
@@ -256,7 +282,7 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = PamClusteringBenchmark
+      benchmarkFunction = PamClusteringMicrobenchmark
    )
 
    microbenchmarks[["pam_cluster_3_7_5000"]] <- methods::new(
@@ -271,7 +297,7 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = PamClusteringBenchmark
+      benchmarkFunction = PamClusteringMicrobenchmark
    )
 
    microbenchmarks[["pam_cluster_3_7_5715"]] <- methods::new(
@@ -286,7 +312,7 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = PamClusteringBenchmark
+      benchmarkFunction = PamClusteringMicrobenchmark
    )
 
    microbenchmarks[["pam_cluster_16_33_1213"]] <- methods::new(
@@ -301,7 +327,7 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = PamClusteringBenchmark
+      benchmarkFunction = PamClusteringMicrobenchmark
    )
 
    microbenchmarks[["pam_cluster_64_33_1213"]] <- methods::new(
@@ -316,7 +342,7 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = PamClusteringBenchmark
+      benchmarkFunction = PamClusteringMicrobenchmark
    )
 
    microbenchmarks[["pam_cluster_16_7_2858"]] <- methods::new(
@@ -331,7 +357,7 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = PamClusteringBenchmark
+      benchmarkFunction = PamClusteringMicrobenchmark
    )
 
    microbenchmarks[["pam_cluster_32_7_2858"]] <- methods::new(
@@ -346,7 +372,7 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = PamClusteringBenchmark
+      benchmarkFunction = PamClusteringMicrobenchmark
    )
 
    microbenchmarks[["pam_cluster_64_7_5715"]] <- methods::new(
@@ -361,7 +387,7 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = PamClusteringBenchmark
+      benchmarkFunction = PamClusteringMicrobenchmark
    )
 
    microbenchmarks[["clara_cluster_64_33_1213"]] <- methods::new(
@@ -376,7 +402,7 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = ClaraClusteringBenchmark
+      benchmarkFunction = ClaraClusteringMicrobenchmark
    )
 
    microbenchmarks[["clara_cluster_1000_99_1000"]] <- methods::new(
@@ -391,7 +417,7 @@ GetClusteringDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = ClaraClusteringBenchmark
+      benchmarkFunction = ClaraClusteringMicrobenchmark
    )
 
    return (microbenchmarks)
@@ -433,7 +459,7 @@ GetClusteringExampleMicrobenchmarks <- function() {
       numberOfTrials = as.integer(2),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = PamClusteringBenchmark
+      benchmarkFunction = PamClusteringMicrobenchmark
    )
 
    microbenchmarks[["clara_cluster_3_3_1000"]] <- methods::new(
@@ -448,7 +474,7 @@ GetClusteringExampleMicrobenchmarks <- function() {
       numberOfTrials = as.integer(2),
       numberOfWarmupTrials = as.integer(1),
       allocatorFunction = ClusteringAllocator,
-      benchmarkFunction = ClaraClusteringBenchmark
+      benchmarkFunction = ClaraClusteringMicrobenchmark
    )
 
    return (microbenchmarks)

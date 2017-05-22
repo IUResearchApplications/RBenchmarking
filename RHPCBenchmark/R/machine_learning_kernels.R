@@ -104,7 +104,7 @@ GenerateClusterData <- function(numberOfFeatures, numberOfVectorsPerCluster,
 #'   needed to generate input for the clustering microbenchmarks.
 #' @return a list containing the data objects to be input to the
 #'   clustering microbenchmark
-#' @seealso \code{\link{PamClusteringBenchmark}} \code{\link{ClaraClusteringBenchmark}}
+#' @seealso \code{\link{PamClusteringMicrobenchmark}} \code{\link{ClaraClusteringMicrobenchmark}}
 #'
 #' @export
 ClusteringAllocator <- function(benchmarkParameters) {
@@ -135,8 +135,16 @@ ClusteringAllocator <- function(benchmarkParameters) {
 #' @return a vector containing the user, system, and elapsed performance
 #'   timings in that order
 #'
+#' @examples
+#' # Allocate input to the pam clustering microbenchmark
+#' microbenchmarks <- GetClusteringExampleMicrobenchmarks()
+#' kernelParameters <- ClusteringAllocator(microbenchmarks[["pam_cluster_3_3_1000"]])
+#' # Execute the microbenchmark
+#' timings <- PamClusteringMicrobenchmark(
+#'    microbenchmarks[["pam_cluster_3_3_1000"]], kernelParameters)
+#'
 #' @export
-PamClusteringBenchmark <- function(benchmarkParameters, kernelParameters) {
+PamClusteringMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({clusterObj <- cluster::pam(kernelParameters$featureVectors,
       kernelParameters$numberOfClusters, cluster.only=TRUE, trace.lev=1)})
    return (timings)
@@ -157,8 +165,16 @@ PamClusteringBenchmark <- function(benchmarkParameters, kernelParameters) {
 #' @return a vector containing the user, system, and elapsed performance
 #'   timings in that order
 #'
+#' @examples
+#' # Allocate input to the pam clustering microbenchmark
+#' microbenchmarks <- GetClusteringExampleMicrobenchmarks()
+#' kernelParameters <- ClusteringAllocator(microbenchmarks[["clara_cluster_3_3_1000"]])
+#' # Execute the microbenchmark
+#' timings <- ClaraClusteringMicrobenchmark(
+#'    microbenchmarks[["clara_cluster_3_3_1000"]], kernelParameters)
+#'
 #' @export
-ClaraClusteringBenchmark <- function(benchmarkParameters, kernelParameters) {
+ClaraClusteringMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({clusterObj <- cluster::clara(kernelParameters$featureVectors,
       kernelParameters$numberOfClusters, samples=50, trace=0, keep.data=FALSE,
       rngR=TRUE, pamLike=TRUE)})

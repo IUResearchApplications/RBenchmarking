@@ -161,7 +161,7 @@ with the benchmark, the rest of the matrices come from the
 [University of Florida Sparse Matrix Collection](https://www.cise.ufl.edu/research/sparse/matrices/).
 More detailed descriptions of the matrices from the *Sparse Matrix Collection*
 can be found on the web site.  The R data files containing the sparse matrices
-can be downloaded in the companion package [RHPCBenchmarkData](https://github.com/IUResearchAnalytics/RBenchmarking/blob/master/RHPCBenchmarkData_0.1.0.0.tar.gz).
+can be downloaded in the companion package [RHPCBenchmarkData](https://github.com/IUResearchAnalytics/RBenchmarking/blob/master/RHPCBenchmarkData_0.1.0.tar.gz).
 
 | Matrix name            | Number of rows | Number of columns | Number of non-zeros | Symmetry and Structure    |
 |:-----------------------|:--------------:|:-----------------:|:-------------------:|:-------------------------:| 
@@ -329,8 +329,9 @@ allResults <- RunDenseMatrixBenchmark(runIdentifier, resultsDirectory)
 save(allResults, file="./DenseMatrixResults/allResultsFrame.RData")
 ```
 
-This example runs all but the matrix transpose microbenchmarks and saves
-the results to the same directory as in the previous example.
+This example runs all but the matrix transpose microbenchmarks, which tend to
+run very slowly, and saves the results to the same directory as in the previous
+example.
 ```
 # Get the default microbenchmark definition objects and deactivate
 # the unwanted matrix transpose microbenchmarks.
@@ -415,14 +416,14 @@ This example shows how to specify a new clustering microbenchmark and run it.
 # `cluster` package using a data set with 250 features, 50 clusters, and
 # 2000 normally distributed feature vectors per cluster.
 claraMicrobenchmark <- list()
-claraMicrobenchmark[["clara_cluster_500_50_2000"]] <- methods::new(
+claraMicrobenchmark[["clara_cluster_250_50_2000"]] <- methods::new(
       "ClusteringMicrobenchmark",
       active = TRUE,
-      benchmarkName = "clara_cluster_500_50_2000",
-      benchmarkDescription = "Clustering of 100000 500-dimensional feature vectors into 50 clusters using clara function",
-      numberOfFeatures = as.integer(1000),
-      numberOfClusters = as.integer(99),
-      numberOfFeatureVectorsPerCluster = as.integer(1000),
+      benchmarkName = "clara_cluster_250_50_2000",
+      benchmarkDescription = "Clustering of 100000 250-dimensional feature vectors into 50 clusters using clara function",
+      numberOfFeatures = as.integer(250),
+      numberOfClusters = as.integer(50),
+      numberOfFeatureVectorsPerCluster = as.integer(2000),
       dataObjectName = NA_character_,
       numberOfTrials = as.integer(3),
       numberOfWarmupTrials = as.integer(1),

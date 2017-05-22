@@ -132,6 +132,14 @@
 #'    choleskyMicrobenchmarks=exampleCholeskyMicrobenchmarks,
 #'    luMicrobenchmarks=NULL,
 #'    qrMicrobenchmarks=NULL)
+#'
+#' # This example runs only the Cholesky factorization microbenchmarks.
+#' runIdentifier <- "choleksy_only"
+#' # Run only the sparse Choleksy factorization microbenchmarks
+#' choleskyResults <- RunSparseMatrixBenchmark(runIdentifier, resultsDirectory,
+#'    matrixVectorMicrobenchmarks=NULL, luMicrobenchmarks=NULL,
+#'    qrMicrobenchmarks=NULL)
+#'
 #' }
 #'
 #' @seealso \code{\link{GetSparseMatrixVectorDefaultMicrobenchmarks}}
@@ -320,7 +328,7 @@ GetSparseMatrixVectorDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(20)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseMatrixVectorAllocator,
-      benchmarkFunction = SparseMatrixVectorBenchmark
+      benchmarkFunction = SparseMatrixVectorMicrobenchmark
    )
 
    microbenchmarks[["matvec_laplacian7pt_200"]] <- methods::new(
@@ -335,7 +343,7 @@ GetSparseMatrixVectorDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(20)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseMatrixVectorAllocator,
-      benchmarkFunction = SparseMatrixVectorBenchmark
+      benchmarkFunction = SparseMatrixVectorMicrobenchmark
    )   
 
    microbenchmarks[["matvec_ca2010"]] <- methods::new(
@@ -350,7 +358,7 @@ GetSparseMatrixVectorDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(20)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseMatrixVectorAllocator,
-      benchmarkFunction = SparseMatrixVectorBenchmark
+      benchmarkFunction = SparseMatrixVectorMicrobenchmark
    )
 
    return (microbenchmarks)
@@ -395,7 +403,7 @@ GetSparseCholeskyDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseCholeskyAllocator,
-      benchmarkFunction = SparseCholeskyBenchmark
+      benchmarkFunction = SparseCholeskyMicrobenchmark
    )
 
    microbenchmarks[["cholesky_Andrews"]] <- methods::new(
@@ -410,7 +418,7 @@ GetSparseCholeskyDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseCholeskyAllocator,
-      benchmarkFunction = SparseCholeskyBenchmark
+      benchmarkFunction = SparseCholeskyMicrobenchmark
    )
 
    microbenchmarks[["cholesky_G3_circuit"]] <- methods::new(
@@ -425,7 +433,7 @@ GetSparseCholeskyDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseCholeskyAllocator,
-      benchmarkFunction = SparseCholeskyBenchmark
+      benchmarkFunction = SparseCholeskyMicrobenchmark
    )
 
    return (microbenchmarks)
@@ -469,7 +477,7 @@ GetSparseLuDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseLuAllocator,
-      benchmarkFunction = SparseLuBenchmark
+      benchmarkFunction = SparseLuMicrobenchmark
    )
 
    microbenchmarks[["lu_stomach"]] <- methods::new(
@@ -484,7 +492,7 @@ GetSparseLuDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseLuAllocator,
-      benchmarkFunction = SparseLuBenchmark
+      benchmarkFunction = SparseLuMicrobenchmark
    )
 
    microbenchmarks[["lu_torso3"]] <- methods::new(
@@ -499,7 +507,7 @@ GetSparseLuDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseLuAllocator,
-      benchmarkFunction = SparseLuBenchmark
+      benchmarkFunction = SparseLuMicrobenchmark
    )
 
    return (microbenchmarks)
@@ -541,7 +549,7 @@ GetSparseQrDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseQrAllocator,
-      benchmarkFunction = SparseQrBenchmark
+      benchmarkFunction = SparseQrMicrobenchmark
    )
 
    microbenchmarks[["qr_landmark"]] <- methods::new(
@@ -556,7 +564,7 @@ GetSparseQrDefaultMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseQrAllocator,
-      benchmarkFunction = SparseQrBenchmark
+      benchmarkFunction = SparseQrMicrobenchmark
    )
 
    return (microbenchmarks)
@@ -595,7 +603,7 @@ GetSparseMatrixVectorExampleMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseMatrixVectorAllocator,
-      benchmarkFunction = SparseMatrixVectorBenchmark
+      benchmarkFunction = SparseMatrixVectorMicrobenchmark
    )
 
    return (microbenchmarks)
@@ -635,7 +643,7 @@ GetSparseCholeskyExampleMicrobenchmarks <- function() {
       numberOfTrials = as.integer(c(3)),
       numberOfWarmupTrials = as.integer(c(1)),
       allocatorFunction = SparseCholeskyAllocator,
-      benchmarkFunction = SparseCholeskyBenchmark
+      benchmarkFunction = SparseCholeskyMicrobenchmark
    )
 
    return (microbenchmarks)

@@ -66,8 +66,20 @@ SparseMatrixVectorAllocator <- function(benchmarkParameters, index) {
 #' @return a vector containing the user, system, and elapsed performance
 #'   timings in that order
 #'
+#' @examples
+#' \dontrun{
+#' # Allocate input to the matrix-vector microbenchmark for the first Laplacian
+#' # matrix
+#' microbenchmarks <- GetSparseMatrixVectorDefaultMicrobenchmarks()
+#' kernelParameters <- SparseMatrixVectorAllocator(
+#'    microbenchmarks[["matvec_laplacian7pt_100"]], 1)
+#' # Execute the microbenchmark
+#' timings <- SparseMatrixVectorMicrobenchmark(
+#'    microbenchmarks[["matvec_laplacian7pt_100"]], kernelParameters)
+#' }
+#'
 #' @export
-SparseMatrixVectorBenchmark <- function(benchmarkParameters, kernelParameters) {
+SparseMatrixVectorMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- kernelParameters$A %*% kernelParameters$x})
    return (timings)
 }
@@ -116,10 +128,21 @@ SparseCholeskyAllocator <- function(benchmarkParameters, index) {
 #' @return a vector containing the user, system, and elapsed performance
 #'   timings in that order
 #'
-#' @inheritParams SparseMatrixVectorBenchmark
+#' @inheritParams SparseMatrixVectorMicrobenchmark
+#'
+#' @examples
+#' \dontrun{
+#' # Allocate input to the Cholesky factorization microbenchmark for the
+#' # ct20stif matrix
+#' microbenchmarks <- GetSparseCholeskyDefaultMicrobenchmarks()
+#' kernelParameters <- SparseCholeskyAllocator(microbenchmarks[["cholesky_ct20stif"]], 1)
+#' # Execute the microbenchmark
+#' timings <- SparseCholeskyMicrobenchmark(
+#'    microbenchmarks[["choleksy_ct20stif"]], kernelParameters)
+#' }
 #'
 #' @export
-SparseCholeskyBenchmark <- function(benchmarkParameters, kernelParameters) {
+SparseCholeskyMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- Matrix::Cholesky(kernelParameters$A)})
    return (timings)
 }
@@ -167,10 +190,21 @@ SparseLuAllocator <- function(benchmarkParameters, index) {
 #' function
 #' call \code{kernelParameters$A \%*\% kernelParameters$b}.
 #'
-#' @inheritParams SparseMatrixVectorBenchmark
+#' @inheritParams SparseMatrixVectorMicrobenchmark
+#'
+#' @examples
+#' \dontrun{
+#' # Allocate input to the LU factorization microbenchmark for the
+#' # circuit5M_dc matrix
+#' microbenchmarks <- GetSparseLuDefaultMicrobenchmarks()
+#' kernelParameters <- SparseLuAllocator(microbenchmarks[["lu_circuit5M_dc"]], 1)
+#' # Execute the microbenchmark
+#' timings <- SparseLuMicrobenchmark(
+#'    microbenchmarks[["lu_circuit5M_dc"]], kernelParameters)
+#' }
 #'
 #' @export
-SparseLuBenchmark <- function(benchmarkParameters, kernelParameters) {
+SparseLuMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- Matrix::lu(kernelParameters$A)})
    return (timings)
 }
@@ -211,10 +245,21 @@ SparseQrAllocator <- function(benchmarkParameters, index) {
 #' in the \code{kernelParameters} parameter.  The function times the single
 #' function call \code{qr(kernelParameters$A)}.
 #'
-#' @inheritParams SparseMatrixVectorBenchmark
+#' @inheritParams SparseMatrixVectorMicrobenchmark
+#'
+#' @examples
+#' \dontrun{
+#' # Allocate input to the QR factorization microbenchmark for the
+#' # Maragal_6 matrix
+#' microbenchmarks <- GetSparseQrDefaultMicrobenchmarks()
+#' kernelParameters <- SparseQrAllocator(microbenchmarks[["qr_Maragal_6"]], 1)
+#' # Execute the microbenchmark
+#' timings <- SparseQrMicrobenchmark(
+#'    microbenchmarks[["qr_Maragal_6"]], kernelParameters)
+#' }
 #'
 #' @export
-SparseQrBenchmark <- function(benchmarkParameters, kernelParameters) {
+SparseQrMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
    timings <- system.time({b <- Matrix::qr(kernelParameters$A)})
    return (timings)
 }

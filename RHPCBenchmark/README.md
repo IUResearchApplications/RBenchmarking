@@ -8,7 +8,7 @@ covering the three categories are RunDenseMatrixBenchmark,
 RunSparseMatrixBenchmark, RunMachineLearningBenchmark.
 
 # Installation
-The companion data package [RHPCBenchmarkData](https://github.com/IUResearchAnalytics/RBenchmarking/blob/master/RHPCBenchmarkData_0.1.0.0.tar.gz)
+The companion data package [RHPCBenchmarkData](https://github.com/IUResearchAnalytics/RBenchmarking/blob/master/RHPCBenchmarkData_0.1.0.tar.gz)
 contains the sparse matrix files needed by the sparse matrix benchmarking
 function.
 
