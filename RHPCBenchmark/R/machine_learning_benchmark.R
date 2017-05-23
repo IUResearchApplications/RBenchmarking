@@ -69,6 +69,7 @@
 #'   time of times of each performance trial
 #'   
 #' @examples 
+#' \dontrun{
 #' # Set needed environment variables for multithreading.  Only single threading
 #' # is used in the example.
 #' #
@@ -121,6 +122,7 @@
 #' # Run the clara microbenchmark
 #' claraResults <- RunMachineLearningBenchmark(runIdentifier, resultsDirectory,
 #'    clusteringMicrobenchmarks=claraMicrobenchmark)
+#' }
 #'
 #' @seealso \code{\link{GetClusteringDefaultMicrobenchmarks}}
 #'          \code{\link{GetClusteringExampleMicrobenchmarks}}

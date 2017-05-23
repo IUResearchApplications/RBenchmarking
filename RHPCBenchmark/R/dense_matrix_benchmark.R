@@ -61,6 +61,7 @@
 #'   for each microbenchmark
 #'
 #' @examples 
+#' \dontrun{
 #' # Set needed environment variables for multithreading.  Only single threading
 #' # is used in the example.
 #' #
@@ -108,6 +109,7 @@
 #' runIdentifier <- "matmat"
 #' matMatResults <- RunDenseMatrixBenchmark(runIdentifier, resultsDirectory,
 #'    microbenchmarks=matMatMicrobenchmark)
+#' }
 #' 
 #' @seealso \code{\link{GetDenseMatrixDefaultMicrobenchmarks}}
 #'          \code{\link{GetDenseMatrixExampleMicrobenchmarks}}

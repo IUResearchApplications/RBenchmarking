@@ -23,11 +23,15 @@ There were 2 NOTEs:
 There are currently no downstream dependencies for this package.
 
 ## Notes on examples
-Examples were added for all three top-level functions.  The examples for
-`RunSparseMatrixBenchmark` are labeled `dontrun` because they depend on the
-companion data package
-[RHPCBenchmarkData](https://github.com/IUResearchAnalytics/RBenchmarking/blob/master/RHPCBenchmarkData_0.1.0.0.tar.gz)
-which is not available on CRAN due to its size.
+* Examples were added for all three top-level functions and benchmark
+  definitions in the `_kernels.R` files.
+* All examples are labeled dontrun because several of them violate CRAN run
+  time limit checks.
+* The examples have been checked using R CMD check --as-cran --run-dontrun.
+  `RunSparseMatrixBenchmark` are labeled `dontrun` because they depend on the
+  companion data package
+  [RHPCBenchmarkData](https://github.com/IUResearchAnalytics/RBenchmarking/blob/master/RHPCBenchmarkData_0.1.0.0.tar.gz)
+  which is not available on CRAN due to its size.
 
 Status of examples:
 * `RunDenseMatrixBenchmark` examples execute normally

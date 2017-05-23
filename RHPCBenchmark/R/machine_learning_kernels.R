@@ -136,12 +136,14 @@ ClusteringAllocator <- function(benchmarkParameters) {
 #'   timings in that order
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the pam clustering microbenchmark
 #' microbenchmarks <- GetClusteringExampleMicrobenchmarks()
 #' kernelParameters <- ClusteringAllocator(microbenchmarks[["pam_cluster_3_3_1000"]])
 #' # Execute the microbenchmark
 #' timings <- PamClusteringMicrobenchmark(
 #'    microbenchmarks[["pam_cluster_3_3_1000"]], kernelParameters)
+#' }
 #'
 #' @export
 PamClusteringMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -166,12 +168,14 @@ PamClusteringMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
 #'   timings in that order
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the pam clustering microbenchmark
 #' microbenchmarks <- GetClusteringExampleMicrobenchmarks()
 #' kernelParameters <- ClusteringAllocator(microbenchmarks[["clara_cluster_3_3_1000"]])
 #' # Execute the microbenchmark
 #' timings <- ClaraClusteringMicrobenchmark(
 #'    microbenchmarks[["clara_cluster_3_3_1000"]], kernelParameters)
+#' }
 #'
 #' @export
 ClaraClusteringMicrobenchmark <- function(benchmarkParameters, kernelParameters) {

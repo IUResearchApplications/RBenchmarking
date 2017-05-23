@@ -22,5 +22,5 @@ library(devtools)
 
 packagePath <- file.path(getwd(), "RHPCBenchmark")
 devtools::document("RHPCBenchmark")
-devtools::check_built(packagePath)
+devtools::check_built(packagePath, run_dont_test=TRUE)
 readline(prompt="Press [ENTER] to continue")

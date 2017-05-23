@@ -62,12 +62,14 @@ CholeskyAllocator <- function(benchmarkParameters, index) {
 #'   timings in that order
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the Cholesky microbenchmark for the first matrix size
 #' # to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- CholeskyAllocator(microbenchmarks[["cholesky"]], 1)
 #' # Execute the microbenchmark
 #' timings <- CholeskyMicrobenchmark(microbenchmarks[["cholesky"]], kernelParameters)
+#' }
 #'
 #' @export
 CholeskyMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -107,12 +109,14 @@ CrossprodAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the matrix cross product microbenchmark for the first
 #' # matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- CrossprodAllocator(microbenchmarks[["crossprod"]], 1)
 #' # Execute the microbenchmark
 #' timings <- CrossprodMicrobenchmark(microbenchmarks[["crossprod"]], kernelParameters)
+#' }
 #'
 #' @export
 CrossprodMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -158,12 +162,14 @@ DeformtransAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the matrix deformation and transpose microbenchmark for
 #' # the first matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- DeformtransAllocator(microbenchmarks[["deformtrans"]], 1)
 #' # Execute the microbenchmark
 #' timings <- DeformtransMicrobenchmark(microbenchmarks[["deformtrans"]], kernelParameters)
+#' }
 #'
 #' @export
 DeformtransMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -211,12 +217,14 @@ DeterminantAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the matrix determinant microbenchmark for the first
 #' # matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- DeterminantAllocator(microbenchmarks[["determinant"]], 1)
 #' # Execute the microbenchmark
 #' timings <- DeterminantMicrobenchmark(microbenchmarks[["determinant"]], kernelParameters)
+#' }
 #'
 #' @export
 DeterminantMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -256,12 +264,14 @@ EigenAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the matrix eigendecomposition microbenchmark for the
 #' # first matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- EigenAllocator(microbenchmarks[["eigen"]], 1)
 #' # Execute the microbenchmark
 #' timings <- EigenMicrobenchmark(microbenchmarks[["eigen"]], kernelParameters)
+#' }
 #'
 #' @export
 EigenMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -309,12 +319,14 @@ LsfitAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the least-squares fit microbenchmark for the
 #' # first matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- LsfitAllocator(microbenchmarks[["lsfit"]], 1)
 #' # Execute the microbenchmark
 #' timings <- LsfitMicrobenchmark(microbenchmarks[["lsfit"]], kernelParameters)
+#' }
 #'
 #' @export
 LsfitMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -359,12 +371,14 @@ MatmatAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the matrix-matrix multiplication microbenchmark for the
 #' # first matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- MatmatAllocator(microbenchmarks[["matmat"]], 1)
 #' # Execute the microbenchmark
 #' timings <- MatmatMicrobenchmark(microbenchmarks[["matmat"]], kernelParameters)
+#' }
 #'
 #' @export
 MatmatMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -408,12 +422,14 @@ MatvecAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the matrix-vector multiplication microbenchmark for the
 #' # first matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- MatvecAllocator(microbenchmarks[["matvec"]], 1)
 #' # Execute the microbenchmark
 #' timings <- MatvecMicrobenchmark(microbenchmarks[["matvec"]], kernelParameters)
+#' }
 #'
 #' @export
 MatvecMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -457,12 +473,14 @@ QrAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the QR decomposition microbenchmark for the
 #' # first matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- QrAllocator(microbenchmarks[["qr"]], 1)
 #' # Execute the microbenchmark
 #' timings <- QrMicrobenchmark(microbenchmarks[["qr"]], kernelParameters)
+#' }
 #'
 #' @export
 QrMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -509,12 +527,14 @@ SolveAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the linear solve microbenchmark for the
 #' # first matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- SolveAllocator(microbenchmarks[["solve"]], 1)
 #' # Execute the microbenchmark
 #' timings <- SolveMicrobenchmark(microbenchmarks[["solve"]], kernelParameters)
+#' }
 #'
 #' @export
 SolveMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -554,12 +574,14 @@ SvdAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the singular value decomposition microbenchmark for the
 #' # first matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- SvdAllocator(microbenchmarks[["svd"]], 1)
 #' # Execute the microbenchmark
 #' timings <- SvdMicrobenchmark(microbenchmarks[["svd"]], kernelParameters)
+#' }
 #'
 #' @export
 SvdMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
@@ -602,12 +624,14 @@ TransposeAllocator <- function(benchmarkParameters, index) {
 #' @inheritParams CholeskyMicrobenchmark
 #'
 #' @examples
+#' \dontrun{
 #' # Allocate input to the matrix transpose microbenchmark for the
 #' # first matrix size to be tested
 #' microbenchmarks <- GetDenseMatrixDefaultMicrobenchmarks()
 #' kernelParameters <- TransposeAllocator(microbenchmarks[["transpose"]], 1)
 #' # Execute the microbenchmark
 #' timings <- TransposeMicrobenchmark(microbenchmarks[["transpose"]], kernelParameters)
+#' }
 #'
 #' @export
 TransposeMicrobenchmark <- function(benchmarkParameters, kernelParameters) {
